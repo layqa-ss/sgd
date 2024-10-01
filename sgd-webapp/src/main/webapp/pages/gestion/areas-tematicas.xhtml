@@ -1,0 +1,93 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="jakarta.faces.core" xmlns:h="jakarta.faces.html"
+	xmlns:ui="jakarta.faces.facelets" xmlns:p="http://primefaces.org/ui"
+	template="/layout/template.xhtml">
+
+	<ui:define name="content">
+		<section class="intro">
+			<article>
+				<h1 class="titulo-seccion">Gestión de áreas temáticas</h1>
+			</article>
+		</section>
+
+		<section>
+			<article class="main-container">
+				<div class="item">
+					<a class="button agregar-button"> Agregar<i
+						class="fa-solid fa-plus"></i>
+					</a>
+				</div>
+
+				<div class="form-container">
+					<h:form class="form container form-gestion">
+						<div class="item">
+							<label for="area-nombre">Nombre</label>
+							<h:inputText id="area-nombre"
+								value="#{gestionController.area.nombre}" />
+						</div>
+						<div class="item">
+							<label for="carreras">Carrera</label>
+							<h:selectOneMenu id="carreras"
+								value="#{gestionController.area.carreraId}">
+								<f:selectItem itemLabel="-- Selecciona una carrera --" />
+								<f:selectItems value="#{gestionController.carreras}"
+									var="carrera" itemValue="#{carrera.id}"
+									itemLabel="#{carrera.nombre}" />
+							</h:selectOneMenu>
+						</div>
+						<div class="item">
+							<h:commandButton styleClass="button button_rojo"
+								action="#{gestionController.agregarAreaTematica}"
+								value="Guardar" update="tableForm" />
+						</div>
+					</h:form>
+					<button class="material-symbols-outlined close-button">
+						cancel</button>
+				</div>
+				<h:form id="tableForm">
+					<p:dataTable value="#{gestionController.areas}" var="areaVar"
+						widgetVar="areasTable" styleClass="table"
+						emptyMessage="No se encontraron áreas temáticas"
+						filteredValue="#{gestionController.areasFiltradas}"
+						filterBy="#{gestionController.filterBy}" rows="10"
+						paginator="true" paginatorPosition="bottom"
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
+						rowsPerPageTemplate="5,10,{ShowAll|'Todos'}">
+
+						<p:column headerText="Nombre" sortBy="#{areaVar.nombre}"
+							filterBy="#{areaVar.nombre}" filterMatchMode="contains"
+							filterPlaceholder="Filtrar por nombre">
+							<h:outputText value="#{areaVar.nombre}" />
+						</p:column>
+
+						<p:column headerText="Carrera" sortBy="#{areaVar.nombreCarrera}"
+							field="nombreCarrera" filterMatchMode="exact"
+							filterPlaceholder="Filtrar por carrera">
+
+							<f:facet name="filter">
+								<h:selectOneMenu onchange="PF('areasTable').filter()"
+									styleClass="ui-custom-filter custom-filter">
+									<f:selectItem itemLabel="Todas" itemValue="#{null}"
+										noSelectionOption="true" />
+									<f:selectItems value="#{gestionController.carreras}" var="car"
+										itemLabel="#{car.nombre}" itemValue="#{car.nombre}" />
+								</h:selectOneMenu>
+							</f:facet>
+							<h:outputText value="#{areaVar.nombreCarrera}" />
+						</p:column>
+
+						<p:column styleClass="links-column">
+							<h:commandLink update="tableForm" styleClass="link-delete"
+								action="#{gestionController.borrarAreaTematica(areaVar.id)}">
+								<i class="material-symbols-outlined">delete</i>
+							</h:commandLink>
+						</p:column>
+
+					</p:dataTable>
+				</h:form>
+			</article>
+		</section>
+	</ui:define>
+
+</ui:composition>

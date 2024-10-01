@@ -1,0 +1,89 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="jakarta.faces.core" xmlns:h="jakarta.faces.html"
+	xmlns:ui="jakarta.faces.facelets" xmlns:p="http://primefaces.org/ui"
+	template="/layout/template.xhtml">
+
+	<ui:define name="content">
+		<section class="intro">
+			<article>
+				<h1 class="titulo-seccion">Gestión de carreras</h1>
+			</article>
+		</section>
+
+		<section>
+			<article class="main-container">
+				<div class="item">
+					<a class="button agregar-button"> Agregar<i
+						class="fa-solid fa-plus"></i>
+					</a>
+				</div>
+				<div class="form-container">
+					<h:form class="form container form-gestion">
+						<div class="item">
+							<label for="area-nombre">Nombre</label>
+							<h:inputText value="#{gestionController.carrera.nombre}" />
+						</div>
+						<div class="item">
+							<label>Unidad académica</label>
+							<h:selectOneMenu value="#{gestionController.carrera.uaId}">
+								<f:selectItem itemLabel="-- Selecciona una unidad académica --" />
+								<f:selectItems value="#{gestionController.unidades}"
+									var="unidad" itemValue="#{unidad.id}"
+									itemLabel="#{unidad.nombre}" />
+							</h:selectOneMenu>
+						</div>
+						<div class="item">
+							<h:commandButton styleClass="button button_rojo"
+								action="#{gestionController.agregarCarrera}"
+								value="Guardar" update="tableForm" />
+						</div>
+					</h:form>
+					<button class="material-symbols-outlined close-button">
+						cancel</button>
+				</div>
+				<h:form id="tableForm">
+					<p:dataTable value="#{gestionController.carreras}" var="carreraVar"
+						widgetVar="carrerasTable" styleClass="table"
+						emptyMessage="No se encontraron carreras"
+						filteredValue="#{gestionController.carrerasFiltradas}"
+						filterBy="#{gestionController.filterBy}" rows="10"
+						paginator="true" paginatorPosition="bottom"
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
+						rowsPerPageTemplate="5,10,{ShowAll|'Todos'}">
+
+						<p:column headerText="Nombre" sortBy="#{carreraVar.nombre}"
+							filterBy="#{carreraVar.nombre}" filterMatchMode="contains"
+							filterPlaceholder="Filtrar por nombre">
+							<h:outputText value="#{carreraVar.nombre}" />
+						</p:column>
+
+						<p:column headerText="Unidad Académica" sortBy="#{areaVar.nombreUA}"
+							field="nombreUA" filterMatchMode="exact">
+
+							<f:facet name="filter">
+								<h:selectOneMenu onchange="PF('carrerasTable').filter()"
+									styleClass="ui-custom-filter custom-filter">
+									<f:selectItem itemLabel="Todas" itemValue="#{null}"
+										noSelectionOption="true" />
+									<f:selectItems value="#{gestionController.unidades}" var="u"
+										itemLabel="#{u.nombre}" itemValue="#{u.nombre}" />
+								</h:selectOneMenu>
+							</f:facet>
+							<h:outputText value="#{carreraVar.nombreUA}" />
+						</p:column>
+
+						<p:column styleClass="links-column">
+							<h:commandLink update="tableForm" styleClass="link-delete"
+								action="#{gestionController.borrarCarrera(carreraVar.id)}">
+								<i class="material-symbols-outlined">delete</i>
+							</h:commandLink>
+						</p:column>
+
+					</p:dataTable>
+				</h:form>
+			</article>
+		</section>
+	</ui:define>
+
+</ui:composition>

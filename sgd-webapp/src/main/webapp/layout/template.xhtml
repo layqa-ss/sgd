@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html"
+	xmlns:f="jakarta.faces.core" xmlns:ui="jakarta.faces.facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<f:facet name="first">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="viewport"
+			content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="viewport"
+			content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+	</f:facet>
+	<link rel="stylesheet" href="/assets/css/normalize.min.css" />
+
+	<!--Icons-->
+	<link rel="stylesheet"
+		href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+	<link
+		href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;800"
+		rel="stylesheet" />
+	<link rel="stylesheet" href="/assets/css/styles.min.css" />
+
+	<title>SGD - FHCE</title>
+
+</h:head>
+
+<h:body>
+	<header class="main-header">
+		<div class="container">
+			<a href="/index.xhtml" class="logo"> <img
+				src="/assets/images/logo-fhce.png" />
+			</a>
+			<nav class="navigation-wrapper">
+				<button class="button button_icon material-symbols-outlined"
+					id="botonMenu">menu</button>
+				<ul class="navigation-menu" id="navigationMenu">
+					<button class="button_blanco button_icon material-symbols-outlined"
+						id="botonCerrar">cancel</button>
+					<li><a href="/pages/contacto.html"
+						class="container container-user"> <span
+							class="material-symbols-outlined"> person </span>
+							<p class="dashboard_user_name">#{appCtrl.usuarioLogueado}</p>
+					</a></li>
+				</ul>
+			</nav>
+		</div>
+	</header>
+	<main>
+		<h:form id="form-side">
+			<div class="side-bar">
+				<div class="group">
+					<div class="group-title">Usuarios</div>
+					<ul class="group-wrapper">
+						<li><a href="pages/programa-nuevo.html"> <span
+								class="material-symbols-outlined"> person_add </span>
+								<p>Usuario nuevo</p>
+						</a></li>
+						<li><a href="/pages/programa-nuevo.html"> <span
+								class="material-symbols-outlined"> group </span>
+								<p>Ver usuarios</p>
+						</a></li>
+						<li><a href="/pages/programa-nuevo.html"> <span
+								class="material-symbols-outlined"> manufacturing </span>
+								<p>Roles y operaciones</p>
+						</a></li>
+					</ul>
+				</div>
+				<div class="group">
+					<div class="group-title">Gestión FHCE</div>
+					<ul class="group-wrapper">
+						<li><a href="/pages/gestion/areas-tematicas.xhtml"> <span
+								class="material-symbols-outlined"> settings </span>
+								<p>Ver áreas temáticas</p>
+						</a></li>
+						<li><a href="/pages/gestion/carreras.xhtml"> <span
+								class="material-symbols-outlined"> account_balance </span>
+								<p>Ver carreras</p>
+						</a></li>
+						<li><a href="/pages/gestion/unidades.xhtml"> <span
+								class="material-symbols-outlined"> local_library </span>
+								<p>Ver unidades académicas</p>
+						</a></li>
+					</ul>
+				</div>
+				<div class="group">
+					<div class="group-title">Programas</div>
+					<ul class="group-wrapper">
+						<li><h:commandLink action="#{pCtrl.agregarPrograma}">
+								<span class="material-symbols-outlined"> note_add </span>
+								<p>Programa nuevo</p>
+							</h:commandLink></li>
+						<li><a href="/pages/programas/ver-programas.jsf"> <span
+								class="material-symbols-outlined"> hourglass_top </span>
+								<p>Ver programas en proceso de creación</p>
+						</a></li>
+						<li><a href="/pages/programas/ver-programas.xhtml"> <span
+								class="material-symbols-outlined"> view_list </span>
+								<p>Ver programas aprobados</p>
+						</a></li>
+					</ul>
+				</div>
+			</div>
+		</h:form>
+		<div class="content">
+			<ui:insert name="content">Main Content</ui:insert>
+			<script src="/js/jquery-3.6.1.min.js"></script>
+			<script src="/js/jquery-ui.min.js"></script>
+			<script src="/js/main.js"></script>
+			<script src="https://kit.fontawesome.com/0b69af8f69.js"
+				crossorigin="anonymous"></script>
+		</div>
+	</main>
+	<footer> </footer>
+
+
+
+</h:body>
+
+</html>
+

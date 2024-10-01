@@ -1,0 +1,90 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="jakarta.faces.core" xmlns:h="jakarta.faces.html"
+	xmlns:ui="jakarta.faces.facelets" xmlns:p="http://primefaces.org/ui"
+	template="/layout/template.xhtml">
+	
+	<f:metadata>
+		<f:importConstants type="com.fhce.sgd.model.enums.EnumEstadoPrograma" />
+	</f:metadata>
+
+	<ui:define name="content">
+		<section class="intro">
+			<article>
+				<h1 class="titulo-seccion">Ver programas</h1>
+			</article>
+		</section>
+
+		<section>
+			<article class="main-container">
+				<h:form>
+					<div class="item">
+						<h:commandLink class="button agregar-button"
+							action="#{pCtrl.agregarPrograma}">
+						Nuevo programa<i class="fa-solid fa-plus"></i>
+						</h:commandLink>
+					</div>
+				</h:form>
+				<h:form id="tableForm">
+					<p:dataTable value="#{pCtrl.programasTodos}" var="p"
+						widgetVar="programasTable" styleClass="table"
+						emptyMessage="No se encontraron programas"
+						filteredValue="#{pCtrl.programasFiltrados}"
+						filterBy="#{pCtrl.filterBy}" rows="10" paginator="true"
+						paginatorPosition="bottom"
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
+						rowsPerPageTemplate="5,10,{ShowAll|'Todos'}">
+
+						<p:column headerText="UnidadCurricular" sortBy="#{p.nombreUC}"
+							filterBy="#{p.nombreUC}" filterMatchMode="contains"
+							filterPlaceholder="Filtrar por unidad curricular">
+							<h:outputText value="#{p.nombreUC}" />
+						</p:column>
+
+						<p:column headerText="Año" sortBy="#{p.year}" filterBy="#{p.year}"
+							filterMatchMode="contains" filterPlaceholder="Filtrar por año">
+							<h:outputText value="#{p.year}" />
+						</p:column>
+
+						<p:column headerText="Estado" sortBy="#{p.estado.step}"
+							field="estado" filterMatchMode="exact">
+
+							<f:facet name="filter">
+								<h:selectOneMenu onchange="PF('programasTable').filter()"
+									styleClass="ui-custom-filter custom-filter">
+									<f:selectItem itemLabel="Todas" itemValue="#{null}"
+										noSelectionOption="true" />
+									<f:selectItems value="#{pCtrl.estados}" var="e"
+										itemValue="#{e}" itemLabel="#{e.label}" />
+								</h:selectOneMenu>
+							</f:facet>
+							<h:outputText value="#{p.estado.label}" />
+						</p:column>
+
+						<p:column styleClass="links-column">
+							<h:commandLink update="tableForm" styleClass="link-delete"
+								action="#{pCtrl.editarPrograma(p.id)}">
+								<i class="material-symbols-outlined">edit</i>
+							</h:commandLink>
+						</p:column>
+						<p:column styleClass="links-column">
+							<h:commandLink update="tableForm" styleClass="link-delete"
+								actionListener="#{pCtrl.crearPdfPrograma(p.id)}" ajax="false">
+								<i class="material-symbols-outlined">picture_as_pdf</i>
+								<p:fileDownload value="#{pCtrl.file}"/>
+							</h:commandLink>
+						</p:column>
+						<p:column styleClass="links-column">
+							<h:commandLink update="tableForm" styleClass="link-delete"
+								action="#{pCtrl.borrarPrograma(p.id)}" rendered="#{p.estado == EnumEstadoPrograma.CREADO}">
+								<i class="material-symbols-outlined">delete</i>
+							</h:commandLink>
+						</p:column>
+
+					</p:dataTable>
+				</h:form>
+			</article>
+		</section>
+	</ui:define>
+
+</ui:composition>
