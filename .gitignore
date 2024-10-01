@@ -1,0 +1,5 @@
+sgd-domain/target/
+sgd-services/target/
+sgd-webapp/target/
+.settings/
+.project
