@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.fhce.sgd.dto.gestion.AreaTematicaDto;
 import com.fhce.sgd.dto.gestion.CarreraDto;
 import com.fhce.sgd.dto.gestion.UnidadAcademicaDto;
+import com.fhce.sgd.dto.gestion.UsuarioDto;
 import com.fhce.sgd.service.GestionService;
+import com.fhce.sgd.service.UsuarioService;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
@@ -22,17 +24,23 @@ public class GestionController {
 	@Autowired
     private GestionService gestionService;
 	
+	@Autowired
+    private UsuarioService usuarioService;
+	
 	private AreaTematicaDto area;
 	private CarreraDto carrera;
 	private UnidadAcademicaDto ua;
+	private UsuarioDto user;
 	
 	private List<CarreraDto> carreras;
 	private List<AreaTematicaDto> areas;
 	private List<UnidadAcademicaDto> unidades;
+	private List<UsuarioDto> usuarios;
 	
 	private List<AreaTematicaDto> areasFiltradas;
 	private List<CarreraDto> carrerasFiltradas;
 	private List<UnidadAcademicaDto> unidadesFiltradas;
+	private List<UsuarioDto> usuariosFiltrados;
 	private List<FilterMeta> filterBy;
 	
 	@PostConstruct
@@ -40,10 +48,12 @@ public class GestionController {
 		area = new AreaTematicaDto();
 		carrera = new CarreraDto();
 		ua = new UnidadAcademicaDto();
+		user = new UsuarioDto();
 		
         carreras = gestionService.getCarreras();
         areas = gestionService.getAreasTematicas();
         unidades = gestionService.getUnidadesAcademicas();
+        usuarios = usuarioService.getUsuarios();
         
         filterBy = new ArrayList<>();
     }
@@ -85,6 +95,19 @@ public class GestionController {
     	gestionService.deleteUA(id);
     	unidades = gestionService.getUnidadesAcademicas();
     	return "unidades";
+    }
+    
+    public String agregarUsuario() {
+    	usuarioService.save(user);
+    	usuarios = usuarioService.getUsuarios();
+    	user = new UsuarioDto();
+        return "usuarios";
+    }
+    
+    public String borrarUsuario(Long id) {
+    	usuarioService.deleteUsuario(id);
+    	usuarios = usuarioService.getUsuarios();
+        return "usuarios";
     }
 
 	public AreaTematicaDto getArea() {
@@ -165,6 +188,30 @@ public class GestionController {
 
 	public void setUnidadesFiltradas(List<UnidadAcademicaDto> unidadesFiltradas) {
 		this.unidadesFiltradas = unidadesFiltradas;
+	}
+
+	public UsuarioDto getUser() {
+		return user;
+	}
+
+	public void setUser(UsuarioDto user) {
+		this.user = user;
+	}
+
+	public List<UsuarioDto> getUsuarios() {
+		return usuarios;
+	}
+
+	public void setUsuarios(List<UsuarioDto> usuarios) {
+		this.usuarios = usuarios;
+	}
+
+	public List<UsuarioDto> getUsuariosFiltrados() {
+		return usuariosFiltrados;
+	}
+
+	public void setUsuariosFiltrados(List<UsuarioDto> usuariosFiltrados) {
+		this.usuariosFiltrados = usuariosFiltrados;
 	}
 
 }

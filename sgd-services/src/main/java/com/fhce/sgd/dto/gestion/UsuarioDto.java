@@ -1,5 +1,6 @@
 package com.fhce.sgd.dto.gestion;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class UsuarioDto {
@@ -13,6 +14,10 @@ public class UsuarioDto {
     private String fullname;
 
     private Date creationDate;
+    
+    public UsuarioDto() {
+    	
+    }
 
     public UsuarioDto(Long id, String username, String password, Date creationDate, String fullname) {
         this.id = id;
@@ -60,5 +65,9 @@ public class UsuarioDto {
 
 	public void setCreationDate(Date creationDate) {
 		this.creationDate = creationDate;
+	}
+	
+	public String getCreationDateFormated() {
+		return new SimpleDateFormat("dd/MM/yyyy").format(creationDate);
 	}
 }

@@ -1,5 +1,7 @@
 package com.fhce.sgd.service;
 
+import java.util.List;
+
 import com.fhce.sgd.dto.gestion.UsuarioDto;
 
 public interface UsuarioService {
@@ -9,4 +11,8 @@ public interface UsuarioService {
 	UsuarioDto getUsuarioByUsername(String username);
 	
 	Long save(UsuarioDto userDto);
+	
+	List<UsuarioDto> getUsuarios();
+	
+	void deleteUsuario(Long id);
 }

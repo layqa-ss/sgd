@@ -1,5 +1,6 @@
 package com.fhce.sgd.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -51,6 +52,25 @@ public class UsuarioServiceImpl implements UsuarioService {
 				userDto.getFullname());
 		user = usuarioRepository.save(user);
 		return user.getId();
+	}
+	
+	public List<UsuarioDto> getUsuarios() {
+    	Iterable<Usuario> usuariosTodos = usuarioRepository.findAll();
+    	List<Usuario> usuarios = StreamSupport.stream(usuariosTodos.spliterator(), false).toList();
+        if (!usuarios.isEmpty()) {
+        	List<UsuarioDto> usuariosDto = new ArrayList<UsuarioDto>();
+        	for (Usuario u : usuarios) {
+        		UsuarioDto uDto = new UsuarioDto(u.getId(), u.getUsername(), u.getPassword(), u.getCreationDate(), u.getFullname());
+        		usuariosDto.add(uDto);
+        	}
+        	return usuariosDto;
+        } else {
+            return null;
+        }
+    }
+	
+	public void deleteUsuario(Long id) {
+		usuarioRepository.deleteById(id);
 	}
 
 }

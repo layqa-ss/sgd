@@ -1,0 +1,82 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="jakarta.faces.core" xmlns:h="jakarta.faces.html"
+	xmlns:ui="jakarta.faces.facelets" xmlns:p="http://primefaces.org/ui"
+	template="/layout/template.xhtml">
+
+	<ui:define name="content">
+		<section class="intro">
+			<article>
+				<h1 class="titulo-seccion">Usuarios</h1>
+			</article>
+		</section>
+
+		<section>
+			<article class="main-container">
+				<div class="item">
+					<a class="button agregar-button"> Agregar<i
+						class="fa-solid fa-plus"></i>
+					</a>
+				</div>
+
+				<div class="form-container">
+					<h:form class="form container form-gestion">
+						<div class="item">
+							<label>Nombre completo</label>
+							<h:inputText value="#{gestionController.user.fullname}" />
+						</div>
+						<div class="item">
+							<label>Nombre de usuario</label>
+							<h:inputText value="#{gestionController.user.username}" />
+						</div>
+						<div class="item">
+							<label>Contraseña</label>
+							<h:inputSecret value="#{gestionController.user.password}" />
+						</div>
+						<div class="item">
+							<h:commandButton styleClass="button button_rojo"
+								action="#{gestionController.agregarUsuario}" value="Guardar"
+								update="tableForm" />
+						</div>
+					</h:form>
+					<button class="material-symbols-outlined close-button">
+						cancel</button>
+				</div>
+				<h:form id="tableForm">
+					<p:dataTable value="#{gestionController.usuarios}" var="userVar"
+						widgetVar="userTable" styleClass="table"
+						emptyMessage="No se encontraron usuarios"
+						filteredValue="#{gestionController.usuariosFiltradas}"
+						filterBy="#{gestionController.filterBy}" rows="10"
+						paginator="true" paginatorPosition="bottom"
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
+						rowsPerPageTemplate="5,10,{ShowAll|'Todos'}">
+
+						<p:column headerText="Nombre completo"
+							sortBy="#{userVar.fullname}" filterBy="#{userVar.fullname}"
+							filterMatchMode="contains" filterPlaceholder="Filtrar por nombre">
+							<h:outputText value="#{userVar.fullname}" />
+						</p:column>
+						
+						<p:column headerText="Nombre de usuario">
+							<h:outputText value="#{userVar.username}" />
+						</p:column>
+
+						<p:column headerText="Fecha de creación">
+							<h:outputText value="#{userVar.creationDateFormated}" />
+						</p:column>
+
+						<p:column styleClass="links-column">
+							<h:commandLink update="tableForm" styleClass="link-delete"
+								action="#{gestionController.borrarUsuario(userVar.id)}">
+								<i class="material-symbols-outlined">delete</i>
+							</h:commandLink>
+						</p:column>
+
+					</p:dataTable>
+				</h:form>
+			</article>
+		</section>
+	</ui:define>
+
+</ui:composition>

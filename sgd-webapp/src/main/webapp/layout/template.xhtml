@@ -30,7 +30,7 @@
 <h:body>
 	<header class="main-header">
 		<div class="container">
-			<a href="/index.xhtml" class="logo"> <img
+			<a href="/index.jsf" class="logo"> <img
 				src="/assets/images/logo-fhce.png" />
 			</a>
 			<nav class="navigation-wrapper">
@@ -39,75 +39,78 @@
 				<ul class="navigation-menu" id="navigationMenu">
 					<button class="button_blanco button_icon material-symbols-outlined"
 						id="botonCerrar">cancel</button>
-					<li><a href="/pages/contacto.html"
-						class="container container-user"> <span
+					<li><a href="#" class="container-user"> <span
 							class="material-symbols-outlined"> person </span>
-							<p class="dashboard_user_name">#{appCtrl.usuarioLogueado}</p>
-					</a></li>
+							#{appCtrl.usuarioLogueado}
+						</a>
+						<ul>
+							<li><a href="/logout">Cerrar sesión</a></li>
+						</ul>
+					</li>
 				</ul>
 			</nav>
 		</div>
 	</header>
 	<main>
-		<h:form id="form-side">
-			<div class="side-bar">
-				<div class="group">
-					<div class="group-title">Usuarios</div>
-					<ul class="group-wrapper">
-						<li><a href="pages/programa-nuevo.html"> <span
-								class="material-symbols-outlined"> person_add </span>
-								<p>Usuario nuevo</p>
-						</a></li>
-						<li><a href="/pages/programa-nuevo.html"> <span
-								class="material-symbols-outlined"> group </span>
-								<p>Ver usuarios</p>
-						</a></li>
-						<li><a href="/pages/programa-nuevo.html"> <span
-								class="material-symbols-outlined"> manufacturing </span>
-								<p>Roles y operaciones</p>
-						</a></li>
-					</ul>
-				</div>
-				<div class="group">
-					<div class="group-title">Gestión FHCE</div>
-					<ul class="group-wrapper">
-						<li><a href="/pages/gestion/areas-tematicas.jsf"> <span
-								class="material-symbols-outlined"> settings </span>
-								<p>Ver áreas temáticas</p>
-						</a></li>
-						<li><a href="/pages/gestion/carreras.jsf"> <span
-								class="material-symbols-outlined"> account_balance </span>
-								<p>Ver carreras</p>
-						</a></li>
-						<li><a href="/pages/gestion/unidades.jsf"> <span
-								class="material-symbols-outlined"> local_library </span>
-								<p>Ver unidades académicas</p>
-						</a></li>
-					</ul>
-				</div>
-				<div class="group">
-					<div class="group-title">Programas</div>
-					<ul class="group-wrapper">
-						<li><h:commandLink action="#{pCtrl.agregarPrograma}">
-								<span class="material-symbols-outlined"> note_add </span>
-								<p>Programa nuevo</p>
-							</h:commandLink></li>
-						<li><a href="/pages/programas/ver-programas.jsf"> <span
-								class="material-symbols-outlined"> hourglass_top </span>
-								<p>Ver programas en proceso de creación</p>
-						</a></li>
-						<li><a href="/pages/programas/ver-programas.jsf"> <span
-								class="material-symbols-outlined"> view_list </span>
-								<p>Ver programas aprobados</p>
-						</a></li>
-					</ul>
-				</div>
+		<h:form id="sidebar-container" class="side-bar">
+			<a href="#" data-toggle="sidebar-colapse" class="collapse"> <span
+				id="collapse-icon" class="fa fa-2x mr-3 fa-angle-double-right"></span>
+				<span id="collapse-text" class="menu-collapsed">Cerrar</span>
+			</a>
+			<div class="group">
+				<div class="group-title">Usuarios</div>
+				<ul class="group-wrapper">
+					<li><a href="/pages/gestion/usuarios.jsf"> <span
+							class="material-symbols-outlined"> group </span> Ver usuarios
+					</a></li>
+					<li><a href="/pages/programa-nuevo.html"> <span
+							class="material-symbols-outlined"> manufacturing </span> Roles y
+							operaciones
+					</a></li>
+				</ul>
+			</div>
+			<div class="group">
+				<div class="group-title">Gestión FHCE</div>
+				<ul class="group-wrapper">
+					<li><a href="/pages/gestion/areas-tematicas.jsf"> <span
+							class="material-symbols-outlined"> settings </span>
+							<p>Ver áreas temáticas</p>
+					</a></li>
+					<li><a href="/pages/gestion/carreras.jsf"> <span
+							class="material-symbols-outlined"> account_balance </span>
+							<p>Ver carreras</p>
+					</a></li>
+					<li><a href="/pages/gestion/unidades.jsf"> <span
+							class="material-symbols-outlined"> local_library </span>
+							<p>Ver unidades académicas</p>
+					</a></li>
+				</ul>
+			</div>
+			<div class="group">
+				<div class="group-title">Programas</div>
+				<ul class="group-wrapper">
+					<li><h:commandLink action="#{pCtrl.agregarPrograma}">
+							<span class="material-symbols-outlined"> note_add </span>
+							<p>Programa nuevo</p>
+						</h:commandLink></li>
+					<li><a href="/pages/programas/ver-programas.jsf"> <span
+							class="material-symbols-outlined"> hourglass_top </span>
+							<p>Ver programas en proceso de creación</p>
+					</a></li>
+					<li><a href="/pages/programas/ver-programas.jsf"> <span
+							class="material-symbols-outlined"> view_list </span>
+							<p>Ver programas aprobados</p>
+					</a></li>
+				</ul>
 			</div>
 		</h:form>
-		<div class="content">
+
+		<div class="content" id="content">
 			<ui:insert name="content">Main Content</ui:insert>
 			<script src="/js/jquery-3.6.1.min.js"></script>
 			<script src="/js/jquery-ui.min.js"></script>
+			<script
+				src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js" />
 			<script src="/js/main.js"></script>
 			<script src="https://kit.fontawesome.com/0b69af8f69.js"
 				crossorigin="anonymous"></script>
