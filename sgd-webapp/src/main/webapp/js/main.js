@@ -34,7 +34,6 @@
   })( window, document, jQuery );
 
   $(function(){
-    SidebarCollapse();
     $('.btn-circle').on('click', function(e){
       var tab = $(e.currentTarget).attr('href');
       var $activeTab = $('.tab-pane.active');

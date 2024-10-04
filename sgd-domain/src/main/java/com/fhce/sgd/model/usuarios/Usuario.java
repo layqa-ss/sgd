@@ -6,6 +6,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -23,6 +25,10 @@ public class Usuario {
 	private String fullname;
 
 	private Date creationDate;
+	
+	@ManyToOne
+    @JoinColumn(name="id_rol")
+	private Rol rol;
 	
 	public Usuario(String username, String password, String fullname) {
 		super();

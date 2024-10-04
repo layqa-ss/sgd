@@ -1,7 +1,7 @@
 package com.fhce.sgd.model.programas;
 
 import com.fhce.sgd.model.enums.EnumCargo;
-import com.fhce.sgd.model.enums.EnumRol;
+import com.fhce.sgd.model.enums.EnumRolDocente;
 import com.fhce.sgd.model.usuarios.Usuario;
 
 import jakarta.persistence.Entity;
@@ -26,7 +26,7 @@ public class ProgramaIntegrante {
 	
 	private String nombre_docente;
 	
-	private EnumRol rol;
+	private EnumRolDocente rol;
 	
 	private EnumCargo cargo;
 	
@@ -42,7 +42,7 @@ public class ProgramaIntegrante {
 		
 	}
 	
-	public ProgramaIntegrante(EnumRol rol, EnumCargo cargo, String unidad_academica, String subunidad_academica) {
+	public ProgramaIntegrante(EnumRolDocente rol, EnumCargo cargo, String unidad_academica, String subunidad_academica) {
 		this.rol =  rol;
 		this.cargo = cargo;
 		this.unidad_academica = unidad_academica;
@@ -81,11 +81,11 @@ public class ProgramaIntegrante {
 		this.nombre_docente = nombre_docente;
 	}
 
-	public EnumRol getRol() {
+	public EnumRolDocente getRol() {
 		return rol;
 	}
 
-	public void setRol(EnumRol rol) {
+	public void setRol(EnumRolDocente rol) {
 		this.rol = rol;
 	}
 

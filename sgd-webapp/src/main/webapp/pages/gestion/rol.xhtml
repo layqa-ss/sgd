@@ -1,0 +1,44 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="jakarta.faces.core" xmlns:h="jakarta.faces.html"
+	xmlns:ui="jakarta.faces.facelets" xmlns:p="http://primefaces.org/ui"
+	template="/layout/template.xhtml">
+
+	<ui:define name="content">
+		<section class="intro">
+			<article>
+				<h1 class="titulo-seccion">#{gestionController.edicionRol ?
+					'Editar rol' : 'Crear rol'}</h1>
+			</article>
+		</section>
+		<section>
+			<article>
+				<h:form class="form container" id="form">
+					<div class="item">
+						<label>Nombre</label>
+						<h:inputText value="#{gestionController.rol.nombre}" />
+					</div>
+
+					<div class="item">
+						<label>Operaciones</label>
+						<p:pickList id="pojoPickList" value="#{gestionController.operaciones}"
+							var="operacion" itemValue="#{operacion}" itemLabel="#{operacion}"
+							converter="#{operacionConverter}"
+							responsive="true">
+
+							<p:column>
+								<h:outputText value="#{gestionController.obtenerLabelEnum(operacion)}" />
+							</p:column>
+						</p:pickList>
+					</div>
+
+					<div class="item">
+						<h:commandButton class="button_rojo button_large button"
+							action="#{gestionController.guardarRol}" value="Guardar"></h:commandButton>
+					</div>
+
+				</h:form>
+			</article>
+		</section>
+	</ui:define>
+
+</ui:composition>

@@ -5,11 +5,13 @@ import java.util.Map;
 
 import com.fhce.sgd.dto.gestion.AreaTematicaDto;
 import com.fhce.sgd.dto.gestion.CarreraDto;
+import com.fhce.sgd.dto.gestion.RolDto;
 import com.fhce.sgd.dto.gestion.UnidadAcademicaDto;
 import com.fhce.sgd.dto.gestion.UnidadCurricularDto;
 import com.fhce.sgd.model.gestion.AreaTematica;
 import com.fhce.sgd.model.gestion.Carrera;
 import com.fhce.sgd.model.gestion.UnidadAcademica;
+import com.fhce.sgd.model.usuarios.Rol;
 
 public interface GestionService {
 
@@ -42,4 +44,12 @@ public interface GestionService {
 	UnidadAcademica getUnidadAcademica(Long id);
 	
 	List<UnidadCurricularDto> getUnidadesCurriculares();
+	
+	Long addRol(RolDto rolDto);
+	
+	void deleteRol(Long id);
+	
+	RolDto getRol(Long id);
+	
+	List<RolDto> getRoles();
 }

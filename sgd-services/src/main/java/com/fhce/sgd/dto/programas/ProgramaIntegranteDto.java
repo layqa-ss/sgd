@@ -1,13 +1,13 @@
 package com.fhce.sgd.dto.programas;
 
 import com.fhce.sgd.model.enums.EnumCargo;
-import com.fhce.sgd.model.enums.EnumRol;
+import com.fhce.sgd.model.enums.EnumRolDocente;
 
 public class ProgramaIntegranteDto {
 	
 	private Long id;
 
-	private EnumRol rol;
+	private EnumRolDocente rol;
 	
 	private EnumCargo cargo;
 	
@@ -23,7 +23,7 @@ public class ProgramaIntegranteDto {
 		
 	}
 
-	public ProgramaIntegranteDto(Long id, EnumRol rol, EnumCargo cargo, String ua, String sua, Long idUsuario, String nombreDocente) {
+	public ProgramaIntegranteDto(Long id, EnumRolDocente rol, EnumCargo cargo, String ua, String sua, Long idUsuario, String nombreDocente) {
 		this.id = id;
 		this.rol = rol;
 		this.cargo = cargo;
@@ -34,12 +34,12 @@ public class ProgramaIntegranteDto {
 	}
 
 
-	public EnumRol getRol() {
+	public EnumRolDocente getRol() {
 		return rol;
 	}
 
 
-	public void setRol(EnumRol rol) {
+	public void setRol(EnumRolDocente rol) {
 		this.rol = rol;
 	}
 

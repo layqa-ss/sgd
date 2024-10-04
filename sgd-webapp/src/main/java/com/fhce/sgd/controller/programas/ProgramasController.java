@@ -9,8 +9,6 @@ import org.primefaces.event.ReorderEvent;
 import org.primefaces.model.FilterMeta;
 import org.primefaces.model.StreamedContent;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fhce.sgd.dto.gestion.AreaTematicaDto;
 import com.fhce.sgd.dto.gestion.CarreraDto;
@@ -26,9 +24,8 @@ import com.fhce.sgd.model.enums.EnumEstadoPrograma;
 import com.fhce.sgd.model.enums.EnumFormato;
 import com.fhce.sgd.model.enums.EnumModalidad;
 import com.fhce.sgd.model.enums.EnumRegimen;
-import com.fhce.sgd.model.enums.EnumRol;
+import com.fhce.sgd.model.enums.EnumRolDocente;
 import com.fhce.sgd.model.enums.EnumSemestre;
-import com.fhce.sgd.model.usuarios.CustomUsuarioDetails;
 import com.fhce.sgd.service.GestionService;
 import com.fhce.sgd.service.ProgramaService;
 import com.fhce.sgd.util.GeneradorPdf;
@@ -172,8 +169,8 @@ public class ProgramasController implements Serializable  {
 		}
 	}
 
-	public EnumRol[] getRoles() {
-		return EnumRol.values();
+	public EnumRolDocente[] getRoles() {
+		return EnumRolDocente.values();
 	}
 
 	public EnumCargo[] getCargos() {

@@ -1,0 +1,56 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="jakarta.faces.core" xmlns:h="jakarta.faces.html"
+	xmlns:ui="jakarta.faces.facelets" xmlns:p="http://primefaces.org/ui"
+	template="/layout/template.xhtml">
+
+	<ui:define name="content">
+		<section class="intro">
+			<article>
+				<h1 class="titulo-seccion">Ver roles</h1>
+			</article>
+		</section>
+
+		<section>
+			<article class="main-container">
+				<h:form>
+					<div class="item">
+						<h:commandLink class="button agregar-button"
+							action="#{gestionController.nuevoRol}">
+						Nuevo rol<i class="fa-solid fa-plus"></i>
+						</h:commandLink>
+					</div>
+				</h:form>
+				<h:form id="tableForm">
+					<p:dataTable value="#{gestionController.roles}" var="r"
+						widgetVar="rolesTable" styleClass="table"
+						emptyMessage="No se encontraron roles"
+						rows="10" paginator="true"
+						paginatorPosition="bottom"
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
+						rowsPerPageTemplate="5,10,{ShowAll|'Todos'}">
+
+						<p:column headerText="Nombre" sortBy="#{r.nombre}">
+							<h:outputText value="#{r.nombre}" />
+						</p:column>
+
+						<p:column styleClass="links-column">
+							<h:commandLink update="tableForm" styleClass="link-delete"
+								action="#{gestionController.editarRol(r.id)}">
+								<i class="material-symbols-outlined">edit</i>
+							</h:commandLink>
+						</p:column>
+						<p:column styleClass="links-column">
+							<h:commandLink update="tableForm" styleClass="link-delete"
+								action="#{gestionController.borrarRol(r.id)}">
+								<i class="material-symbols-outlined">delete</i>
+							</h:commandLink>
+						</p:column>
+
+					</p:dataTable>
+				</h:form>
+			</article>
+		</section>
+	</ui:define>
+
+</ui:composition>

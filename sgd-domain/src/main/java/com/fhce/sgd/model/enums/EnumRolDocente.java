@@ -1,6 +1,6 @@
 package com.fhce.sgd.model.enums;
 
-public enum EnumRol {
+public enum EnumRolDocente {
 	
 	RESPONSABLE("Responsable"),
 	ENCARGADO("Encargado/a"),
@@ -9,7 +9,7 @@ public enum EnumRol {
 	
 	public final String label;
 
-    private EnumRol(String label) {
+    private EnumRolDocente(String label) {
     	this.label = label;
     }
 
