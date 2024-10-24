@@ -52,12 +52,12 @@
 		</div>
 	</header>
 	<main>
-		<h:form id="sidebar-container" class="side-bar">
-			<a href="#" data-toggle="sidebar-colapse" class="collapse"> <span
+		<h:form id="sidebar-container" class="side-bar sidebar-collapsed">
+			<a href="#" data-toggle="sidebar-colapse" class="collapse content-collapsed"> <span
 				id="collapse-icon" class="fa fa-2x mr-3 fa-angle-double-right"></span>
-				<span id="collapse-text" class="menu-collapsed">Cerrar</span>
+				<span id="collapse-text" class="menu-collapsed d-none">Cerrar</span>
 			</a>
-			<div class="group">
+			<div class="group d-none">
 				<div class="group-title">Usuarios</div>
 				<ul class="group-wrapper">
 					<li><a href="/pages/gestion/usuarios.jsf"> <span
@@ -68,7 +68,7 @@
 					</a></li>
 				</ul>
 			</div>
-			<div class="group">
+			<div class="group d-none">
 				<div class="group-title">Gestión FHCE</div>
 				<ul class="group-wrapper">
 					<li><a href="/pages/gestion/areas-tematicas.jsf"> <span
@@ -85,7 +85,7 @@
 					</a></li>
 				</ul>
 			</div>
-			<div class="group">
+			<div class="group d-none">
 				<div class="group-title">Programas</div>
 				<ul class="group-wrapper">
 					<li><h:commandLink action="#{pCtrl.agregarPrograma}">
@@ -104,7 +104,7 @@
 			</div>
 		</h:form>
 
-		<div class="content" id="content">
+		<div class="content content-collapsed" id="content">
 			<ui:insert name="content">Main Content</ui:insert>
 			<script src="/js/jquery-3.6.1.min.js"></script>
 			<script src="/js/jquery-ui.min.js"></script>
@@ -115,9 +115,11 @@
 				crossorigin="anonymous"></script>
 		</div>
 	</main>
-	<footer> </footer>
-
-
+	<footer> 
+		<div class="footer">
+            <p class="version">Versión #{appCtrl.buildVersion}</p>
+        </div>
+	</footer>
 
 </h:body>
 

@@ -4,6 +4,7 @@ import java.security.Principal;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,6 +25,9 @@ public class AppController {
 
 	@Autowired
 	private UserDetailsService userDetailsService;
+
+	@Value("${build.version}")
+	private String buildVersion;
 
 	private boolean puedeDescargarPdf = false;
 	private boolean puedeEnviarCC = false;
@@ -65,6 +69,14 @@ public class AppController {
 
 	public boolean isPuedeEnviarCC() {
 		return puedeEnviarCC;
+	}
+
+	public String getBuildVersion() {
+		return buildVersion;
+	}
+
+	public void setBuildVersion(String buildVersion) {
+		this.buildVersion = buildVersion;
 	}
 
 }

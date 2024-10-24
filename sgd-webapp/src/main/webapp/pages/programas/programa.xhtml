@@ -388,7 +388,8 @@
 									</h:panelGroup>
 								</h:panelGroup>
 								<p:dataTable value="#{pCtrl.nuevo.integrantes}" var="i"
-									styleClass="table table-docentes" id="table-docentes">
+									styleClass="table table-docentes" id="table-docentes"
+									emptyMessage="No se encontraron registros">
 
 									<p:column headerText="Rol">
 										<h:outputText value="#{i.rol.label}" />
