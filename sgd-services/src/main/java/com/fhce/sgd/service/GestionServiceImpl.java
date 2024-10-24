@@ -26,9 +26,13 @@ import com.fhce.sgd.repository.CarreraRepository;
 import com.fhce.sgd.repository.RolRepository;
 import com.fhce.sgd.repository.UnidadAcademicaRepository;
 import com.fhce.sgd.repository.UnidadCurricularRepository;
+import com.fhce.sgd.service.exception.SgdServicesException;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Transactional
+@Slf4j
 public class GestionServiceImpl implements GestionService {
 
 	@Autowired
@@ -46,182 +50,289 @@ public class GestionServiceImpl implements GestionService {
 	@Autowired
 	private RolRepository rolRepository;
 
-	public List<AreaTematicaDto> getAreasTematicasForCarrera(Long carreraId) {
-		Iterable<AreaTematica> areasTodas = areaTematicaRepository.findAll();
-		List<AreaTematica> areas = StreamSupport.stream(areasTodas.spliterator(), false)
-				.filter(a -> a.getCarrera().getId().equals(carreraId)).toList();
-		if (!areas.isEmpty()) {
-			List<AreaTematicaDto> areasDto = new ArrayList<AreaTematicaDto>();
-			for (AreaTematica a : areas) {
-				AreaTematicaDto areaDto = new AreaTematicaDto(a.getId(), a.getNombreArea(), carreraId);
-				areasDto.add(areaDto);
+	public List<AreaTematicaDto> getAreasTematicasForCarrera(Long carreraId) throws SgdServicesException {
+		try {
+			Iterable<AreaTematica> areasTodas = areaTematicaRepository.findAll();
+			List<AreaTematica> areas = StreamSupport.stream(areasTodas.spliterator(), false)
+					.filter(a -> a.getCarrera().getId().equals(carreraId)).toList();
+			if (!areas.isEmpty()) {
+				List<AreaTematicaDto> areasDto = new ArrayList<AreaTematicaDto>();
+				for (AreaTematica a : areas) {
+					AreaTematicaDto areaDto = new AreaTematicaDto(a.getId(), a.getNombreArea(), carreraId);
+					areasDto.add(areaDto);
+				}
+				return areasDto;
+			} else {
+				return null;
 			}
-			return areasDto;
-		} else {
-			return null;
+		} catch (Exception e) {
+			log.error("Error en getAreasTematicasForCarrera de GestionService: " + e.getMessage());
+			throw new SgdServicesException("Error en getAreasTematicasForCarrera de GestionService: " + e.getMessage(),
+					e);
 		}
+
 	}
 
-	public Map<Long, List<AreaTematicaDto>> getAreasPorCarrera() {
-		Map<Long, List<AreaTematicaDto>> map = new HashMap<>();
-		List<CarreraDto> carreras = getCarreras();
-		if (carreras != null) {
-			for (CarreraDto c : carreras) {
-				map.put(c.getId(), getAreasTematicasForCarrera(c.getId()));
+	public Map<Long, List<AreaTematicaDto>> getAreasPorCarrera() throws SgdServicesException {
+		try {
+			Map<Long, List<AreaTematicaDto>> map = new HashMap<>();
+			List<CarreraDto> carreras = getCarreras();
+			if (carreras != null) {
+				for (CarreraDto c : carreras) {
+					map.put(c.getId(), getAreasTematicasForCarrera(c.getId()));
+				}
 			}
+			return map;
+		} catch (Exception e) {
+			log.error("Error en getAreasPorCarrera de GestionService: " + e.getMessage());
+			throw new SgdServicesException("Error en getAreasPorCarrera de GestionService: " + e.getMessage(), e);
 		}
-		return map;
+
 	}
 
-	public List<AreaTematicaDto> getAreasTematicas() {
-		Iterable<AreaTematica> areasTodas = areaTematicaRepository.findAll();
-		List<AreaTematica> areas = StreamSupport.stream(areasTodas.spliterator(), false).toList();
-		if (!areas.isEmpty()) {
-			List<AreaTematicaDto> areasDto = new ArrayList<AreaTematicaDto>();
-			for (AreaTematica a : areas) {
-				AreaTematicaDto areaDto = new AreaTematicaDto(a.getId(), a.getNombreArea(), a.getCarrera().getId());
-				areaDto.setNombreCarrera(a.getCarrera().getNombreCarrera());
-				areasDto.add(areaDto);
+	public List<AreaTematicaDto> getAreasTematicas() throws SgdServicesException {
+		try {
+			Iterable<AreaTematica> areasTodas = areaTematicaRepository.findAll();
+			List<AreaTematica> areas = StreamSupport.stream(areasTodas.spliterator(), false).toList();
+			if (!areas.isEmpty()) {
+				List<AreaTematicaDto> areasDto = new ArrayList<AreaTematicaDto>();
+				for (AreaTematica a : areas) {
+					AreaTematicaDto areaDto = new AreaTematicaDto(a.getId(), a.getNombreArea(), a.getCarrera().getId());
+					areaDto.setNombreCarrera(a.getCarrera().getNombreCarrera());
+					areasDto.add(areaDto);
+				}
+				return areasDto;
+			} else {
+				return null;
 			}
-			return areasDto;
-		} else {
-			return null;
+		} catch (Exception e) {
+			log.error("Error en getAreasTematicas de GestionService: " + e.getMessage());
+			throw new SgdServicesException("Error en getAreasTematicas de GestionService: " + e.getMessage(), e);
 		}
 	}
 
-	public Long addAreaTematica(AreaTematicaDto areaDto) {
-		AreaTematica area = new AreaTematica();
-		area.setNombreArea(areaDto.getNombre());
-		Optional<Carrera> carrera = carreraRepository.findById(areaDto.getCarreraId());
-		area.setCarrera(carrera.get());
-		area = areaTematicaRepository.save(area);
-		return area.getId();
+	public Long addAreaTematica(AreaTematicaDto areaDto) throws SgdServicesException {
+		try {
+			AreaTematica area = new AreaTematica();
+			area.setNombreArea(areaDto.getNombre());
+			Optional<Carrera> carrera = carreraRepository.findById(areaDto.getCarreraId());
+			area.setCarrera(carrera.get());
+			area = areaTematicaRepository.save(area);
+			return area.getId();
+		} catch (Exception e) {
+			log.error("Error en addAreaTematica de GestionService: " + e.getMessage());
+			throw new SgdServicesException("Error en addAreaTematica de GestionService: " + e.getMessage(), e);
+		}
 	}
 
-	public void deleteAreaTematica(Long id) {
-		areaTematicaRepository.deleteById(id);
+	public void deleteAreaTematica(Long id) throws SgdServicesException {
+		try {
+			areaTematicaRepository.deleteById(id);
+		} catch (Exception e) {
+			log.error("Error en deleteAreaTematica de GestionService: " + e.getMessage());
+			throw new SgdServicesException("Error en deleteAreaTematica de GestionService: " + e.getMessage(), e);
+		}
 	}
 
-	public AreaTematica getAreaTematica(Long id) {
-		return areaTematicaRepository.findById(id).orElse(null);
+	public AreaTematica getAreaTematica(Long id) throws SgdServicesException {
+		try {
+			return areaTematicaRepository.findById(id).orElse(null);
+		} catch (Exception e) {
+			log.error("Error en getAreaTematica de GestionService: " + e.getMessage());
+			throw new SgdServicesException("Error en getAreaTematica de GestionService: " + e.getMessage(), e);
+		}
 	}
 
-	public List<CarreraDto> getCarreras() {
-		Iterable<Carrera> carrerasTodas = carreraRepository.findAll();
-		List<Carrera> carreras = StreamSupport.stream(carrerasTodas.spliterator(), false).toList();
-		if (!carreras.isEmpty()) {
-			List<CarreraDto> carrerasDto = new ArrayList<CarreraDto>();
-			for (Carrera c : carrerasTodas) {
-				CarreraDto carreraDto = new CarreraDto(c.getId(), c.getNombreCarrera(), c.getUa().getId(),
-						c.getUa().getNombreUA());
-				carreraDto.setNombreUA(c.getUa().getNombreUA());
-				carrerasDto.add(carreraDto);
+	public List<CarreraDto> getCarreras() throws SgdServicesException {
+		try {
+			Iterable<Carrera> carrerasTodas = carreraRepository.findAll();
+			List<Carrera> carreras = StreamSupport.stream(carrerasTodas.spliterator(), false).toList();
+			if (!carreras.isEmpty()) {
+				List<CarreraDto> carrerasDto = new ArrayList<CarreraDto>();
+				for (Carrera c : carrerasTodas) {
+					CarreraDto carreraDto = new CarreraDto(c.getId(), c.getNombreCarrera(), c.getUa().getId(),
+							c.getUa().getNombreUA());
+					carreraDto.setNombreUA(c.getUa().getNombreUA());
+					carrerasDto.add(carreraDto);
+				}
+				return carrerasDto;
+			} else {
+				return null;
 			}
-			return carrerasDto;
-		} else {
-			return null;
+		} catch (Exception e) {
+			log.error("Error en getCarreras de GestionService: " + e.getMessage());
+			throw new SgdServicesException("Error en getCarreras de GestionService: " + e.getMessage(), e);
 		}
 	}
 
-	public Long addCarrera(CarreraDto carreraDto) {
-		Carrera carrera = new Carrera();
-		carrera.setNombreCarrera(carreraDto.getNombre());
-		Optional<UnidadAcademica> ua = uaRepository.findById(carreraDto.getUaId());
-		carrera.setUa(ua.get());
-		carrera = carreraRepository.save(carrera);
-		return carrera.getId();
+	public Long addCarrera(CarreraDto carreraDto) throws SgdServicesException {
+		try {
+			Carrera carrera = new Carrera();
+			carrera.setNombreCarrera(carreraDto.getNombre());
+			Optional<UnidadAcademica> ua = uaRepository.findById(carreraDto.getUaId());
+			carrera.setUa(ua.get());
+			carrera = carreraRepository.save(carrera);
+			return carrera.getId();
+		} catch (Exception e) {
+			log.error("Error en addCarrera de GestionService: " + e.getMessage());
+			throw new SgdServicesException("Error en addCarrera de GestionService: " + e.getMessage(), e);
+		}
 	}
 
-	public void deleteCarrera(Long id) {
-		carreraRepository.deleteById(id);
+	public void deleteCarrera(Long id) throws SgdServicesException {
+		try {
+			carreraRepository.deleteById(id);
+		} catch (Exception e) {
+			log.error("Error en deleteCarrera de GestionService: " + e.getMessage());
+			throw new SgdServicesException("Error en deleteCarrera de GestionService: " + e.getMessage(), e);
+		}
 	}
 
-	public Carrera getCarrera(Long id) {
-		return carreraRepository.findById(id).orElse(null);
+	public Carrera getCarrera(Long id) throws SgdServicesException {
+		try {
+			return carreraRepository.findById(id).orElse(null);
+		} catch (Exception e) {
+			log.error("Error en getCarrera de GestionService: " + e.getMessage());
+			throw new SgdServicesException("Error en getCarrera de GestionService: " + e.getMessage(), e);
+		}
 	}
 
-	public List<UnidadAcademicaDto> getUnidadesAcademicas() {
-		Iterable<UnidadAcademica> unidadesTodas = uaRepository.findAll();
-		List<UnidadAcademica> unidades = StreamSupport.stream(unidadesTodas.spliterator(), false).toList();
-		if (!unidades.isEmpty()) {
-			List<UnidadAcademicaDto> unidadesDto = new ArrayList<UnidadAcademicaDto>();
-			for (UnidadAcademica ua : unidadesTodas) {
-				UnidadAcademicaDto uaDto = new UnidadAcademicaDto(ua.getId(), ua.getNombreUA());
-				unidadesDto.add(uaDto);
+	public List<UnidadAcademicaDto> getUnidadesAcademicas() throws SgdServicesException {
+		try {
+			Iterable<UnidadAcademica> unidadesTodas = uaRepository.findAll();
+			List<UnidadAcademica> unidades = StreamSupport.stream(unidadesTodas.spliterator(), false).toList();
+			if (!unidades.isEmpty()) {
+				List<UnidadAcademicaDto> unidadesDto = new ArrayList<UnidadAcademicaDto>();
+				for (UnidadAcademica ua : unidadesTodas) {
+					UnidadAcademicaDto uaDto = new UnidadAcademicaDto(ua.getId(), ua.getNombreUA());
+					unidadesDto.add(uaDto);
+				}
+				return unidadesDto;
+			} else {
+				return null;
 			}
-			return unidadesDto;
-		} else {
-			return null;
+		} catch (Exception e) {
+			log.error("Error en getUnidadesAcademicas de GestionService: " + e.getMessage());
+			throw new SgdServicesException("Error en getUnidadesAcademicas de GestionService: " + e.getMessage(), e);
 		}
+
 	}
 
-	public Long addUA(UnidadAcademicaDto uaDto) {
-		UnidadAcademica ua = new UnidadAcademica();
-		ua.setNombreUA(uaDto.getNombre());
-		ua = uaRepository.save(ua);
-		return ua.getId();
+	public Long addUA(UnidadAcademicaDto uaDto) throws SgdServicesException {
+		try {
+			UnidadAcademica ua = new UnidadAcademica();
+			ua.setNombreUA(uaDto.getNombre());
+			ua = uaRepository.save(ua);
+			return ua.getId();
+		} catch (Exception e) {
+			log.error("Error en addUA de GestionService: " + e.getMessage());
+			throw new SgdServicesException("Error en addUA de GestionService: " + e.getMessage(), e);
+		}
+
 	}
 
-	public void deleteUA(Long id) {
-		uaRepository.deleteById(id);
+	public void deleteUA(Long id) throws SgdServicesException {
+		try {
+			uaRepository.deleteById(id);
+		} catch (Exception e) {
+			log.error("Error en deleteUA de GestionService: " + e.getMessage());
+			throw new SgdServicesException("Error en deleteUA de GestionService: " + e.getMessage(), e);
+		}
+
 	}
 
-	public UnidadAcademica getUnidadAcademica(Long id) {
-		return uaRepository.findById(id).orElse(null);
+	public UnidadAcademica getUnidadAcademica(Long id) throws SgdServicesException {
+		try {
+			return uaRepository.findById(id).orElse(null);
+		} catch (Exception e) {
+			log.error("Error en getUnidadAcademica de GestionService: " + e.getMessage());
+			throw new SgdServicesException("Error en getUnidadAcademica de GestionService: " + e.getMessage(), e);
+		}
+
 	}
 
-	public List<UnidadCurricularDto> getUnidadesCurriculares() {
-		Iterable<UnidadCurricular> unidadesTodas = ucRepository.findAll();
-		List<UnidadCurricular> unidades = StreamSupport.stream(unidadesTodas.spliterator(), false).toList();
-		if (!unidades.isEmpty()) {
-			List<UnidadCurricularDto> unidadesDto = new ArrayList<UnidadCurricularDto>();
-			for (UnidadCurricular uc : unidadesTodas) {
-				UnidadCurricularDto ucDto = new UnidadCurricularDto(uc.getId(), uc.getNombreUC());
-				unidadesDto.add(ucDto);
+	public List<UnidadCurricularDto> getUnidadesCurriculares() throws SgdServicesException {
+		try {
+			Iterable<UnidadCurricular> unidadesTodas = ucRepository.findAll();
+			List<UnidadCurricular> unidades = StreamSupport.stream(unidadesTodas.spliterator(), false).toList();
+			if (!unidades.isEmpty()) {
+				List<UnidadCurricularDto> unidadesDto = new ArrayList<UnidadCurricularDto>();
+				for (UnidadCurricular uc : unidadesTodas) {
+					UnidadCurricularDto ucDto = new UnidadCurricularDto(uc.getId(), uc.getNombreUC());
+					unidadesDto.add(ucDto);
+				}
+				return unidadesDto;
+			} else {
+				return null;
 			}
-			return unidadesDto;
-		} else {
-			return null;
+		} catch (Exception e) {
+			log.error("Error en getUnidadesCurriculares de GestionService: " + e.getMessage());
+			throw new SgdServicesException("Error en getUnidadesCurriculares de GestionService: " + e.getMessage(), e);
 		}
+
 	}
 
-	public List<RolDto> getRoles() {
-		Iterable<Rol> rolesTodos = rolRepository.findAll();
-		List<Rol> roles = StreamSupport.stream(rolesTodos.spliterator(), false).toList();
-		if (!roles.isEmpty()) {
-			List<RolDto> rolDto = new ArrayList<RolDto>();
-			for (Rol r : rolesTodos) {
-				RolDto rDto = new RolDto(r.getId(), r.getNombre(), r.getOperaciones());
-				rolDto.add(rDto);
+	public List<RolDto> getRoles() throws SgdServicesException {
+		try {
+			Iterable<Rol> rolesTodos = rolRepository.findAll();
+			List<Rol> roles = StreamSupport.stream(rolesTodos.spliterator(), false).toList();
+			if (!roles.isEmpty()) {
+				List<RolDto> rolDto = new ArrayList<RolDto>();
+				for (Rol r : rolesTodos) {
+					RolDto rDto = new RolDto(r.getId(), r.getNombre(), r.getOperaciones());
+					rolDto.add(rDto);
+				}
+				return rolDto;
+			} else {
+				return null;
 			}
-			return rolDto;
-		} else {
-			return null;
+		} catch (Exception e) {
+			log.error("Error en getRoles de GestionService: " + e.getMessage());
+			throw new SgdServicesException("Error en getRoles de GestionService: " + e.getMessage(), e);
 		}
+
 	}
 
-	public Long addRol(RolDto rolDto) {
-		Rol r = new Rol();
-		if (rolDto.getId() != null) {
-			r = rolRepository.findById(rolDto.getId()).get();
+	public Long addRol(RolDto rolDto) throws SgdServicesException {
+		try {
+			Rol r = new Rol();
+			if (rolDto.getId() != null) {
+				r = rolRepository.findById(rolDto.getId()).get();
+			}
+			r.setNombre(rolDto.getNombre());
+			r.setOperaciones(rolDto.getOperaciones());
+			r = rolRepository.save(r);
+			return r.getId();
+		} catch (Exception e) {
+			log.error("Error en addRol de GestionService: " + e.getMessage());
+			throw new SgdServicesException("Error en addRol de GestionService: " + e.getMessage(), e);
 		}
-		r.setNombre(rolDto.getNombre());
-		r.setOperaciones(rolDto.getOperaciones());
-		r = rolRepository.save(r);
-		return r.getId();
+
 	}
 
-	public void deleteRol(Long id) {
-		rolRepository.deleteById(id);
+	public void deleteRol(Long id) throws SgdServicesException {
+		try {
+			rolRepository.deleteById(id);
+		} catch (Exception e) {
+			log.error("Error en deleteRol de GestionService: " + e.getMessage());
+			throw new SgdServicesException("Error en deleteRol de GestionService: " + e.getMessage(), e);
+		}
+
 	}
 
-	public RolDto getRol(Long id) {
-		Rol r = rolRepository.findById(id).orElse(null);
-		if (r != null) {
-			RolDto rd = new RolDto(r.getId(), r.getNombre(), r.getOperaciones());
-			return rd;
-		} else {
-			return null;
+	public RolDto getRol(Long id) throws SgdServicesException {
+		try {
+			Rol r = rolRepository.findById(id).orElse(null);
+			if (r != null) {
+				RolDto rd = new RolDto(r.getId(), r.getNombre(), r.getOperaciones());
+				return rd;
+			} else {
+				return null;
+			}
+		} catch (Exception e) {
+			log.error("Error en getRol de GestionService: " + e.getMessage());
+			throw new SgdServicesException("Error en getRol de GestionService: " + e.getMessage(), e);
 		}
+
 	}
 }

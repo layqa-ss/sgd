@@ -29,6 +29,7 @@ public class ProgramaNuevoDto {
 	private boolean requisitos;
 	private String requisitosCuales;
 	private String recomendaciones;
+	private boolean recomNoCorresponde;
 	private boolean otrosServicios;
 
 	/* Creditos */
@@ -373,6 +374,14 @@ public class ProgramaNuevoDto {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public boolean isRecomNoCorresponde() {
+		return recomNoCorresponde;
+	}
+
+	public void setRecomNoCorresponde(boolean recomNoCorresponde) {
+		this.recomNoCorresponde = recomNoCorresponde;
 	}
 
 }

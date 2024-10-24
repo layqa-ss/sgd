@@ -11,6 +11,8 @@ public class ProgramaIntegranteDto {
 	
 	private EnumCargo cargo;
 	
+	private String cargoOtro;
+	
 	private String unidad_academica;
 	
 	private String subunidad_academica;
@@ -23,10 +25,11 @@ public class ProgramaIntegranteDto {
 		
 	}
 
-	public ProgramaIntegranteDto(Long id, EnumRolDocente rol, EnumCargo cargo, String ua, String sua, Long idUsuario, String nombreDocente) {
+	public ProgramaIntegranteDto(Long id, EnumRolDocente rol, EnumCargo cargo, String cargoOtro, String ua, String sua, Long idUsuario, String nombreDocente) {
 		this.id = id;
 		this.rol = rol;
 		this.cargo = cargo;
+		this.cargoOtro = cargoOtro;
 		this.unidad_academica = ua;
 		this.subunidad_academica = sua;
 		this.idUsuario = idUsuario;
@@ -87,8 +90,7 @@ public class ProgramaIntegranteDto {
 	public String getNombre_docente() {
 		return nombre_docente;
 	}
-
-
+	
 	public void setNombre_docente(String nombre_docente) {
 		this.nombre_docente = nombre_docente;
 	}
@@ -99,6 +101,14 @@ public class ProgramaIntegranteDto {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getCargoOtro() {
+		return cargoOtro;
+	}
+
+	public void setCargoOtro(String cargoOtro) {
+		this.cargoOtro = cargoOtro;
 	}
 
 }

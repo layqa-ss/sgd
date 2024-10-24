@@ -1,0 +1,376 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="jakarta.faces.core" xmlns:h="jakarta.faces.html"
+	xmlns:ui="jakarta.faces.facelets" xmlns:p="http://primefaces.org/ui"
+	template="/layout/template.xhtml">
+	<f:metadata>
+		<f:importConstants type="com.fhce.sgd.model.enums.EnumDuracion" />
+	</f:metadata>
+
+	<ui:define name="content">
+		<section class="intro">
+			<article>
+				<h1 class="titulo-seccion">Revisión de programa</h1>
+			</article>
+		</section>
+		<section>
+			<article>
+				<h:form class="form container form-programa" id="form">
+
+					<div class="process">
+						<div class="process-row nav nav-tabs">
+							<div class="process-step">
+								<button type="button" class="btn-circle active" href="#menu1"
+									id="menu1-btn">
+									<span class="material-symbols-outlined">info</span>
+								</button>
+								<p>
+									<small>General</small>
+								</p>
+							</div>
+							<div class="process-step">
+								<button type="button" class="btn-circle" href="#menu2"
+									id="menu2-btn">
+									<span class="material-symbols-outlined">school</span>
+								</button>
+								<p>
+									<small>Créditos y carga horaria</small>
+								</p>
+							</div>
+							<div class="process-step">
+								<button type="button" class="btn-circle" href="#menu3"
+									id="menu3-btn">
+									<span class="material-symbols-outlined">description</span>
+								</button>
+								<p>
+									<small>Objetivos y contenidos</small>
+								</p>
+							</div>
+							<div class="process-step">
+								<button type="button" class="btn-circle" href="#menu4"
+									id="menu4-btn">
+									<span class="material-symbols-outlined">quiz</span>
+								</button>
+								<p>
+									<small>Metodología y evaluación</small>
+								</p>
+							</div>
+							<div class="process-step">
+								<button type="button" class="btn-circle" href="#menu5"
+									id="menu5-btn">
+									<span class="material-symbols-outlined">menu_book</span>
+								</button>
+								<p>
+									<small>Bibliografía</small>
+								</p>
+							</div>
+						</div>
+					</div>
+					<div class="tab-content">
+						<div id="menu1" class="tab-pane fade active in">
+							<div class="item">
+								<h3 class="headline-3">General</h3>
+							</div>
+
+							<div class="item">
+								<div class="sug-label">
+                                    <label class="item-label">Unidad curricular</label>
+                                    <button type="button" class="agregar-sug icon-button" ><i class="material-symbols-outlined">add</i></button>
+                                </div>
+								<h:outputText value="#{pCtrl.revisado.nombreUC}" />
+								<div class="item sugerencia">
+                                    <textarea></textarea>
+                                    <button type="button" class="icon-button close-sug"><i class="material-symbols-outlined">close</i></button>
+                                </div>
+							</div>
+							<div class="item">
+								<div class="sug-label">
+                                    <label class="item-label">Unidad académica que la ofrece</label>
+                                    <button type="button" class="agregar-sug icon-button" ><i class="material-symbols-outlined">add</i></button>
+                                </div>
+								<ui:repeat value="#{pCtrl.revisado.unidades}" var="unidad">
+									<div class="item">
+										<h:outputText value="#{unidad.nombre}" />
+									</div>
+								</ui:repeat>
+								<div class="item sugerencia">
+                                    <textarea></textarea>
+                                    <button type="button" class="icon-button close-sug"><i class="material-symbols-outlined">close</i></button>
+                                </div>
+							</div>
+
+							<div class="item">
+								<label class="item-label">Carrera</label>
+								<ui:repeat value="#{pCtrl.revisado.carreras}" var="c">
+									<div class="item">
+										<h:outputText value="#{c.nombre}" />
+									</div>
+									
+								</ui:repeat>
+							</div>
+							
+							<div class="item">
+								<label class="item-label">Area temática por carrera</label>
+								<ui:repeat value="#{pCtrl.revisado.carreras}" var="c">
+									<div class="item">
+										<h:outputText value="#{c.nombre} - #{c.areaNombre}" />
+									</div>
+								</ui:repeat>
+							</div>
+
+							<div class="item">
+								<label class="item-label">Duración</label>
+								<h:outputText value="#{pCtrl.revisado.duracion.label}" rendered="#{pCtrl.revisado.duracion!=EnumDuracion.OTRO}"/>
+								<h:outputText value="#{pCtrl.revisado.duracionOtro}" rendered="#{pCtrl.revisado.duracion==EnumDuracion.OTRO}"/>
+							</div>
+							<h:panelGroup class="item" layout="block"
+								rendered="#{pCtrl.revisado.duracion != EnumDuracion.ANUAL}">
+								<label class="item-label">Semestre en el que se ofrece</label>
+								<h:outputText value="#{pCtrl.revisado.semestre.label}" />
+							</h:panelGroup>
+							<div class="item">
+								<label class="item-label">La unidad curricular está
+									recomendada para estudiantes de ingreso</label>
+
+								<h:outputText value="#{pCtrl.revisado.ingreso ? 'SI' : 'NO'}" />
+							</div>
+							<div class="item">
+								<label class="item-label">Requisitos de inscripción
+									(unidades curriculares previas o cantidad de créditos
+									obtenidos)</label>
+								<h:outputText value="#{pCtrl.revisado.requisitos ? 'SI' : 'NO'}" />
+							</div>
+							<h:panelGroup class="item" rendered="#{pCtrl.revisado.requisitos}">
+								<label class="item-label">¿Cuáles?</label>
+								<h:outputText value="#{pCtrl.revisado.requisitosCuales}" />
+							</h:panelGroup>
+
+							<div class="item">
+								<label class="item-label" for="uc">Conocimientos previos
+									o grados de avance en la carrera recomendados</label>
+								<h:outputText value="#{pCtrl.revisado.recomendaciones}" />
+							</div>
+							<div class="item">
+								<label class="item-label">Unidad curricular ofertada
+									como electiva para otros servicios universitarios o terciarios</label>
+								<h:outputText value="#{pCtrl.revisado.otrosServicios ? 'SI' : 'NO'}" />
+
+							</div>
+							<label class="titulo">Integrantes del equipo docente</label>
+							<p:dataTable value="#{pCtrl.revisado.integrantes}" var="i"
+								styleClass="table table-docentes">
+
+								<p:column headerText="Rol">
+									<h:outputText value="#{i.rol.label}" />
+								</p:column>
+
+								<p:column headerText="Cargo">
+									<h:outputText value="#{i.cargo.label}" />
+								</p:column>
+
+								<p:column headerText="Nombre">
+									<h:outputText value="#{i.nombre_docente}" />
+								</p:column>
+
+								<p:column headerText="Unidad académica">
+									<h:outputText value="#{i.unidad_academica}" />
+								</p:column>
+
+								<p:column headerText="Subunidad académica">
+									<h:outputText value="#{i.subunidad_academica}" />
+								</p:column>
+							</p:dataTable>
+							<div class="buttons">
+								<button type="button" class="button next-step">
+									Siguiente <i class="fa fa-chevron-right"></i>
+								</button>
+							</div>
+						</div>
+
+						<div id="menu2" class="tab-pane fade">
+							<h3 class="headline-3">Créditos y carga horaria del curso</h3>
+
+							<table class="table-creditos">
+								<tr>
+									<th colspan="2"></th>
+									<th>Horas</th>
+								</tr>
+								<tr>
+									<th rowspan="3">Con acompañamiento directo del/la docente</th>
+									<td>Horas aula, presenciales o virtuales</td>
+									<td><h:outputText value="#{pCtrl.revisado.horasAula}"/></td>
+								</tr>
+								<tr>
+									<td>Trabajo de campo o prácticas</td>
+									<td><h:outputText
+											value="#{pCtrl.revisado.horasTrabajosConAcompa}"/></td>
+								</tr>
+								<tr>
+									<td>Otros <h:outputText
+											value="#{pCtrl.revisado.otrosConAcompa}"  /></td>
+									<td><h:outputText
+											value="#{pCtrl.revisado.horasOtrosConAcompa}"/></td>
+								</tr>
+								<tr>
+									<th rowspan="5">Sin acompañamiento directo del/la docente
+										(estudio autónomo)</th>
+									<td>Lecturas y estudio de materiales varios</td>
+									<td><h:outputText value="#{pCtrl.revisado.horasLecturas}" /></td>
+								</tr>
+								<tr>
+									<td>Tareas y actividades varias (individuales, grupales,
+										actividades en EVA)</td>
+									<td><h:outputText value="#{pCtrl.revisado.horasTareas}" /></td>
+								</tr>
+								<tr>
+									<td>Trabajo de campo o prácticas</td>
+									<td><h:outputText
+											value="#{pCtrl.revisado.horasTrabajosSinAcompa}"/></td>
+								</tr>
+								<tr>
+									<td>Trabajos finales</td>
+									<td><h:outputText
+											value="#{pCtrl.revisado.horasTrabajosFinales}"/></td>
+								</tr>
+								<tr>
+									<td>Otros <h:outputText
+											value="#{pCtrl.revisado.otrosSinAcompa}" /></td>
+									<td><h:outputText
+											value="#{pCtrl.revisado.horasOtrosSinAcompa}"/></td>
+								</tr>
+								<tr>
+									<th colspan="2">Horas totales previstas del curso</th>
+									<td><h:outputText value="#{pCtrl.revisado.horasTotales}"
+											 /></td>
+								</tr>
+								<tr>
+									<th colspan="2">Créditos</th>
+									<td><h:outputText value="#{pCtrl.revisado.creditos}"
+											/></td>
+								</tr>
+							</table>
+							<p class="mensaje"></p>
+							<div class="buttons">
+								<button type="button" class="button prev-step">
+									<i class="fa fa-chevron-left"></i> Anterior
+								</button>
+								<!-- 								<div class="item"> -->
+								<!-- 									<h:commandLink class="button next-step" action="#{pCtrl.siguiente}" immediate="true" ajax="true" update="form:menu4"> -->
+								<!-- 										Siguiente <i class="fa fa-chevron-right"></i> -->
+								<!-- 									</h:commandLink> -->
+								<!-- 								</div> -->
+								<button type="button" class="button next-step">
+									Siguiente <i class="fa fa-chevron-right"></i>
+								</button>
+							</div>
+						</div>
+
+						<div id="menu3" class="tab-pane fade">
+							<h3 class="headline-3">Objetivos y contenidos</h3>
+
+
+							<div class="item">
+								<label class="item-label" for="uc">Objetivos</label>
+								<h:outputText value="#{pCtrl.revisado.objetivos}" />
+							</div>
+							<div class="item">
+								<label class="item-label" for="uc">Contenidos</label>
+								<h:outputText value="#{pCtrl.revisado.contenidos}" />
+							</div>
+
+
+							<div class="buttons">
+								<button type="button" class="button prev-step">
+									<i class="fa fa-chevron-left"></i> Anterior
+								</button>
+								<button type="button" class="button next-step">
+									Siguiente <i class="fa fa-chevron-right"></i>
+								</button>
+							</div>
+						</div>
+						<div id="menu4" class="tab-pane fade">
+							<h3 class="headline-3">Metodología y evaluación</h3>
+							<div class="item">
+								<label class="item-label">La Unidad Curricular es</label>
+								<h:outputText value="#{pCtrl.revisado.formato.label}" />
+							</div>
+							<div class="item">
+								<label class="item-label" for="duracion">Modalidad</label>
+								<h:outputText value="#{pCtrl.revisado.modalidad.label}" />
+							</div>
+							<div class="item">
+								<label class="item-label" for="uc">Descripción de la
+									propuesta metodológica de la unidad curricular</label>
+								<h:outputText value="#{pCtrl.revisado.descrMetodologia}" />
+							</div>
+							<div class="item">
+								<label class="item-label">La Unidad curricular prevé
+									adecuaciones metodológicas para estudiantes en situación de
+									privación de libertad</label>
+								<h:outputText value="#{pCtrl.revisado.adecuaciones ? 'SI' : 'NO'}" />
+							</div>
+							<h:panelGroup class="item descr" rendered="#{pCtrl.revisado.adecuaciones}">
+								<label class="item-label">Descripción de las adecuaciones metodológicas a realizar</label>
+								<h:outputText value="#{pCtrl.revisado.descripcionAdecuaciones}" />
+							</h:panelGroup>
+							<h:panelGroup class="item" id="regimen" layout="block">
+								<label class="item-label">Régimen de asistencia</label>
+								<h:outputText value="#{pCtrl.revisado.regimen.label}" />
+							</h:panelGroup>
+							<h:panelGroup class="item" id="tareasOblig" layout="block">
+								<label class="item-label">Realización obligatoria del
+									75% de las tareas propuestas por el equipo docente</label>
+								<h:outputText value="#{pCtrl.revisado.tareas75obligatoria ? 'SI' : 'NO'}" />
+							</h:panelGroup>
+							<div class="item">
+								<label class="item-label">Permite aprobación directa
+									(exoneración)</label>
+								<h:outputText value="#{pCtrl.revisado.aprobDirecta ? 'SI' : 'NO'}" />
+							</div>
+							<div class="item">
+								<label class="item-label" for="uc">Descripción de la
+									forma de evaluación y aprobación</label>
+								<h:outputText value="#{pCtrl.revisado.descrEvaluacion}" />
+							</div>
+							<div class="buttons">
+								<button type="button" class="button prev-step">
+									<i class="fa fa-chevron-left"></i> Anterior
+								</button>
+								<button type="button" class="button next-step">
+									Siguiente <i class="fa fa-chevron-right"></i>
+								</button>
+							</div>
+						</div>
+						<div id="menu5" class="tab-pane fade">
+							<h3 class="headline-3">Bibliografía básica</h3>
+							<div class="item bibliografia">
+
+									<p:dataTable value="#{pCtrl.revisado.bibliografia}" var="b"
+										styleClass="table table-bibliografia">
+
+										<p:column headerText="#" class="numberColumn">
+											<h:outputText value="#{b.orden}" />
+										</p:column>
+
+										<p:column headerText="Material bibliográfico">
+											<h:outputText value="#{b.titulo}" />
+										</p:column>
+									</p:dataTable>
+							</div>
+							<div class="buttons">
+								<button type="button" class="button prev-step">
+									<i class="fa fa-chevron-left"></i> Anterior
+								</button>
+							</div>
+						</div>
+					</div>
+
+					<div class="item">
+						<h:commandButton class="button_rojo button_large button"
+							action="#{pCtrl.guardarPrograma}" value="Enviar sugerencias"></h:commandButton>
+					</div>
+				</h:form>
+			</article>
+		</section>
+	</ui:define>
+
+</ui:composition>

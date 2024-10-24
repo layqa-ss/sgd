@@ -17,18 +17,19 @@
 						class="fa-solid fa-plus"></i>
 					</a>
 				</div>
-
+				<h:messages id="messages" styleClass="messages error"/>
 				<div class="form-container">
 					<h:form class="form container form-gestion">
+						
 						<div class="item">
-							<label for="area-nombre">Nombre</label>
+							<label for="area-nombre">Nombre<span class="required">*</span></label>
 							<h:inputText id="area-nombre"
-								value="#{gestionController.area.nombre}" />
+								value="#{gestionController.area.nombre}" required="true" requiredMessage="Debe ingresar el nombre del área temática"/>
 						</div>
 						<div class="item">
-							<label for="carreras">Carrera</label>
+							<label for="carreras">Carrera<span class="required">*</span></label>
 							<h:selectOneMenu id="carreras"
-								value="#{gestionController.area.carreraId}">
+								value="#{gestionController.area.carreraId}" required="true" requiredMessage="Debe seleccionar una carrera">
 								<f:selectItem itemLabel="-- Selecciona una carrera --" />
 								<f:selectItems value="#{gestionController.carreras}"
 									var="carrera" itemValue="#{carrera.id}"
@@ -38,7 +39,9 @@
 						<div class="item">
 							<h:commandButton styleClass="button button_rojo"
 								action="#{gestionController.agregarAreaTematica}"
-								value="Guardar" update="tableForm" />
+								value="Guardar">
+								<f:ajax execute="@form" render="tableForm, messages" />
+							</h:commandButton>
 						</div>
 					</h:form>
 					<button class="material-symbols-outlined close-button">

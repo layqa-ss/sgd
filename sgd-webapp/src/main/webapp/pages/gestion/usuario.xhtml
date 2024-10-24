@@ -1,0 +1,47 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="jakarta.faces.core" xmlns:h="jakarta.faces.html"
+	xmlns:ui="jakarta.faces.facelets" xmlns:p="http://primefaces.org/ui"
+	template="/layout/template.xhtml">
+
+	<ui:define name="content">
+		<section class="intro">
+			<article>
+				<h1 class="titulo-seccion">#{gestionController.edicionUsuario ?
+					'Editar usuario' : 'Crear usuario'}</h1>
+			</article>
+		</section>
+		<section>
+			<article>
+				<h:form class="form container">
+					<div class="item">
+						<label>Nombre completo</label>
+						<h:inputText value="#{gestionController.user.fullname}" />
+					</div>
+					<div class="item">
+						<label>Nombre de usuario</label>
+						<h:inputText value="#{gestionController.user.username}" />
+					</div>
+					<h:panelGroup layout="block" class="item" rendered="#{not gestionController.edicionUsuario}">
+						<label>Contraseña</label>
+						<h:inputSecret value="#{gestionController.user.password}" />
+					</h:panelGroup>
+					<div class="item">
+						<label>Rol</label>
+						<h:selectOneMenu value="#{gestionController.user.idRol}">
+
+							<f:selectItem itemLabel="Selecciona" itemValue="" />
+							<f:selectItems value="#{gestionController.roles}"
+								var="r" itemValue="#{r.id}" itemLabel="#{r.nombre}" />
+						</h:selectOneMenu>
+					</div>
+					<div class="item">
+						<h:commandButton styleClass="button button_rojo button_large"
+							action="#{gestionController.agregarUsuario}" value="Guardar"
+							update="tableForm" />
+					</div>
+				</h:form>
+			</article>
+		</section>
+	</ui:define>
+
+</ui:composition>

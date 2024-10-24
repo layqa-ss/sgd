@@ -18,13 +18,18 @@ import com.fhce.sgd.dto.gestion.UsuarioDto;
 import com.fhce.sgd.model.enums.EnumOperacion;
 import com.fhce.sgd.service.GestionService;
 import com.fhce.sgd.service.UsuarioService;
+import com.fhce.sgd.service.exception.SgdServicesException;
 
 import jakarta.annotation.PostConstruct;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
+import lombok.extern.slf4j.Slf4j;
 
 @Named("gestionController")
 @ViewScoped
+@Slf4j
 public class GestionController {
 
 	@Autowired
@@ -54,87 +59,169 @@ public class GestionController {
 	private DualListModel<String> operaciones;
 	private boolean edicionRol = false;
 
+	private boolean edicionUsuario = false;
+
 	@PostConstruct
 	public void init() {
-		area = new AreaTematicaDto();
-		carrera = new CarreraDto();
-		ua = new UnidadAcademicaDto();
-		user = new UsuarioDto();
-		rol = new RolDto();
+		try {
+			area = new AreaTematicaDto();
+			carrera = new CarreraDto();
+			ua = new UnidadAcademicaDto();
+			user = new UsuarioDto();
+			rol = new RolDto();
 
-		carreras = gestionService.getCarreras();
-		areas = gestionService.getAreasTematicas();
-		unidades = gestionService.getUnidadesAcademicas();
-		usuarios = usuarioService.getUsuarios();
-		roles = gestionService.getRoles();
+			carreras = gestionService.getCarreras();
+			areas = gestionService.getAreasTematicas();
+			unidades = gestionService.getUnidadesAcademicas();
+			usuarios = usuarioService.getUsuarios();
+			roles = gestionService.getRoles();
 
-		filterBy = new ArrayList<>();
+			filterBy = new ArrayList<>();
 
-		List<String> opeSource = Stream.of(EnumOperacion.values()).map(EnumOperacion::name)
-				.collect(Collectors.toList());
-		List<String> opeTarget = new ArrayList<>();
+			List<String> opeSource = Stream.of(EnumOperacion.values()).map(EnumOperacion::name)
+					.collect(Collectors.toList());
+			List<String> opeTarget = new ArrayList<>();
 
-		operaciones = new DualListModel<>(opeSource, opeTarget);
+			operaciones = new DualListModel<>(opeSource, opeTarget);
+		} catch (SgdServicesException e) {
+			log.error("Error en init de GestionController.");
+		}
 	}
 
 	public String agregarAreaTematica() {
-		gestionService.addAreaTematica(area);
-		areas = gestionService.getAreasTematicas();
-		area = new AreaTematicaDto();
-		return "areas-tematicas";
+		try {
+			gestionService.addAreaTematica(area);
+			areas = gestionService.getAreasTematicas();
+			area = new AreaTematicaDto();
+			return "/pages/gestion/areas-tematicas.jsf?faces-redirect=true";
+		} catch (SgdServicesException e) {
+			log.error("Error en agregarAreaTematica de GestionController");
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage("Ha ocurrido un error al agregar el área temática"));
+			return "areas-tematicas";
+		}
 	}
 
 	public String borrarAreaTematica(Long id) {
-		gestionService.deleteAreaTematica(id);
-		areas = gestionService.getAreasTematicas();
+		try {
+			gestionService.deleteAreaTematica(id);
+			areas = gestionService.getAreasTematicas();
+		} catch (SgdServicesException e) {
+			log.error("Error en borrarAreaTematica de GestionController");
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage("No se ha podido borrar el área temática"));
+		}
 		return "areas-tematicas";
 	}
 
 	public String agregarCarrera() {
-		gestionService.addCarrera(carrera);
-		carreras = gestionService.getCarreras();
-		carrera = new CarreraDto();
-		return "carreras";
+		try {
+			gestionService.addCarrera(carrera);
+			carreras = gestionService.getCarreras();
+			carrera = new CarreraDto();
+			return "/pages/gestion/carreras.jsf?faces-redirect=true";
+		} catch (SgdServicesException e) {
+			log.error("Error en agregarCarrera de GestionController");
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage("Ha ocurrido un error al agregar la carrera"));
+			return "carreras";
+		}
+		
 	}
 
 	public String borrarCarrera(Long id) {
-		gestionService.deleteCarrera(id);
-		carreras = gestionService.getCarreras();
+		try {
+			gestionService.deleteCarrera(id);
+			carreras = gestionService.getCarreras();
+		} catch (SgdServicesException e) {
+			log.error("Error en borrarCarrera de GestionController");
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("No se ha podido borrar la carrera"));
+		}
 		return "carreras";
 	}
 
 	public String agregarUA() {
-		gestionService.addUA(ua);
-		unidades = gestionService.getUnidadesAcademicas();
-		ua = new UnidadAcademicaDto();
-		return "unidades";
+		try {
+			gestionService.addUA(ua);
+			unidades = gestionService.getUnidadesAcademicas();
+			ua = new UnidadAcademicaDto();
+			return "/pages/gestion/unidades.jsf?faces-redirect=true";
+		} catch (SgdServicesException e) {
+			log.error("Error en agregarUA de GestionController");
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage("Ha ocurrido un error al agregar la unidad académica"));
+			return "unidades";
+		}
 	}
 
 	public String borrarUA(Long id) {
-		gestionService.deleteUA(id);
-		unidades = gestionService.getUnidadesAcademicas();
+		try {
+			gestionService.deleteUA(id);
+			unidades = gestionService.getUnidadesAcademicas();
+		} catch (SgdServicesException e) {
+			log.error("Error en borrarUA de GestionController");
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage("No se ha podido borrar la unidad académica"));
+		}
 		return "unidades";
 	}
 
-	public String agregarUsuario() {
-		usuarioService.save(user);
-		usuarios = usuarioService.getUsuarios();
+	public String nuevoUsuario() {
 		user = new UsuarioDto();
+		edicionUsuario = false;
+		return "/pages/gestion/usuario.jsf?faces-redirect=true";
+	}
+
+	public String agregarUsuario() {
+		try {
+			usuarioService.saveOrUpdateUsuario(user);
+			usuarios = usuarioService.getUsuarios();
+			user = new UsuarioDto();
+			edicionUsuario = false;
+		} catch (SgdServicesException e) {
+			log.error("Error en agregarUsuario de GestionController");
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage("Ha ocurrido un error al agregar el usuario"));
+		}
 		return "usuarios";
 	}
 
 	public String borrarUsuario(Long id) {
-		usuarioService.deleteUsuario(id);
-		usuarios = usuarioService.getUsuarios();
+		try {
+			usuarioService.deleteUsuario(id);
+			usuarios = usuarioService.getUsuarios();
+		} catch (SgdServicesException e) {
+			log.error("Error en borrarUsuario de GestionController");
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("No se ha podido borrar el usuario"));
+		}
 		return "usuarios";
 	}
 
+	public String editarUsuario(Long id) {
+		try {
+			edicionUsuario = true;
+			user = usuarioService.getUsuario(id);
+			return "/pages/gestion/usuario.jsf?faces-redirect=true";
+		} catch (SgdServicesException e) {
+			log.error("Error en editarUsuario de GestionController");
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("No se ha podido obtener el usuario"));
+			return "usuarios";
+		}
+	}
+
 	public String guardarRol() {
-		EnumOperacion[] o = operaciones.getTarget().stream().map(EnumOperacion::valueOf).toArray(EnumOperacion[]::new);
-		rol.setOperaciones(o);
-		gestionService.addRol(rol);
-		roles = gestionService.getRoles();
-		rol = new RolDto();
+		try {
+			EnumOperacion[] o = operaciones.getTarget().stream().map(EnumOperacion::valueOf)
+					.toArray(EnumOperacion[]::new);
+			rol.setOperaciones(o);
+			gestionService.addRol(rol);
+			roles = gestionService.getRoles();
+			rol = new RolDto();
+		} catch (SgdServicesException e) {
+			log.error("Error en guardarRol de GestionController");
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage("Ha ocurrido un error al agregar el rol"));
+		}
 		return "ver-roles";
 	}
 
@@ -149,27 +236,39 @@ public class GestionController {
 	}
 
 	public String editarRol(Long id) {
-		rol = gestionService.getRol(id);
-		edicionRol = true;
-		
-		EnumOperacion[] opeTodas = EnumOperacion.values();
-		List<EnumOperacion> source = new ArrayList<>();
-		List<EnumOperacion> target = Arrays.stream(rol.getOperaciones()).toList();
-		for (int i = 0; i < opeTodas.length; i++) {
-			if (!target.contains(opeTodas[i])) {
-				source.add(opeTodas[i]);
+		try {
+			rol = gestionService.getRol(id);
+			edicionRol = true;
+
+			EnumOperacion[] opeTodas = EnumOperacion.values();
+			List<EnumOperacion> source = new ArrayList<>();
+			List<EnumOperacion> target = Arrays.stream(rol.getOperaciones()).toList();
+			for (int i = 0; i < opeTodas.length; i++) {
+				if (!target.contains(opeTodas[i])) {
+					source.add(opeTodas[i]);
+				}
 			}
+			List<String> opeSource = source.stream().map(EnumOperacion::name).collect(Collectors.toList());
+			operaciones.setSource(opeSource);
+			operaciones.setTarget(Arrays.stream(rol.getOperaciones()).map(EnumOperacion::name).toList());
+
+			return "/pages/gestion/rol.jsf?faces-redirect=true";
+		} catch (SgdServicesException e) {
+			log.error("Error en editarRol de GestionController");
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("No se ha podido obtener el rol"));
+			return "ver-roles";
 		}
-		List<String> opeSource = source.stream().map(EnumOperacion::name).collect(Collectors.toList());
-		operaciones.setSource(opeSource);
-		operaciones.setTarget(Arrays.stream(rol.getOperaciones()).map(EnumOperacion::name).toList());
 		
-		return "/pages/gestion/rol.jsf?faces-redirect=true";
 	}
 
 	public String borrarRol(Long id) {
-		gestionService.deleteRol(id);
-		roles = gestionService.getRoles();
+		try {
+			gestionService.deleteRol(id);
+			roles = gestionService.getRoles();
+		} catch (SgdServicesException e) {
+			log.error("Error en borrarRol de GestionController");
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("No se ha podido borrar el rol"));
+		}
 		return "ver-roles";
 	}
 
@@ -311,6 +410,14 @@ public class GestionController {
 
 	public void setRoles(List<RolDto> roles) {
 		this.roles = roles;
+	}
+
+	public boolean isEdicionUsuario() {
+		return edicionUsuario;
+	}
+
+	public void setEdicionUsuario(boolean edicionUsuario) {
+		this.edicionUsuario = edicionUsuario;
 	}
 
 }

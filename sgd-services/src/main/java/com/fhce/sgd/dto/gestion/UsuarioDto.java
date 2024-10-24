@@ -15,16 +15,19 @@ public class UsuarioDto {
 
     private Date creationDate;
     
+    private Long idRol;
+    
     public UsuarioDto() {
     	
     }
 
-    public UsuarioDto(Long id, String username, String password, Date creationDate, String fullname) {
+    public UsuarioDto(Long id, String username, String password, Date creationDate, String fullname, Long idRol) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.creationDate = creationDate;
         this.fullname = fullname;
+        this.idRol = idRol;
     }
 
     public Long getId() {
@@ -69,5 +72,13 @@ public class UsuarioDto {
 	
 	public String getCreationDateFormated() {
 		return new SimpleDateFormat("dd/MM/yyyy").format(creationDate);
+	}
+
+	public Long getIdRol() {
+		return idRol;
+	}
+
+	public void setIdRol(Long idRol) {
+		this.idRol = idRol;
 	}
 }

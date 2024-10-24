@@ -1,20 +1,19 @@
 package com.fhce.sgd.service;
 
-import java.util.Arrays;
-import java.util.Collection;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.fhce.sgd.dto.gestion.UsuarioDto;
 import com.fhce.sgd.model.usuarios.CustomUsuarioDetails;
+import com.fhce.sgd.model.usuarios.Usuario;
+import com.fhce.sgd.service.exception.SgdServicesException;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class CustomUsuarioDetailsService implements UserDetailsService {
 
 	@Autowired
@@ -22,16 +21,17 @@ public class CustomUsuarioDetailsService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
-		UsuarioDto user = usuarioService.getUsuarioByUsername(username);
-		if (user == null) {
-			throw new UsernameNotFoundException("Username or Password not found");
+		try {
+			Usuario user = usuarioService.getUsuarioByUsername(username);
+			if (user == null) {
+				throw new UsernameNotFoundException("Usuario o contraseña incorrecta");
+			}
+			return new CustomUsuarioDetails(user);
+		} catch (SgdServicesException e) {
+			log.error("Error en loadUserByUsername de CustomUsuarioDetailsService: " + e.getMessage());
+			throw new UsernameNotFoundException("Error al obtener usuario");
 		}
-		return new CustomUsuarioDetails(user.getUsername(), user.getPassword(), authorities(), user.getFullname());
-	}
 
-	public Collection<? extends GrantedAuthority> authorities() {
-		return Arrays.asList(new SimpleGrantedAuthority("USER"));
 	}
 
 }

@@ -17,15 +17,16 @@
 						class="fa-solid fa-plus"></i>
 					</a>
 				</div>
+				<h:messages id="messages" styleClass="messages error"/>
 				<div class="form-container">
 					<h:form class="form container form-gestion">
 						<div class="item">
-							<label for="area-nombre">Nombre</label>
-							<h:inputText value="#{gestionController.carrera.nombre}" />
+							<label for="area-nombre">Nombre<span class="required">*</span></label>
+							<h:inputText value="#{gestionController.carrera.nombre}" required="true" requiredMessage="Debe ingresar el nombre de la carrera"/>
 						</div>
 						<div class="item">
-							<label>Unidad académica</label>
-							<h:selectOneMenu value="#{gestionController.carrera.uaId}">
+							<label>Unidad académica<span class="required">*</span></label>
+							<h:selectOneMenu value="#{gestionController.carrera.uaId}" required="true" requiredMessage="Debe seleccionar una unidad académica">
 								<f:selectItem itemLabel="-- Selecciona una unidad académica --" />
 								<f:selectItems value="#{gestionController.unidades}"
 									var="unidad" itemValue="#{unidad.id}"
@@ -35,7 +36,9 @@
 						<div class="item">
 							<h:commandButton styleClass="button button_rojo"
 								action="#{gestionController.agregarCarrera}"
-								value="Guardar" update="tableForm" />
+								value="Guardar">
+								<f:ajax execute="@form" render="tableForm, messages" />	
+							</h:commandButton>
 						</div>
 					</h:form>
 					<button class="material-symbols-outlined close-button">

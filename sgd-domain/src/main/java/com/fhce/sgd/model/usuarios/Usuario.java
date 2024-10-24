@@ -82,4 +82,11 @@ public class Usuario {
 		this.fullname = fullname;
 	}
 
+	public Rol getRol() {
+		return rol;
+	}
+
+	public void setRol(Rol rol) {
+		this.rol = rol;
+	}
 }

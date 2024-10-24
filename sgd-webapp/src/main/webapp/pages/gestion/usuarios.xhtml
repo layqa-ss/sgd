@@ -12,35 +12,14 @@
 
 		<section>
 			<article class="main-container">
-				<div class="item">
-					<a class="button agregar-button"> Agregar<i
-						class="fa-solid fa-plus"></i>
-					</a>
-				</div>
-
-				<div class="form-container">
-					<h:form class="form container form-gestion">
-						<div class="item">
-							<label>Nombre completo</label>
-							<h:inputText value="#{gestionController.user.fullname}" />
-						</div>
-						<div class="item">
-							<label>Nombre de usuario</label>
-							<h:inputText value="#{gestionController.user.username}" />
-						</div>
-						<div class="item">
-							<label>Contraseña</label>
-							<h:inputSecret value="#{gestionController.user.password}" />
-						</div>
-						<div class="item">
-							<h:commandButton styleClass="button button_rojo"
-								action="#{gestionController.agregarUsuario}" value="Guardar"
-								update="tableForm" />
-						</div>
-					</h:form>
-					<button class="material-symbols-outlined close-button">
-						cancel</button>
-				</div>
+				<h:form>
+					<div class="item">
+						<h:commandLink class="button agregar-button"
+							action="#{gestionController.nuevoUsuario}">
+						Nuevo usuario<i class="fa-solid fa-plus"></i>
+						</h:commandLink>
+					</div>
+				</h:form>
 				<h:form id="tableForm">
 					<p:dataTable value="#{gestionController.usuarios}" var="userVar"
 						widgetVar="userTable" styleClass="table"
@@ -64,6 +43,13 @@
 
 						<p:column headerText="Fecha de creación">
 							<h:outputText value="#{userVar.creationDateFormated}" />
+						</p:column>
+						
+						<p:column styleClass="links-column">
+							<h:commandLink update="tableForm" styleClass="link-delete"
+								action="#{gestionController.editarUsuario(userVar.id)}">
+								<i class="material-symbols-outlined">edit</i>
+							</h:commandLink>
 						</p:column>
 
 						<p:column styleClass="links-column">

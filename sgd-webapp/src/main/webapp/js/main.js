@@ -72,12 +72,33 @@
 
     $('.agregar-button').on('click', function (e){
       $('.form.container').css('display', 'flex');
+      $('.group-docentes').css('display', 'flex');
       $('.close-button').css('display', 'block');
     });
 
     $('.close-button').on('click', function (e){
       $('.form.container').css('display', 'none');
       $('.close-button').css('display', 'none');
+    });
+
+    $('.agregar-sug').on('click', function (e){
+      var $inp = $(e.target).closest('.item').find('.sugerencia');
+      $inp.css('display', 'flex');
+    });
+
+    $('.close-sug').on('click', function (e){
+      var $inp = $(this).closest('.item.sugerencia');
+      $inp.css('display', 'none');
+    });
+
+    $('.item-horas').on('change', function (e){
+      var suma = 0;
+      $(".item-horas").each(function(){
+        suma = suma + parseInt($(this).val());
+      })
+      $('.horas-totales').val(suma);
+      $('.creditos').val(parseInt(parseInt($('.horas-totales').val())/15));
+
     });
 
     $('.horas-totales, .creditos').on('change', function (e){

@@ -1,42 +1,44 @@
 package com.fhce.sgd.model.usuarios;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fhce.sgd.model.enums.EnumOperacion;
+
 public class CustomUsuarioDetails implements UserDetails {
 	private static final long serialVersionUID = 1L;
-	private String username;
-	private String password;
-	private Collection<? extends GrantedAuthority> authorities;
-	private String fullname;
+	private Usuario user;
 
-	public CustomUsuarioDetails(String username, String password, Collection<? extends GrantedAuthority> authorities,
-			String fullname) {
-		this.username = username;
-		this.password = password;
-		this.authorities = authorities;
-		this.fullname = fullname;
+	public CustomUsuarioDetails(Usuario u) {
+		this.user = u;
 	}
 
 	public String getFullname() {
-		return fullname;
+		return user.getFullname();
 	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
+		List<GrantedAuthority> authorities = new ArrayList<>();
+		EnumOperacion[] operaciones = user.getRol().getOperaciones();
+		for (int i = 0; i < operaciones.length; i++) {
+			authorities.add(operaciones[i]);
+		}
 		return authorities;
 	}
 
 	@Override
 	public String getPassword() {
-		return password;
+		return user.getPassword();
 	}
 
 	@Override
 	public String getUsername() {
-		return username;
+		return user.getUsername();
 	}
 
 	@Override

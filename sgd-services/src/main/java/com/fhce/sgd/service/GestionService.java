@@ -11,45 +11,45 @@ import com.fhce.sgd.dto.gestion.UnidadCurricularDto;
 import com.fhce.sgd.model.gestion.AreaTematica;
 import com.fhce.sgd.model.gestion.Carrera;
 import com.fhce.sgd.model.gestion.UnidadAcademica;
-import com.fhce.sgd.model.usuarios.Rol;
+import com.fhce.sgd.service.exception.SgdServicesException;
 
 public interface GestionService {
 
-	List<AreaTematicaDto> getAreasTematicasForCarrera(Long carreraId);
+	List<AreaTematicaDto> getAreasTematicasForCarrera(Long carreraId) throws SgdServicesException;
 	
-	Map<Long, List<AreaTematicaDto>> getAreasPorCarrera();
+	Map<Long, List<AreaTematicaDto>> getAreasPorCarrera() throws SgdServicesException;
 	
-	List<AreaTematicaDto> getAreasTematicas();
+	List<AreaTematicaDto> getAreasTematicas() throws SgdServicesException;
 
-	Long addAreaTematica(AreaTematicaDto areaDto);
+	Long addAreaTematica(AreaTematicaDto areaDto) throws SgdServicesException;
 	
-	void deleteAreaTematica(Long id);
+	void deleteAreaTematica(Long id) throws SgdServicesException;
 	
-	AreaTematica getAreaTematica(Long id);
+	AreaTematica getAreaTematica(Long id) throws SgdServicesException;
 	
-	List<CarreraDto> getCarreras();
+	List<CarreraDto> getCarreras() throws SgdServicesException;
 	
-	Long addCarrera(CarreraDto carreraDto);
+	Long addCarrera(CarreraDto carreraDto) throws SgdServicesException;
 	
-	void deleteCarrera(Long id);
+	void deleteCarrera(Long id) throws SgdServicesException;
 	
-	Carrera getCarrera(Long id);
+	Carrera getCarrera(Long id) throws SgdServicesException;
 	
-	List<UnidadAcademicaDto> getUnidadesAcademicas();
+	List<UnidadAcademicaDto> getUnidadesAcademicas() throws SgdServicesException;
 	
-	Long addUA(UnidadAcademicaDto uaDto);
+	Long addUA(UnidadAcademicaDto uaDto) throws SgdServicesException;
 	
-	void deleteUA(Long id);
+	void deleteUA(Long id) throws SgdServicesException;
 	
-	UnidadAcademica getUnidadAcademica(Long id);
+	UnidadAcademica getUnidadAcademica(Long id) throws SgdServicesException;
 	
-	List<UnidadCurricularDto> getUnidadesCurriculares();
+	List<UnidadCurricularDto> getUnidadesCurriculares() throws SgdServicesException;
 	
-	Long addRol(RolDto rolDto);
+	Long addRol(RolDto rolDto) throws SgdServicesException;
 	
-	void deleteRol(Long id);
+	void deleteRol(Long id) throws SgdServicesException;
 	
-	RolDto getRol(Long id);
+	RolDto getRol(Long id) throws SgdServicesException;
 	
-	List<RolDto> getRoles();
+	List<RolDto> getRoles() throws SgdServicesException;
 }

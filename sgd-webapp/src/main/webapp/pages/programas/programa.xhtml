@@ -4,6 +4,9 @@
 	template="/layout/template.xhtml">
 	<f:metadata>
 		<f:importConstants type="com.fhce.sgd.model.enums.EnumDuracion" />
+		<f:importConstants type="com.fhce.sgd.model.enums.EnumRolDocente" />
+		<f:importConstants type="com.fhce.sgd.model.enums.EnumFormato" />
+		<f:importConstants type="com.fhce.sgd.model.enums.EnumCargo" />
 	</f:metadata>
 
 	<ui:define name="content">
@@ -15,6 +18,7 @@
 		</section>
 		<section>
 			<article>
+
 				<h:form class="form container form-programa" id="form">
 
 					<div class="process">
@@ -67,6 +71,7 @@
 						</div>
 					</div>
 					<div class="tab-content">
+						<h:messages id="messages" styleClass="messages error" />
 						<div id="menu1" class="tab-pane fade active in">
 							<div class="item">
 								<h3 class="headline-3">General</h3>
@@ -74,46 +79,47 @@
 							</div>
 
 							<div class="item">
-								<label class="item-label" for="uc">Unidad curricular</label>
+								<label class="item-label" for="uc">Unidad curricular<span
+									class="required">*</span></label>
 								<p class="ayuda">Ingresar el nombre de la unidad curricular.</p>
 								<h:inputText id="uc" value="#{pCtrl.nuevo.nombreUC}"
-									required="true" />
+									required="true"
+									requiredMessage="Debe ingresar el nombre de la unidad curricular" />
 							</div>
 							<div class="item">
-								<label class="item-label">Unidad académica que la ofrece</label>
+								<label class="item-label">Unidad académica que la ofrece<span
+									class="required">*</span></label>
 								<p class="ayuda">Seleccionar la unidad académica o unidad de
 									promoción de las funciones universitarias que ofrece la unidad
 									curricular. Si correspondiere, es posible seleccionar más de
 									una opción.</p>
 								<p:selectManyCheckbox value="#{pCtrl.nuevo.unidades}"
-									layout="custom" id="custom">
+									layout="custom" id="custom" required="true"
+									requiredMessage="Debe seleccionar al menos una unidad académica">
 									<f:selectItems value="#{pCtrl.unidadesAcademicas}" var="unidad"
-										itemLabel="#{unidad.nombre}"
-											itemValue="#{unidad}" />
+										itemLabel="#{unidad.nombre}" itemValue="#{unidad}" />
 								</p:selectManyCheckbox>
 
 								<div class="item item-ua">
 									<ui:repeat value="#{pCtrl.unidadesAcademicas}" var="u"
 										varStatus="v" id="repeat">
-
 										<div class="item-checkbox">
 											<p:checkbox id="opt-#{v.index+1}" for=":form:custom"
 												itemIndex="#{v.index+1}" />
 											<p:outputLabel value="#{u.nombre}" />
 										</div>
-
-
 									</ui:repeat>
 								</div>
 							</div>
 
 							<div class="item">
-								<label class="item-label">Carreras</label>
+								<label class="item-label">Carrera<span class="required">*</span></label>
 								<p class="ayuda">Seleccionar la o las carreras que ofrecen
 									esta unidad curricular.</p>
-								
+
 								<p:selectManyCheckbox id="carreras"
-									value="#{pCtrl.nuevo.carreras}" layout="custom">
+									value="#{pCtrl.nuevo.carreras}" layout="custom" required="true"
+									requiredMessage="Debe seleccionar al menos una carrera">
 									<f:selectItems value="#{pCtrl.carreras}" var="carrera"
 										itemLabel="#{carrera.nombre}" itemValue="#{carrera}" />
 									<f:ajax render="form:areas" />
@@ -130,7 +136,7 @@
 									</ui:repeat>
 								</div>
 							</div>
-							
+
 							<h:panelGroup class="item" layout="block" id="areas">
 								<label class="item-label">Area temática por carrera</label>
 								<p class="ayuda">Seleccionar por cada carrera el área
@@ -141,12 +147,15 @@
 											<p:outputLabel value="#{carreraA.nombre}" />
 										</div>
 										<div class="item item-areas">
-											<label class="item-label">Área temática</label>
-											<h:selectOneMenu value="#{carreraA.area}">
+											<label class="item-label">Área temática<span
+												class="required">*</span></label>
+											<h:selectOneMenu value="#{carreraA.area}" required="true"
+												requiredMessage="Debe seleccionar área temática para #{carreraA.nombre}">
 
 												<f:selectItem itemLabel="Selecciona" itemValue="" />
-												<f:selectItems value="#{pCtrl.areasPorCarrera.get(carreraA.id)}"
-													var="a" itemValue="#{a.id}" itemLabel="#{a.nombre}" />
+												<f:selectItems
+													value="#{pCtrl.areasPorCarrera.get(carreraA.id)}" var="a"
+													itemValue="#{a.id}" itemLabel="#{a.nombre}" />
 											</h:selectOneMenu>
 										</div>
 									</div>
@@ -154,32 +163,36 @@
 							</h:panelGroup>
 
 							<div class="item">
-								<label class="item-label">Duración</label>
+								<label class="item-label">Duración<span class="required">*</span></label>
 								<p class="ayuda">Indicar la duración de la unidad
 									curricular. En caso de tener una duración menor a un semestre
 									lectivo, especificar de cuántos días o semanas.</p>
 								<h:panelGroup id="duracion" class="items-radio item">
 									<h:selectOneRadio value="#{pCtrl.nuevo.duracion}"
-										styleClass="items-radio item">
+										styleClass="items-radio item" required="true"
+										requiredMessage="Debe indicar la duración de la unidad curricular">
 										<f:selectItems value="#{pCtrl.itemsDuracion}" var="d"
 											itemValue="#{d}" itemLabel="#{d.label}" />
 										<f:ajax render="duracion" />
 										<f:ajax render="semestre" />
 									</h:selectOneRadio>
 									<h:inputText value="#{pCtrl.nuevo.duracionOtro}" class="otro"
-										disabled="#{pCtrl.nuevo.duracion!=EnumDuracion.OTRO}" />
-
+										disabled="#{pCtrl.nuevo.duracion!=EnumDuracion.OTRO}"
+										required="true"
+										requiredMessage="Debe indicar la duración de la unidad curricular" />
 								</h:panelGroup>
 							</div>
 							<h:panelGroup id="semestre" layout="block">
 								<h:panelGroup class="item" layout="block"
 									rendered="#{pCtrl.nuevo.duracion != EnumDuracion.ANUAL}">
-									<label class="item-label">Semestre en el que se ofrece</label>
+									<label class="item-label">Semestre en el que se ofrece<span
+										class="required">*</span></label>
 									<p class="ayuda">Indicar si la unidad curricular se ofrece
 										en el semestre par, impar o en ambos.</p>
 									<div class="items-radio item">
 										<h:selectOneRadio value="#{pCtrl.nuevo.semestre}"
-											styleClass="items-radio item">
+											styleClass="items-radio item" required="true"
+											requiredMessage="Debe indicar el semestre de la unidad curricular">
 											<f:selectItems value="#{pCtrl.itemsSemestre}" var="s"
 												itemValue="#{s}" itemLabel="#{s.label}" />
 										</h:selectOneRadio>
@@ -212,36 +225,43 @@
 									previstos por el Plan de Estudios vigente y aprobados por el
 									Consejo de Facultad.</p>
 							</div>
-							<h:panelGroup id="cuales">
+							<h:panelGroup id="cuales" layout="block">
 								<h:panelGroup class="item" rendered="#{pCtrl.nuevo.requisitos}">
-									<label class="item-label">¿Cuáles?</label>
-									<h:inputTextarea value="#{pCtrl.nuevo.requisitosCuales}" />
-									<!-- 									<p:textEditor widgetVar="editor1" id="editor1" -->
-									<!-- 										value="#{pCtrl.nuevo.requisitosCuales}" height="100px"> -->
-									<!-- 										<f:facet name="toolbar"> -->
-									<!-- 											<span class="ql-formats"> -->
-									<!-- 												<button class="ql-bold"></button> -->
-									<!-- 												<button class="ql-italic"></button> -->
-									<!-- 												<button class="ql-underline"></button> -->
-									<!-- 												<button class="ql-strike"></button> -->
-									<!-- 											</span> -->
-									<!-- 											<span class="ql-formats"> -->
-									<!-- 												<button class="ql-list" value="ordered"></button> -->
-									<!-- 												<button class="ql-list" value="bullet"></button> -->
-									<!-- 											</span> -->
-									<!-- 										</f:facet> -->
-									<!-- 									</p:textEditor> -->
+									<label class="item-label">¿Cuáles?<span
+										class="required">*</span></label>
+									<h:inputTextarea value="#{pCtrl.nuevo.requisitosCuales}"
+										required="true"
+										requiredMessage="Debe ingresar cuáles son los requisitos"
+										validatorMessage="Se ha excedido el máximo de caracteres permitidos en el campo ¿Cuáles?">
+										<f:validateLength maximum="250" />
+									</h:inputTextarea>
+									<p class="small">Máximo 250 caracteres</p>
 								</h:panelGroup>
 							</h:panelGroup>
 
 							<div class="item recomendaciones">
 								<label class="item-label" for="uc">Conocimientos previos
-									o grados de avance en la carrera recomendados</label>
+									o grados de avance en la carrera recomendados<span
+									class="required">*</span>
+								</label>
 								<p class="ayuda">Señalar si existen recomendaciones respecto
 									a conocimientos previos o algún grado de avance en la carrera
 									sugerido para quienes pretendan cursar la unidad curricular. Se
 									trata de recomendaciones, no de requisitos excluyentes.</p>
-								<h:inputTextarea value="#{pCtrl.nuevo.recomendaciones}" />
+								<div class="item item-checkbox item-ua">
+									<h:selectBooleanCheckbox value="#{pCtrl.nuevo.recomNoCorresponde}">
+										<f:ajax render="recom" />
+									</h:selectBooleanCheckbox>
+									<label>No corresponde</label>
+								</div>
+								
+								<h:inputTextarea value="#{pCtrl.nuevo.recomendaciones}" id="recom"
+									required="#{!pCtrl.nuevo.recomNoCorresponde}" disabled="#{pCtrl.nuevo.recomNoCorresponde}"
+									requiredMessage="Debe ingresar los conocimientos previos recomendados"
+									validatorMessage="Se ha excedido el máximo de caracteres permitidos en el campo Conocimientos previos recomendados">
+									<f:validateLength maximum="250" />
+								</h:inputTextarea>
+								<p class="small">Máximo 250 caracteres</p>
 								<!-- 								<p:textEditor widgetVar="editor2" id="editor2" -->
 								<!-- 									value="#{pCtrl.nuevo.recomendaciones}" height="100px"> -->
 								<!-- 									<f:facet name="toolbar"> -->
@@ -272,27 +292,42 @@
 							<label class="titulo">Integrantes del equipo docente</label>
 							<p>Seleccionar rol y cargo, e indicar el nombre y la
 								adscripción institucional de cada integrante del equipo docente.</p>
-							<h:panelGroup id="docentes" class="item">
-								<h:panelGroup class="group-docentes">
+							<h:panelGroup id="docentes" class="item" layout="block">
+								<h:messages id="messages-docentes" styleClass="messages error" globalOnly="true"/>
+								<h:panelGroup class="group-docentes" layout="block"
+									id="group-docentes">
 									<div class="item">
-										<label class="item-label">Rol</label>
-										<h:selectOneMenu value="#{pCtrl.integrante.rol}">
+										<label class="item-label">Rol<span class="required">*</span></label>
+										<h:selectOneMenu value="#{pCtrl.integrante.rol}" id="rol-docente">
 											<f:selectItem itemLabel="Selecciona" itemValue="" />
 											<f:selectItems value="#{pCtrl.roles}" var="rol"
 												itemValue="#{rol}" itemLabel="#{rol.label}" />
+											<f:ajax render="ayudas" />
 										</h:selectOneMenu>
+										<h:message for="form:rol-docente" style = "color:red" />
 									</div>
 									<div class="item">
-										<label class="item-label">Cargo</label>
-										<h:selectOneMenu value="#{pCtrl.integrante.cargo}">
+										<label class="item-label">Cargo<span class="required">*</span></label>
+										<h:selectOneMenu value="#{pCtrl.integrante.cargo}" id="cargo-docente">
 											<f:selectItem itemLabel="Selecciona" itemValue="" />
 											<f:selectItems value="#{pCtrl.cargos}" var="cargo"
 												itemValue="#{cargo}" itemLabel="#{cargo.label}" />
+											<f:ajax render="cargo-otro" />
 										</h:selectOneMenu>
+										<h:message for="form:cargo-docente" style = "color:red" />
 									</div>
+									<h:panelGroup layout="block" class="item" id="cargo-otro">
+										<label class="item-label">Cargo (otro)</label>
+										<h:inputText value="#{pCtrl.integrante.cargoOtro}" class="otro"
+											disabled="#{pCtrl.integrante.cargo!=EnumCargo.OTRO}" id="otro-docente"/>
+										<h:message for="form:otro-docente" style = "color:red" />
+									</h:panelGroup>
+									
 									<div class="item">
-										<label class="item-label" for="nombre">Nombre</label> 
-										<h:inputText value="#{pCtrl.integrante.nombre_docente}" />
+										<label class="item-label" for="nombre">Nombre<span
+											class="required">*</span></label>
+										<h:inputText value="#{pCtrl.integrante.nombre_docente}" id="nombre-docente"/>
+										<h:message for="form:nombre-docente" style = "color:red" />
 									</div>
 									<div class="item">
 										<label class="item-label" for="nombre">Unidad
@@ -305,49 +340,62 @@
 										<h:inputText value="#{pCtrl.integrante.subunidad_academica}" />
 									</div>
 									<div class="item">
-										<h:commandButton class="button button_gris"
-											action="#{pCtrl.agregarDocente}" value="Agregar"
-											update=":form:docentes">
-											<f:ajax execute="docentes" render="docentes" />
+										<h:commandButton class="button button_rojo"
+											action="#{pCtrl.agregarDocente}" value="Guardar">
+											<f:ajax execute="form:group-docentes"
+												render="form:table-docentes form:group-docentes form:messages-docentes" />
 										</h:commandButton>
 									</div>
+									<h:panelGroup layout="block" id="ayudas">
+										<h:panelGroup layout="block"
+											rendered="#{pCtrl.integrante.rol==EnumRolDocente.RESPONSABLE}">
+											<p class="ayuda">
+												<b>Responsables:</b> Podrán ser Responsables de unidades
+												curriculares Profesores/as Adjuntos/as (Gr.3), Agregados/as
+												(Gr.4) y Titulares (Gr.5).
+											</p>
+										</h:panelGroup>
+										<h:panelGroup layout="block"
+											rendered="#{pCtrl.integrante.rol==EnumRolDocente.ENCARGADO}">
+											<p class="ayuda">
+												<b>Encargado/a:</b> Podrán ser Encargados/as o
+												Co-encargados/as de unidades curriculares Profesores/as
+												Adjuntos/as (Gr.3), Agregados/as (Gr.4) y Titulares (Gr.5).
+												Solo en casos excepcionales, docentes en grados de formación
+												(Gr. 1 y 2) podrán incluirse como Encargados/as de cursos.
+												Para ello, el/la Director/a de Carrera, deberá completar el
+												siguiente <a href="http://www.google.com" target="_blank">formulario</a>
+												solicitando la autorización del Consejo de Facultad previo
+												al inicio de clases.
+											</p>
+										</h:panelGroup>
+										<h:panelGroup layout="block"
+											rendered="#{pCtrl.integrante.rol==EnumRolDocente.APOYO}">
+											<p class="ayuda">
+												<b>Docente de apoyo:</b> Ayudantes (Gr.1) y Asistentes
+												(Gr.2) podrán dictar clases en calidad de Docentes de apoyo
+												en proporción a su perfil de formación y carga horaria.
+												También podrán hacerlo docentes de grados superiores.
+											</p>
+										</h:panelGroup>
+										<h:panelGroup layout="block"
+											rendered="#{pCtrl.integrante.rol==EnumRolDocente.INVITADO}">
+											<p class="ayuda">
+												<b>Invitado/a:</b> Se podrá incluir como invitadas a la
+												unidad curricular a personas con o sin cargo docente.
+											</p>
+										</h:panelGroup>
+									</h:panelGroup>
 								</h:panelGroup>
-								<p class="ayuda">
-									<b>Responsables:</b> Podrán ser Responsables de unidades
-									curriculares Profesores/as Adjuntos/as (Gr.3), Agregados/as
-									(Gr.4) y Titulares (Gr.5).
-								</p>
-								<p class="ayuda">
-									<b>Encargado/a:</b> Podrán ser Encargados/as o Co-encargados/as
-									de unidades curriculares Profesores/as Adjuntos/as (Gr.3),
-									Agregados/as (Gr.4) y Titulares (Gr.5). Solo en casos
-									excepcionales, docentes en grados de formación (Gr. 1 y 2)
-									podrán incluirse como Encargados/as de cursos. Para ello, el/la
-									Director/a de Carrera, deberá completar el siguiente <a
-										href="http://www.google.com" target="_blank">formulario</a>
-									solicitando la autorización del Consejo de Facultad previo al
-									inicio de clases.
-								</p>
-								<p class="ayuda">
-									<b>Docente de apoyo:</b> Ayudantes (Gr.1) y Asistentes (Gr.2)
-									podrán dictar clases en calidad de Docentes de apoyo en
-									proporción a su perfil de formación y carga horaria. También
-									podrán hacerlo docentes de grados superiores.
-								</p>
-								<p class="ayuda">
-									<b>Invitado/a:</b> Se podrá incluir como invitadas a la unidad
-									curricular a personas con o sin cargo docente.
-								</p>
-
 								<p:dataTable value="#{pCtrl.nuevo.integrantes}" var="i"
-									styleClass="table table-docentes">
+									styleClass="table table-docentes" id="table-docentes">
 
 									<p:column headerText="Rol">
 										<h:outputText value="#{i.rol.label}" />
 									</p:column>
 
 									<p:column headerText="Cargo">
-										<h:outputText value="#{i.cargo.label}" />
+										<h:outputText value="#{i.cargo == EnumCargo.OTRO ? i.cargoOtro : i.cargo.label}" />
 									</p:column>
 
 									<p:column headerText="Nombre">
@@ -361,8 +409,16 @@
 									<p:column headerText="Subunidad académica">
 										<h:outputText value="#{i.subunidad_academica}" />
 									</p:column>
-								</p:dataTable>
 
+									<p:column styleClass="links-column">
+										<h:commandLink styleClass="link-delete"
+											action="#{pCtrl.borrarDocente(i)}">
+											<i class="material-symbols-outlined">delete</i>
+											<f:ajax execute="form:table-docentes"
+												render="form:table-docentes" />
+										</h:commandLink>
+									</p:column>
+								</p:dataTable>
 
 							</h:panelGroup>
 							<div class="buttons">
@@ -468,14 +524,19 @@
 
 
 							<div class="item">
-								<label class="item-label" for="uc">Objetivos</label>
+								<label class="item-label" for="uc">Objetivos<span
+									class="required">*</span></label>
 								<p class="ayuda">Describir los objetivos de la unidad
 									curricular en términos de objetivos de enseñanza, formulados
 									desde el equipo docente, o de objetivos de aprendizaje,
 									planteados desde los/las estudiantes. Los objetivos específicos
 									deben conducir al logro del objetivo general.</p>
 								<h:inputTextarea value="#{pCtrl.nuevo.objetivos}"
-									placeholder="Generales y específicos" />
+									placeholder="Generales y específicos" required="true"
+									requiredMessage="Debe describir los objetivos de la unidad curricular">
+									<f:validateLength maximum="4000" />
+								</h:inputTextarea>
+								<p class="small">Máximo 4000 caracteres</p>
 
 								<!-- 								<p:textEditor widgetVar="editor4" id="editor4" -->
 								<!-- 									value="#{pCtrl.nuevo.objetivos}" height="100px" rendered="#{pCtrl.estaEnContenido}"> -->
@@ -494,11 +555,17 @@
 								<!-- 								</p:textEditor> -->
 							</div>
 							<div class="item">
-								<label class="item-label" for="uc">Contenidos</label>
+								<label class="item-label" for="uc">Contenidos<span
+									class="required">*</span></label>
 								<p class="ayuda">Detallar los contenidos de la unidad
 									curricular en coherencia con los objetivos planteados. Podrán
 									organizarse en una secuencia de unidades temáticas o módulos.</p>
-								<h:inputTextarea value="#{pCtrl.nuevo.contenidos}" />
+								<h:inputTextarea value="#{pCtrl.nuevo.contenidos}"
+									required="true"
+									requiredMessage="Debe describir los contenidos de la unidad curricular">
+									<f:validateLength maximum="4000" />
+								</h:inputTextarea>
+								<p class="small">Máximo 4000 caracteres</p>
 								<!-- 								<p:textEditor widgetVar="editor5" id="editor5" -->
 								<!-- 									value="#{pCtrl.nuevo.contenidos}" height="100px"> -->
 								<!-- 									<f:facet name="toolbar"> -->
@@ -529,7 +596,8 @@
 						<div id="menu4" class="tab-pane fade">
 							<h3 class="headline-3">Metodología y evaluación</h3>
 							<div class="item">
-								<label class="item-label">La Unidad Curricular es</label>
+								<label class="item-label">La Unidad Curricular es<span
+									class="required">*</span></label>
 								<p class="ayuda">Indicar si se trata de una unidad
 									curricular teórica, práctica o teórico-práctica. Las unidades
 									curriculares prácticas y teórico-prácticas incluyen las
@@ -537,21 +605,25 @@
 									Consejo de la Facultad autorice.</p>
 								<div class="items-radio item">
 									<h:selectOneRadio value="#{pCtrl.nuevo.formato}"
-										styleClass="items-radio item">
+										styleClass="items-radio item" required="true"
+										requiredMessage="Debe seleccionar el formato de la unidad curricular">
 										<f:selectItems value="#{pCtrl.itemsFormato}" var="f"
 											itemValue="#{f}" itemLabel="#{f.label}" />
-										<f:ajax render="form:regimen" listener="#{pCtrl.actualizarRegimenOpciones}" />
+										<f:ajax render="form:regimen"
+											listener="#{pCtrl.actualizarRegimenOpciones}" />
 										<f:ajax render="form:tareasOblig" />
 									</h:selectOneRadio>
 								</div>
 							</div>
 							<div class="item">
-								<label class="item-label" for="duracion">Modalidad</label>
+								<label class="item-label">Modalidad<span
+									class="required">*</span></label>
 								<p class="ayuda">Escoger la modalidad de cursado de la
 									unidad curricular.</p>
 								<div class="items-radio item">
 									<h:selectOneRadio value="#{pCtrl.nuevo.modalidad}"
-										styleClass="items-radio item">
+										styleClass="items-radio item" required="true"
+										requiredMessage="Debe seleccionar la modalidad de la unidad curricular">
 										<f:selectItems value="#{pCtrl.itemsModalidad}" var="m"
 											itemValue="#{m}" itemLabel="#{m.label}" />
 									</h:selectOneRadio>
@@ -559,10 +631,17 @@
 							</div>
 							<div class="item">
 								<label class="item-label" for="uc">Descripción de la
-									propuesta metodológica de la unidad curricular</label>
+									propuesta metodológica de la unidad curricular<span
+									class="required">*</span>
+								</label>
 								<p class="ayuda">Detallar la metodología de trabajo y las
 									actividades previstas.</p>
-								<h:inputTextarea value="#{pCtrl.nuevo.descrMetodologia}" />
+								<h:inputTextarea value="#{pCtrl.nuevo.descrMetodologia}"
+									required="true"
+									requiredMessage="Debe describir la propuesta metodológica de la unidad curricular">
+									<f:validateLength maximum="4000" />
+								</h:inputTextarea>
+								<p class="small">Máximo 4000 caracteres</p>
 								<!-- 								<p:textEditor widgetVar="editor6" id="editor6" -->
 								<!-- 									value="#{pCtrl.nuevo.descrMetodologia}" height="100px"> -->
 								<!-- 									<f:facet name="toolbar"> -->
@@ -594,50 +673,49 @@
 										privación de libertad que no pueden cursar en la modalidad
 										definida.</p>
 								</div>
-								
+
 							</div>
 							<h:panelGroup id="adecuaciones">
-								<h:panelGroup class="item descr" rendered="#{pCtrl.nuevo.adecuaciones}">
-									<label class="item-label">Descripción de las adecuaciones metodológicas a realizar</label>
+								<h:panelGroup class="item descr"
+									rendered="#{pCtrl.nuevo.adecuaciones}">
+									<label class="item-label">Descripción de las
+										adecuaciones metodológicas a realizar<span class="required">*</span>
+									</label>
 									<p class="ayuda">Detallar las adecuaciones metodológicas a
 										realizar.</p>
-									<h:inputTextarea value="#{pCtrl.nuevo.descripcionAdecuaciones}" />
-									<!-- 									<p:textEditor widgetVar="editor3" id="editor3" -->
-									<!-- 										value="#{pCtrl.nuevo.descripcionAdecuaciones}" height="100px"> -->
-									<!-- 										<f:facet name="toolbar"> -->
-									<!-- 											<span class="ql-formats"> -->
-									<!-- 												<button class="ql-bold"></button> -->
-									<!-- 												<button class="ql-italic"></button> -->
-									<!-- 												<button class="ql-underline"></button> -->
-									<!-- 												<button class="ql-strike"></button> -->
-									<!-- 											</span> -->
-									<!-- 											<span class="ql-formats"> -->
-									<!-- 												<button class="ql-list" value="ordered"></button> -->
-									<!-- 												<button class="ql-list" value="bullet"></button> -->
-									<!-- 											</span> -->
-									<!-- 										</f:facet> -->
-									<!-- 									</p:textEditor> -->
+									<h:inputTextarea value="#{pCtrl.nuevo.descripcionAdecuaciones}"
+										required="true"
+										requiredMessage="Debe describir las adecuaciones metodológicas"
+										validatorMessage="Se ha excedido el máximo de caracteres permitidos en el campo Adecuaciones metodológicas">
+										<f:validateLength maximum="250" />
+									</h:inputTextarea>
+									<p class="small">Máximo 250 caracteres</p>
 								</h:panelGroup>
 							</h:panelGroup>
 							<h:panelGroup class="item" id="regimen" layout="block">
-								<label class="item-label">Régimen de asistencia</label>
+								<label class="item-label">Régimen de asistencia<span
+									class="required">*</span></label>
 								<p class="ayuda">Indicar el régimen de asistencia de la
 									unidad curricular.</p>
 								<div class="items-radio item">
 									<h:selectOneRadio value="#{pCtrl.nuevo.regimen}"
-										styleClass="items-radio item">
+										styleClass="items-radio item" required="true"
+										requiredMessage="Debe seleccionar el régimen de asistencia de la unidad curricular">
 										<f:selectItems value="#{pCtrl.itemsRegimen}" var="r"
 											itemValue="#{r}" itemLabel="#{r.label}" />
+										<f:ajax render="form:tareasOblig" listener="#{pCtrl.actualizarTareasOblig}"/>
 									</h:selectOneRadio>
 								</div>
 							</h:panelGroup>
-							<h:panelGroup class="switch-button item" id="tareasOblig" layout="block">
+							<h:panelGroup class="switch-button item" id="tareasOblig"
+								layout="block">
 								<label class="item-label">Realización obligatoria del
 									75% de las tareas propuestas por el equipo docente</label>
 								<h:selectBooleanCheckbox
 									value="#{pCtrl.nuevo.tareas75obligatoria}" id="switch-label5"
-									class="switch-button__checkbox" disabled="#{pCtrl.nuevo.formato == EnumFormato.TEORICA}"/>
-								<label for="form:switch-label5" class="switch-button__label"></label>
+									class="switch-button__checkbox"
+									disabled="#{pCtrl.tareasObligTrueDisabled}" />
+								<label for="form:switch-label5" class="switch-button__label #{pCtrl.tareasObligTrueDisabled ? 'disabled': ''}"></label>
 								<p class="ayuda">Indicar si se exige la realización del 75%
 									de las tareas. En las unidades curriculares prácticas o
 									teórico-prácticas será obligatoria la asistencia al 75% de las
@@ -655,7 +733,8 @@
 							</div>
 							<div class="item">
 								<label class="item-label" for="uc">Descripción de la
-									forma de evaluación y aprobación</label>
+									forma de evaluación y aprobación<span class="required">*</span>
+								</label>
 								<p class="ayuda">Detallar el conjunto de las actividades de
 									evaluación previstas (a modo de ejemplo: pruebas parciales,
 									informes, ejercicios o actividades prácticas a realizar con o
@@ -671,7 +750,12 @@
 									realizar una prueba de recuperación y qué se entenderá por
 									Excelente, Muy bueno, Bueno, Aceptable, Insuficiente o Muy
 									insuficiente en el marco de esta unidad curricular.</p>
-								<h:inputTextarea value="#{pCtrl.nuevo.descrEvaluacion}" />
+								<h:inputTextarea value="#{pCtrl.nuevo.descrEvaluacion}"
+									required="true"
+									requiredMessage="Debe describir la forma de evaluación y aprobación">
+									<f:validateLength maximum="4000" />
+								</h:inputTextarea>
+								<p class="small">Máximo 4000 caracteres</p>
 								<!-- 								<p:textEditor widgetVar="editor7" id="editor7" -->
 								<!-- 									value="#{pCtrl.nuevo.descrEvaluacion}" height="100px"> -->
 								<!-- 									<f:facet name="toolbar"> -->
@@ -704,13 +788,24 @@
 									APA, el resto de la bibliografía se indicará en clase. Se
 									podrán incluir aquí materiales en diversos soportes. La
 									bibliografía podrá estar organizadas según unidades temáticas o
-									módulos. (capaz podemos agregar acá una aclaración sobre cómo
-									hacerlo)</p>
+									módulos. Para agregar un subtítulo de sección o módulo se tilda la opción "¿Es título de sección?".</p>
 								<h:panelGroup id="bibliografia">
 									<h:panelGroup class="agregar-biblio">
 										<div class="item">
-											<label class="item-label">Material bibliográfico</label>
-											<h:inputText value="#{pCtrl.nuevaBibliografia.titulo}" />
+											<label class="item-label">Material bibliográfico<span
+												class="required">*</span></label>
+											<h:inputText value="#{pCtrl.nuevaBibliografia.titulo}" id="titulo-biblio"
+												validatorMessage="Se ha excedido el máximo de caracteres permitidos en el campo Material bibliográfico">
+												<f:validateLength maximum="500" />
+											</h:inputText>
+											<p class="small">Máximo 500 caracteres</p>
+											<h:message for="form:titulo-biblio" style = "color:red" />
+											<div class="item item-checkbox item-ua">
+												<h:selectBooleanCheckbox value="#{pCtrl.nuevaBibliografia.esTitulo}">
+													<f:ajax render="recom" />
+												</h:selectBooleanCheckbox>
+												<label>¿Es título de sección?</label>
+											</div>
 										</div>
 										<div class="item">
 											<h:commandButton class="button button_gris"
@@ -731,7 +826,16 @@
 										</p:column>
 
 										<p:column headerText="Material bibliográfico">
-											<h:outputText value="#{b.titulo}" />
+											<h:outputText value="#{b.titulo}" styleClass="#{b.esTitulo ? 'item-label': ''}"/>
+										</p:column>
+
+										<p:column styleClass="links-column">
+											<h:commandLink styleClass="link-delete"
+												action="#{pCtrl.borrarBibliografia(b)}">
+												<i class="material-symbols-outlined">delete</i>
+												<f:ajax execute=":form:bibliografia"
+													render=":form:bibliografia" />
+											</h:commandLink>
 										</p:column>
 									</p:dataTable>
 

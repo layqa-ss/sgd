@@ -7,7 +7,8 @@ public enum EnumCargo {
 	ADJUNTO("Prof. Adjunto/a"),
 	AGREGADO("Prof. Agregado/a"),
 	TITULAR("Prof. Titular"),
-	LIBRE("Docente libre");
+	LIBRE("Docente libre"),
+	OTRO("Otro");
 	
 	public final String label;
 

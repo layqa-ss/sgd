@@ -47,12 +47,9 @@ public class Programa {
 	private EnumSemestre semestre;
 	private boolean ingreso;
 	private boolean requisitos;
-	@Lob
-	@Column(length=4096)
 	private String requisitosCuales;
-	@Lob
-	@Column(length=4096)
 	private String recomendaciones;
+	private boolean recomNoCorresponde;
 	private boolean otrosServicios;
 	
 	/* Docentes */
@@ -409,6 +406,14 @@ public class Programa {
 
 	public void setMa(MarcoAcademico ma) {
 		this.ma = ma;
+	}
+
+	public boolean isRecomNoCorresponde() {
+		return recomNoCorresponde;
+	}
+
+	public void setRecomNoCorresponde(boolean recomNoCorresponde) {
+		this.recomNoCorresponde = recomNoCorresponde;
 	}
 
 }

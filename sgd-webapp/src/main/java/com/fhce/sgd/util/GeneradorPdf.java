@@ -3,8 +3,6 @@ package com.fhce.sgd.util;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
@@ -14,6 +12,7 @@ import com.fhce.sgd.dto.gestion.UnidadAcademicaDto;
 import com.fhce.sgd.dto.programas.BibliografiaDto;
 import com.fhce.sgd.dto.programas.ProgramaIntegranteDto;
 import com.fhce.sgd.dto.programas.ProgramaNuevoDto;
+import com.fhce.sgd.model.enums.EnumCargo;
 import com.fhce.sgd.model.enums.EnumDuracion;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
@@ -36,13 +35,16 @@ public class GeneradorPdf {
 
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
 
-			Path path = Paths.get("sgd-webapp/src/main/resources/logo2.png");
 			Document document = new Document();
-			PdfWriter.getInstance(document, os);
+			PdfWriter writer = PdfWriter.getInstance(document, os);
+			
+			writer.setPageEvent(new WatermarkPageEvent());
 
 			document.open();
-
-			Image img = Image.getInstance(path.toAbsolutePath().toString());
+			
+			ClassLoader classLoader = getClass().getClassLoader();
+			InputStream in = classLoader.getResourceAsStream("logo2.png");
+			Image img = Image.getInstance(in.readAllBytes());
 			img.scaleToFit(200, 200);
 			document.add(img);
 
@@ -203,7 +205,7 @@ public class GeneradorPdf {
 			table.setHeaderRows(1);
 			for (ProgramaIntegranteDto i : pr.getIntegrantes()) {
 				table.addCell(i.getRol().getLabel());
-				table.addCell(i.getCargo().getLabel());
+				table.addCell(i.getCargo() == EnumCargo.OTRO ? i.getCargoOtro() : i.getCargo().getLabel());
 				table.addCell(i.getNombre_docente());
 				table.addCell(i.getUnidad_academica());
 				table.addCell(i.getSubunidad_academica());
@@ -448,26 +450,24 @@ public class GeneradorPdf {
 
 			Paragraph pBiblio = new Paragraph();
 			Chunk biblio = new Chunk("Bibliografía básica", fontBold);
-			pDocentes.add(biblio);
-			PdfPTable tableBiblio = new PdfPTable(5);
+			pBiblio.add(biblio);
+			PdfPTable tableBiblio = new PdfPTable(1);
 			tableBiblio.setWidthPercentage(100);
-			columnHeader = new PdfPCell(new Phrase("#", fontBold));
-			columnHeader.setHorizontalAlignment(Element.ALIGN_CENTER);
-			tableBiblio.addCell(columnHeader);
-
-			columnHeader = new PdfPCell(new Phrase("Material bibliográfico", fontBold));
-			columnHeader.setHorizontalAlignment(Element.ALIGN_CENTER);
-			tableBiblio.addCell(columnHeader);
 
 			tableBiblio.setHeaderRows(1);
 			for (BibliografiaDto b : pr.getBibliografia()) {
-				table.addCell(b.getOrden().toString());
-				table.addCell(b.getTitulo());
+				if(b.isEsTitulo()) {
+					columnHeader = new PdfPCell(new Phrase(b.getTitulo(), fontBold));
+					tableBiblio.addCell(columnHeader);
+				} else {
+					tableBiblio.addCell(b.getTitulo());
+				}
 			}
 
 			pBiblio.add(tableBiblio);
 			pBiblio.setSpacingAfter(15);
 			document.add(pBiblio);
+			
 
 			Chunk anio = new Chunk("Año " + pr.getYear(), fontBold);
 			Paragraph pAnio = new Paragraph();

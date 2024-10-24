@@ -23,6 +23,7 @@ public class Bibliografia {
 	private String titulo;
 	
 	private Integer orden;
+	private boolean esTitulo;
 	
 	@ManyToOne
     @JoinColumn(name="id_programa", nullable=false)
@@ -64,6 +65,14 @@ public class Bibliografia {
 
 	public void setOrden(Integer orden) {
 		this.orden = orden;
+	}
+
+	public boolean isEsTitulo() {
+		return esTitulo;
+	}
+
+	public void setEsTitulo(boolean esTitulo) {
+		this.esTitulo = esTitulo;
 	}
 
 }

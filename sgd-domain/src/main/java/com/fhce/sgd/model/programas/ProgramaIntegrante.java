@@ -30,6 +30,8 @@ public class ProgramaIntegrante {
 	
 	private EnumCargo cargo;
 	
+	private String cargoOtro;
+	
 	private String unidad_academica;
 	
 	private String subunidad_academica;
@@ -42,9 +44,10 @@ public class ProgramaIntegrante {
 		
 	}
 	
-	public ProgramaIntegrante(EnumRolDocente rol, EnumCargo cargo, String unidad_academica, String subunidad_academica) {
+	public ProgramaIntegrante(EnumRolDocente rol, EnumCargo cargo, String cargoOtro, String unidad_academica, String subunidad_academica) {
 		this.rol =  rol;
 		this.cargo = cargo;
+		this.cargoOtro = cargoOtro;
 		this.unidad_academica = unidad_academica;
 		this.subunidad_academica = subunidad_academica;
 	}
@@ -111,6 +114,14 @@ public class ProgramaIntegrante {
 
 	public void setSubunidad_academica(String subunidad_academica) {
 		this.subunidad_academica = subunidad_academica;
+	}
+
+	public String getCargoOtro() {
+		return cargoOtro;
+	}
+
+	public void setCargoOtro(String cargoOtro) {
+		this.cargoOtro = cargoOtro;
 	}
 
 }

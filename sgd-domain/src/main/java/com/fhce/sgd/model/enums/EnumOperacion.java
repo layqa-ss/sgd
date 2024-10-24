@@ -2,7 +2,9 @@ package com.fhce.sgd.model.enums;
 
 import java.io.Serializable;
 
-public enum EnumOperacion implements Serializable, Comparable<EnumOperacion> {
+import org.springframework.security.core.GrantedAuthority;
+
+public enum EnumOperacion implements Serializable, Comparable<EnumOperacion>, GrantedAuthority {
 	
 	GESTION_USUARIOS("Gestión de usuarios"),
 	GESTION_UCA("Gestión de unidades académicas, carreras y áreas temáticas"),
@@ -37,5 +39,10 @@ public enum EnumOperacion implements Serializable, Comparable<EnumOperacion> {
 
 	public String getLabel() {
 		return label;
+	}
+
+	@Override
+	public String getAuthority() {
+		return this.name();
 	}
 }

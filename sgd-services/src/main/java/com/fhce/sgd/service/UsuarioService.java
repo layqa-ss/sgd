@@ -3,16 +3,18 @@ package com.fhce.sgd.service;
 import java.util.List;
 
 import com.fhce.sgd.dto.gestion.UsuarioDto;
+import com.fhce.sgd.model.usuarios.Usuario;
+import com.fhce.sgd.service.exception.SgdServicesException;
 
 public interface UsuarioService {
 
-	UsuarioDto getUsuario(Long id);
+	UsuarioDto getUsuario(Long id) throws SgdServicesException;
 	
-	UsuarioDto getUsuarioByUsername(String username);
+	Usuario getUsuarioByUsername(String username) throws SgdServicesException;
 	
-	Long save(UsuarioDto userDto);
+	Long saveOrUpdateUsuario(UsuarioDto userDto) throws SgdServicesException;
 	
-	List<UsuarioDto> getUsuarios();
+	List<UsuarioDto> getUsuarios() throws SgdServicesException;
 	
-	void deleteUsuario(Long id);
+	void deleteUsuario(Long id) throws SgdServicesException;
 }

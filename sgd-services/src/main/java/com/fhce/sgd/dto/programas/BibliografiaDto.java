@@ -7,15 +7,18 @@ public class BibliografiaDto {
 	private Integer orden;
 	
 	private String titulo;
+	
+	private boolean esTitulo;
 
 	public BibliografiaDto() {
 		
 	}
 
-	public BibliografiaDto(Long id, Integer orden, String titulo) {
+	public BibliografiaDto(Long id, Integer orden, String titulo, boolean esTitulo) {
 		this.id = id;
 		this.orden = orden;
 		this.titulo = titulo;
+		this.esTitulo = esTitulo;
 	}
 
 
@@ -33,7 +36,6 @@ public class BibliografiaDto {
 		return titulo;
 	}
 
-
 	public void setTitulo(String titulo) {
 		this.titulo = titulo;
 	}
@@ -44,6 +46,14 @@ public class BibliografiaDto {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public boolean isEsTitulo() {
+		return esTitulo;
+	}
+
+	public void setEsTitulo(boolean esTitulo) {
+		this.esTitulo = esTitulo;
 	}
 
 }

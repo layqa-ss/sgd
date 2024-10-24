@@ -3,3 +3,10 @@ sgd-services/target/
 sgd-webapp/target/
 .settings/
 .project
+.DS_Store
+sgd-webapp/src/.DS_Store
+sgd-webapp/src/main/.DS_Store
+sgd-webapp/src/main/webapp/.DS_Store
+.factorypath
+sgd-domain/.factorypath
+sgd-services/.factorypath
