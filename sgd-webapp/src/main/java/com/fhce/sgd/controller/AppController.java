@@ -20,8 +20,6 @@ import jakarta.inject.Named;
 @Controller
 public class AppController {
 
-
-
 	@Value("${build.version}")
 	private String buildVersion;
 
@@ -35,7 +33,6 @@ public class AppController {
 		return "login";
 	}
 
-
 	public String getUsuarioLogueado() {
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String username = "";
@@ -46,6 +43,17 @@ public class AppController {
 			username = principal.toString();
 		}
 		return username;
+	}
+	
+	public Long getUsuarioLogueadoId() {
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Long id;
+		if (principal instanceof UserDetails) {
+			id = ((CustomUsuarioDetails) principal).getId();
+		} else {
+			id = 0L;
+		}
+		return id;
 	}
 
 	public void cargarPermisos(Collection<? extends GrantedAuthority> operaciones) {

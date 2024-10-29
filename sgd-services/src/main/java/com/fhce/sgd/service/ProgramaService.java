@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.fhce.sgd.dto.programas.ProgramaDto;
 import com.fhce.sgd.dto.programas.ProgramaNuevoDto;
+import com.fhce.sgd.model.enums.EnumEstadoPrograma;
+import com.fhce.sgd.model.programas.Programa;
 import com.fhce.sgd.service.exception.SgdServicesException;
 
 public interface ProgramaService {
@@ -14,7 +16,9 @@ public interface ProgramaService {
 	
 	List<ProgramaDto> getProgramasAll() throws SgdServicesException;
 	
-	ProgramaNuevoDto obtenerProgramaPorId(Long id) throws SgdServicesException;
+	ProgramaNuevoDto obtenerProgramaDtoPorId(Long id) throws SgdServicesException;
 	
-	void enviarCC(Long id) throws SgdServicesException;
+	Programa obtenerProgramaPorId(Long id) throws SgdServicesException;
+	
+	void cambiarEstado(Long id, EnumEstadoPrograma estadoNuevo) throws SgdServicesException;
 }

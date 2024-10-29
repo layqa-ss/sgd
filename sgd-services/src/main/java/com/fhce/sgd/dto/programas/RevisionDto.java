@@ -1,28 +1,11 @@
-package com.fhce.sgd.model.programas;
+package com.fhce.sgd.dto.programas;
 
 import java.util.Date;
 
-import org.hibernate.annotations.CreationTimestamp;
+public class RevisionDto {
 
-import com.fhce.sgd.model.usuarios.Usuario;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-
-@Entity
-@Table(name = "revisiones")
-public class RevisionPrograma {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
 	
-	@CreationTimestamp
 	private Date fecha_revision;
 	
 	private String ucSug;
@@ -51,244 +34,186 @@ public class RevisionPrograma {
 	private String evaluacionSug;
 	private String biblioSug;
 	
-	@ManyToOne
-    @JoinColumn(name="id_usuario", nullable=false)
-	private Usuario usuario;
+	private Long idUsuario;
+	private Long idPrograma;
 	
-	@ManyToOne
-    @JoinColumn(name="id_programa", nullable=false)
-	private Programa programa;
-
+	public RevisionDto() {
+		
+	}
+	
 	public Long getId() {
 		return id;
 	}
-
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-	public Programa getPrograma() {
-		return programa;
-	}
-
-	public void setPrograma(Programa programa) {
-		this.programa = programa;
-	}
-
 	public Date getFecha_revision() {
 		return fecha_revision;
 	}
-
 	public void setFecha_revision(Date fecha_revision) {
 		this.fecha_revision = fecha_revision;
 	}
-
-	public Usuario getUsuario() {
-		return usuario;
-	}
-
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
-	}
-
 	public String getUcSug() {
 		return ucSug;
 	}
-
 	public void setUcSug(String ucSug) {
 		this.ucSug = ucSug;
 	}
-
 	public String getUaSug() {
 		return uaSug;
 	}
-
 	public void setUaSug(String uaSug) {
 		this.uaSug = uaSug;
 	}
-
 	public String getCarreraSug() {
 		return carreraSug;
 	}
-
 	public void setCarreraSug(String carreraSug) {
 		this.carreraSug = carreraSug;
 	}
-
 	public String getAreaSug() {
 		return areaSug;
 	}
-
 	public void setAreaSug(String areaSug) {
 		this.areaSug = areaSug;
 	}
-
 	public String getDuracionSug() {
 		return duracionSug;
 	}
-
 	public void setDuracionSug(String duracionSug) {
 		this.duracionSug = duracionSug;
 	}
-
 	public String getSemestreSug() {
 		return semestreSug;
 	}
-
 	public void setSemestreSug(String semestreSug) {
 		this.semestreSug = semestreSug;
 	}
-
 	public String getIngresoSug() {
 		return ingresoSug;
 	}
-
 	public void setIngresoSug(String ingresoSug) {
 		this.ingresoSug = ingresoSug;
 	}
-
 	public String getRequisitosSug() {
 		return requisitosSug;
 	}
-
 	public void setRequisitosSug(String requisitosSug) {
 		this.requisitosSug = requisitosSug;
 	}
-
 	public String getRequisitosCualesSug() {
 		return requisitosCualesSug;
 	}
-
 	public void setRequisitosCualesSug(String requisitosCualesSug) {
 		this.requisitosCualesSug = requisitosCualesSug;
 	}
-
 	public String getRecomSug() {
 		return recomSug;
 	}
-
 	public void setRecomSug(String recomSug) {
 		this.recomSug = recomSug;
 	}
-
 	public String getOtrosServSug() {
 		return otrosServSug;
 	}
-
 	public void setOtrosServSug(String otrosServSug) {
 		this.otrosServSug = otrosServSug;
 	}
-
 	public String getDocentesSug() {
 		return docentesSug;
 	}
-
 	public void setDocentesSug(String docentesSug) {
 		this.docentesSug = docentesSug;
 	}
-
 	public String getCreditosSug() {
 		return creditosSug;
 	}
-
 	public void setCreditosSug(String creditosSug) {
 		this.creditosSug = creditosSug;
 	}
-
 	public String getObjSug() {
 		return objSug;
 	}
-
 	public void setObjSug(String objSug) {
 		this.objSug = objSug;
 	}
-
 	public String getContSug() {
 		return contSug;
 	}
-
 	public void setContSug(String contSug) {
 		this.contSug = contSug;
 	}
-
 	public String getFormatoSug() {
 		return formatoSug;
 	}
-
 	public void setFormatoSug(String formatoSug) {
 		this.formatoSug = formatoSug;
 	}
-
 	public String getModalidadSug() {
 		return modalidadSug;
 	}
-
 	public void setModalidadSug(String modalidadSug) {
 		this.modalidadSug = modalidadSug;
 	}
-
 	public String getMetodologiaSug() {
 		return metodologiaSug;
 	}
-
 	public void setMetodologiaSug(String metodologiaSug) {
 		this.metodologiaSug = metodologiaSug;
 	}
-
 	public String getAdecSug() {
 		return adecSug;
 	}
-
 	public void setAdecSug(String adecSug) {
 		this.adecSug = adecSug;
 	}
-
 	public String getAdecDescrSug() {
 		return adecDescrSug;
 	}
-
 	public void setAdecDescrSug(String adecDescrSug) {
 		this.adecDescrSug = adecDescrSug;
 	}
-
 	public String getRegimenSug() {
 		return regimenSug;
 	}
-
 	public void setRegimenSug(String regimenSug) {
 		this.regimenSug = regimenSug;
 	}
-
 	public String getTareas75obligSug() {
 		return tareas75obligSug;
 	}
-
 	public void setTareas75obligSug(String tareas75obligSug) {
 		this.tareas75obligSug = tareas75obligSug;
 	}
-
 	public String getAprobDirectaSug() {
 		return aprobDirectaSug;
 	}
-
 	public void setAprobDirectaSug(String aprobDirectaSug) {
 		this.aprobDirectaSug = aprobDirectaSug;
 	}
-
 	public String getEvaluacionSug() {
 		return evaluacionSug;
 	}
-
 	public void setEvaluacionSug(String evaluacionSug) {
 		this.evaluacionSug = evaluacionSug;
 	}
-
 	public String getBiblioSug() {
 		return biblioSug;
 	}
-
 	public void setBiblioSug(String biblioSug) {
 		this.biblioSug = biblioSug;
+	}
+	public Long getIdUsuario() {
+		return idUsuario;
+	}
+	public void setIdUsuario(Long idUsuario) {
+		this.idUsuario = idUsuario;
+	}
+	public Long getIdPrograma() {
+		return idPrograma;
+	}
+	public void setIdPrograma(Long idPrograma) {
+		this.idPrograma = idPrograma;
 	}
 
 }

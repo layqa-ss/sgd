@@ -8,7 +8,9 @@ import com.fhce.sgd.service.exception.SgdServicesException;
 
 public interface UsuarioService {
 
-	UsuarioDto getUsuario(Long id) throws SgdServicesException;
+	UsuarioDto getUsuarioDto(Long id) throws SgdServicesException;
+	
+	Usuario getUsuario(Long id) throws SgdServicesException;
 	
 	Usuario getUsuarioByUsername(String username) throws SgdServicesException;
 	

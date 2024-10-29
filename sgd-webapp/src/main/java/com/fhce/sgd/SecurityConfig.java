@@ -50,7 +50,6 @@ public class SecurityConfig {
 
 	}
 
-	@Bean
 	LdapAuthenticationProvider ldapAuthenticationProvider() {
 		LdapAuthenticationProvider auth = new LdapAuthenticationProvider(authenticator());
 		auth.setUserDetailsContextMapper(mapper);

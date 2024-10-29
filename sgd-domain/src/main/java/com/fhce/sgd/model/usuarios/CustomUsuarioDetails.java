@@ -20,6 +20,10 @@ public class CustomUsuarioDetails implements UserDetails {
 	public String getFullname() {
 		return user.getFullname();
 	}
+	
+	public Long getId() {
+		return user.getId();
+	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

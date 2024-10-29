@@ -66,6 +66,7 @@
 						</div>
 					</div>
 					<div class="tab-content">
+						<h:messages id="messages" styleClass="messages error" />
 						<div id="menu1" class="tab-pane fade active in">
 							<div class="item">
 								<h3 class="headline-3">General</h3>
@@ -78,7 +79,13 @@
                                 </div>
 								<h:outputText value="#{pCtrl.revisado.nombreUC}" />
 								<div class="item sugerencia">
-                                    <textarea></textarea>
+                                    <div class="item">
+										<h:inputTextarea value="#{pCtrl.revision.ucSug}"
+											validatorMessage="Se ha excedido el máximo de caracteres permitidos">
+											<f:validateLength maximum="250" />
+										</h:inputTextarea>
+										<p class="small">Máximo 250 caracteres</p>
+									</div>
                                     <button type="button" class="icon-button close-sug"><i class="material-symbols-outlined">close</i></button>
                                 </div>
 							</div>
@@ -93,92 +100,234 @@
 									</div>
 								</ui:repeat>
 								<div class="item sugerencia">
-                                    <textarea></textarea>
+                                    <div class="item">
+										<h:inputTextarea value="#{pCtrl.revision.uaSug}"
+											validatorMessage="Se ha excedido el máximo de caracteres permitidos">
+											<f:validateLength maximum="250" />
+										</h:inputTextarea>
+										<p class="small">Máximo 250 caracteres</p>
+									</div>
                                     <button type="button" class="icon-button close-sug"><i class="material-symbols-outlined">close</i></button>
                                 </div>
 							</div>
 
 							<div class="item">
-								<label class="item-label">Carrera</label>
+								<div class="sug-label">
+                                    <label class="item-label">Carrera</label>
+                                    <button type="button" class="agregar-sug icon-button" ><i class="material-symbols-outlined">add</i></button>
+                                </div>
 								<ui:repeat value="#{pCtrl.revisado.carreras}" var="c">
 									<div class="item">
 										<h:outputText value="#{c.nombre}" />
 									</div>
-									
 								</ui:repeat>
+								<div class="item sugerencia">
+                                    <div class="item">
+										<h:inputTextarea value="#{pCtrl.revision.carreraSug}"
+											validatorMessage="Se ha excedido el máximo de caracteres permitidos">
+											<f:validateLength maximum="250" />
+										</h:inputTextarea>
+										<p class="small">Máximo 250 caracteres</p>
+									</div>
+                                    <button type="button" class="icon-button close-sug"><i class="material-symbols-outlined">close</i></button>
+                                </div>
 							</div>
 							
 							<div class="item">
-								<label class="item-label">Area temática por carrera</label>
+								<div class="sug-label">
+                                    <label class="item-label">Area temática por carrera</label>
+                                    <button type="button" class="agregar-sug icon-button" ><i class="material-symbols-outlined">add</i></button>
+                                </div>
 								<ui:repeat value="#{pCtrl.revisado.carreras}" var="c">
 									<div class="item">
 										<h:outputText value="#{c.nombre} - #{c.areaNombre}" />
 									</div>
 								</ui:repeat>
+								<div class="item sugerencia">
+                                    <div class="item">
+										<h:inputTextarea value="#{pCtrl.revision.areaSug}"
+											validatorMessage="Se ha excedido el máximo de caracteres permitidos">
+											<f:validateLength maximum="250" />
+										</h:inputTextarea>
+										<p class="small">Máximo 250 caracteres</p>
+									</div>
+                                    <button type="button" class="icon-button close-sug"><i class="material-symbols-outlined">close</i></button>
+                                </div>
 							</div>
 
 							<div class="item">
-								<label class="item-label">Duración</label>
+								<div class="sug-label">
+                                    <label class="item-label">Duración</label>
+                                    <button type="button" class="agregar-sug icon-button" ><i class="material-symbols-outlined">add</i></button>
+                                </div>
 								<h:outputText value="#{pCtrl.revisado.duracion.label}" rendered="#{pCtrl.revisado.duracion!=EnumDuracion.OTRO}"/>
 								<h:outputText value="#{pCtrl.revisado.duracionOtro}" rendered="#{pCtrl.revisado.duracion==EnumDuracion.OTRO}"/>
+								<div class="item sugerencia">
+                                    <div class="item">
+										<h:inputTextarea value="#{pCtrl.revision.duracionSug}"
+											validatorMessage="Se ha excedido el máximo de caracteres permitidos">
+											<f:validateLength maximum="250" />
+										</h:inputTextarea>
+										<p class="small">Máximo 250 caracteres</p>
+									</div>
+                                    <button type="button" class="icon-button close-sug"><i class="material-symbols-outlined">close</i></button>
+                                </div>
 							</div>
+							
 							<h:panelGroup class="item" layout="block"
 								rendered="#{pCtrl.revisado.duracion != EnumDuracion.ANUAL}">
-								<label class="item-label">Semestre en el que se ofrece</label>
+								<div class="sug-label">
+                                    <label class="item-label">Semestre en el que se ofrece</label>
+                                    <button type="button" class="agregar-sug icon-button" ><i class="material-symbols-outlined">add</i></button>
+                                </div>
 								<h:outputText value="#{pCtrl.revisado.semestre.label}" />
+								<div class="item sugerencia">
+                                    <div class="item">
+										<h:inputTextarea value="#{pCtrl.revision.semestreSug}"
+											validatorMessage="Se ha excedido el máximo de caracteres permitidos">
+											<f:validateLength maximum="250" />
+										</h:inputTextarea>
+										<p class="small">Máximo 250 caracteres</p>
+									</div>
+                                    <button type="button" class="icon-button close-sug"><i class="material-symbols-outlined">close</i></button>
+                                </div>
 							</h:panelGroup>
+							
 							<div class="item">
-								<label class="item-label">La unidad curricular está
+								<div class="sug-label">
+                                    <label class="item-label">La unidad curricular está
 									recomendada para estudiantes de ingreso</label>
-
+                                    <button type="button" class="agregar-sug icon-button" ><i class="material-symbols-outlined">add</i></button>
+                                </div>
 								<h:outputText value="#{pCtrl.revisado.ingreso ? 'SI' : 'NO'}" />
+								<div class="item sugerencia">
+                                    <div class="item">
+										<h:inputTextarea value="#{pCtrl.revision.ingresoSug}"
+											validatorMessage="Se ha excedido el máximo de caracteres permitidos">
+											<f:validateLength maximum="250" />
+										</h:inputTextarea>
+										<p class="small">Máximo 250 caracteres</p>
+									</div>
+                                    <button type="button" class="icon-button close-sug"><i class="material-symbols-outlined">close</i></button>
+                                </div>
 							</div>
+							
 							<div class="item">
-								<label class="item-label">Requisitos de inscripción
+								<div class="sug-label">
+                                    <label class="item-label">Requisitos de inscripción
 									(unidades curriculares previas o cantidad de créditos
 									obtenidos)</label>
+                                    <button type="button" class="agregar-sug icon-button" ><i class="material-symbols-outlined">add</i></button>
+                                </div>
 								<h:outputText value="#{pCtrl.revisado.requisitos ? 'SI' : 'NO'}" />
+								<div class="item sugerencia">
+                                    <div class="item">
+										<h:inputTextarea value="#{pCtrl.revision.requisitosSug}"
+											validatorMessage="Se ha excedido el máximo de caracteres permitidos">
+											<f:validateLength maximum="250" />
+										</h:inputTextarea>
+										<p class="small">Máximo 250 caracteres</p>
+									</div>
+                                    <button type="button" class="icon-button close-sug"><i class="material-symbols-outlined">close</i></button>
+                                </div>
 							</div>
+							
 							<h:panelGroup class="item" rendered="#{pCtrl.revisado.requisitos}">
-								<label class="item-label">¿Cuáles?</label>
+								<div class="sug-label">
+                                    <label class="item-label">¿Cuáles?</label>
+                                    <button type="button" class="agregar-sug icon-button" ><i class="material-symbols-outlined">add</i></button>
+                                </div>
 								<h:outputText value="#{pCtrl.revisado.requisitosCuales}" />
+								<div class="item sugerencia">
+                                    <div class="item">
+										<h:inputTextarea value="#{pCtrl.revision.requisitosCualesSug}"
+											validatorMessage="Se ha excedido el máximo de caracteres permitidos">
+											<f:validateLength maximum="250" />
+										</h:inputTextarea>
+										<p class="small">Máximo 250 caracteres</p>
+									</div>
+                                    <button type="button" class="icon-button close-sug"><i class="material-symbols-outlined">close</i></button>
+                                </div>
 							</h:panelGroup>
 
 							<div class="item">
-								<label class="item-label" for="uc">Conocimientos previos
+								<div class="sug-label">
+                                    <label class="item-label" for="uc">Conocimientos previos
 									o grados de avance en la carrera recomendados</label>
+                                    <button type="button" class="agregar-sug icon-button" ><i class="material-symbols-outlined">add</i></button>
+                                </div>
 								<h:outputText value="#{pCtrl.revisado.recomendaciones}" />
+								<div class="item sugerencia">
+                                    <div class="item">
+										<h:inputTextarea value="#{pCtrl.revision.recomSug}"
+											validatorMessage="Se ha excedido el máximo de caracteres permitidos">
+											<f:validateLength maximum="250" />
+										</h:inputTextarea>
+										<p class="small">Máximo 250 caracteres</p>
+									</div>
+                                    <button type="button" class="icon-button close-sug"><i class="material-symbols-outlined">close</i></button>
+                                </div>
 							</div>
+							
 							<div class="item">
-								<label class="item-label">Unidad curricular ofertada
+								<div class="sug-label">
+                                    <label class="item-label">Unidad curricular ofertada
 									como electiva para otros servicios universitarios o terciarios</label>
+                                    <button type="button" class="agregar-sug icon-button" ><i class="material-symbols-outlined">add</i></button>
+                                </div>
 								<h:outputText value="#{pCtrl.revisado.otrosServicios ? 'SI' : 'NO'}" />
-
+								<div class="item sugerencia">
+                                    <div class="item">
+										<h:inputTextarea value="#{pCtrl.revision.otrosServSug}"
+											validatorMessage="Se ha excedido el máximo de caracteres permitidos">
+											<f:validateLength maximum="250" />
+										</h:inputTextarea>
+										<p class="small">Máximo 250 caracteres</p>
+									</div>
+                                    <button type="button" class="icon-button close-sug"><i class="material-symbols-outlined">close</i></button>
+                                </div>
 							</div>
-							<label class="titulo">Integrantes del equipo docente</label>
-							<p:dataTable value="#{pCtrl.revisado.integrantes}" var="i"
-								styleClass="table table-docentes">
-
-								<p:column headerText="Rol">
-									<h:outputText value="#{i.rol.label}" />
-								</p:column>
-
-								<p:column headerText="Cargo">
-									<h:outputText value="#{i.cargo.label}" />
-								</p:column>
-
-								<p:column headerText="Nombre">
-									<h:outputText value="#{i.nombre_docente}" />
-								</p:column>
-
-								<p:column headerText="Unidad académica">
-									<h:outputText value="#{i.unidad_academica}" />
-								</p:column>
-
-								<p:column headerText="Subunidad académica">
-									<h:outputText value="#{i.subunidad_academica}" />
-								</p:column>
-							</p:dataTable>
+							
+							<div class="item">
+								<div class="sug-label">
+	                                <label class="titulo">Integrantes del equipo docente</label>
+	                                <button type="button" class="agregar-sug icon-button" ><i class="material-symbols-outlined">add</i></button>
+	                            </div>
+								
+								<p:dataTable value="#{pCtrl.revisado.integrantes}" var="i"
+									styleClass="table table-docentes">
+	
+									<p:column headerText="Rol">
+										<h:outputText value="#{i.rol.label}" />
+									</p:column>
+	
+									<p:column headerText="Cargo">
+										<h:outputText value="#{i.cargo.label}" />
+									</p:column>
+	
+									<p:column headerText="Nombre">
+										<h:outputText value="#{i.nombre_docente}" />
+									</p:column>
+	
+									<p:column headerText="Unidad académica">
+										<h:outputText value="#{i.unidad_academica}" />
+									</p:column>
+	
+									<p:column headerText="Subunidad académica">
+										<h:outputText value="#{i.subunidad_academica}" />
+									</p:column>
+								</p:dataTable>
+								<div class="item sugerencia">
+                                    <div class="item">
+										<h:inputTextarea value="#{pCtrl.revision.docentesSug}"
+											validatorMessage="Se ha excedido el máximo de caracteres permitidos">
+											<f:validateLength maximum="250" />
+										</h:inputTextarea>
+										<p class="small">Máximo 250 caracteres</p>
+									</div>
+                                    <button type="button" class="icon-button close-sug"><i class="material-symbols-outlined">close</i></button>
+                                </div>
+							</div>
 							<div class="buttons">
 								<button type="button" class="button next-step">
 									Siguiente <i class="fa fa-chevron-right"></i>
@@ -187,68 +336,81 @@
 						</div>
 
 						<div id="menu2" class="tab-pane fade">
-							<h3 class="headline-3">Créditos y carga horaria del curso</h3>
-
-							<table class="table-creditos">
-								<tr>
-									<th colspan="2"></th>
-									<th>Horas</th>
-								</tr>
-								<tr>
-									<th rowspan="3">Con acompañamiento directo del/la docente</th>
-									<td>Horas aula, presenciales o virtuales</td>
-									<td><h:outputText value="#{pCtrl.revisado.horasAula}"/></td>
-								</tr>
-								<tr>
-									<td>Trabajo de campo o prácticas</td>
-									<td><h:outputText
-											value="#{pCtrl.revisado.horasTrabajosConAcompa}"/></td>
-								</tr>
-								<tr>
-									<td>Otros <h:outputText
-											value="#{pCtrl.revisado.otrosConAcompa}"  /></td>
-									<td><h:outputText
-											value="#{pCtrl.revisado.horasOtrosConAcompa}"/></td>
-								</tr>
-								<tr>
-									<th rowspan="5">Sin acompañamiento directo del/la docente
-										(estudio autónomo)</th>
-									<td>Lecturas y estudio de materiales varios</td>
-									<td><h:outputText value="#{pCtrl.revisado.horasLecturas}" /></td>
-								</tr>
-								<tr>
-									<td>Tareas y actividades varias (individuales, grupales,
-										actividades en EVA)</td>
-									<td><h:outputText value="#{pCtrl.revisado.horasTareas}" /></td>
-								</tr>
-								<tr>
-									<td>Trabajo de campo o prácticas</td>
-									<td><h:outputText
-											value="#{pCtrl.revisado.horasTrabajosSinAcompa}"/></td>
-								</tr>
-								<tr>
-									<td>Trabajos finales</td>
-									<td><h:outputText
-											value="#{pCtrl.revisado.horasTrabajosFinales}"/></td>
-								</tr>
-								<tr>
-									<td>Otros <h:outputText
-											value="#{pCtrl.revisado.otrosSinAcompa}" /></td>
-									<td><h:outputText
-											value="#{pCtrl.revisado.horasOtrosSinAcompa}"/></td>
-								</tr>
-								<tr>
-									<th colspan="2">Horas totales previstas del curso</th>
-									<td><h:outputText value="#{pCtrl.revisado.horasTotales}"
-											 /></td>
-								</tr>
-								<tr>
-									<th colspan="2">Créditos</th>
-									<td><h:outputText value="#{pCtrl.revisado.creditos}"
-											/></td>
-								</tr>
-							</table>
-							<p class="mensaje"></p>
+							<div class="item">
+								<div class="sug-label">
+	                                <h3 class="headline-3">Créditos y carga horaria del curso</h3>
+	                                <button type="button" class="agregar-sug icon-button" ><i class="material-symbols-outlined">add</i></button>
+	                            </div>
+								<table class="table-creditos">
+									<tr>
+										<th colspan="2"></th>
+										<th>Horas</th>
+									</tr>
+									<tr>
+										<th rowspan="3">Con acompañamiento directo del/la docente</th>
+										<td>Horas aula, presenciales o virtuales</td>
+										<td><h:outputText value="#{pCtrl.revisado.horasAula}"/></td>
+									</tr>
+									<tr>
+										<td>Trabajo de campo o prácticas</td>
+										<td><h:outputText
+												value="#{pCtrl.revisado.horasTrabajosConAcompa}"/></td>
+									</tr>
+									<tr>
+										<td>Otros <h:outputText
+												value="#{pCtrl.revisado.otrosConAcompa}"  /></td>
+										<td><h:outputText
+												value="#{pCtrl.revisado.horasOtrosConAcompa}"/></td>
+									</tr>
+									<tr>
+										<th rowspan="5">Sin acompañamiento directo del/la docente
+											(estudio autónomo)</th>
+										<td>Lecturas y estudio de materiales varios</td>
+										<td><h:outputText value="#{pCtrl.revisado.horasLecturas}" /></td>
+									</tr>
+									<tr>
+										<td>Tareas y actividades varias (individuales, grupales,
+											actividades en EVA)</td>
+										<td><h:outputText value="#{pCtrl.revisado.horasTareas}" /></td>
+									</tr>
+									<tr>
+										<td>Trabajo de campo o prácticas</td>
+										<td><h:outputText
+												value="#{pCtrl.revisado.horasTrabajosSinAcompa}"/></td>
+									</tr>
+									<tr>
+										<td>Trabajos finales</td>
+										<td><h:outputText
+												value="#{pCtrl.revisado.horasTrabajosFinales}"/></td>
+									</tr>
+									<tr>
+										<td>Otros <h:outputText
+												value="#{pCtrl.revisado.otrosSinAcompa}" /></td>
+										<td><h:outputText
+												value="#{pCtrl.revisado.horasOtrosSinAcompa}"/></td>
+									</tr>
+									<tr>
+										<th colspan="2">Horas totales previstas del curso</th>
+										<td><h:outputText value="#{pCtrl.revisado.horasTotales}"
+												 /></td>
+									</tr>
+									<tr>
+										<th colspan="2">Créditos</th>
+										<td><h:outputText value="#{pCtrl.revisado.creditos}"
+												/></td>
+									</tr>
+								</table>
+								<div class="item sugerencia">
+	                                <div class="item">
+										<h:inputTextarea value="#{pCtrl.revision.creditosSug}"
+											validatorMessage="Se ha excedido el máximo de caracteres permitidos">
+											<f:validateLength maximum="250" />
+										</h:inputTextarea>
+										<p class="small">Máximo 250 caracteres</p>
+									</div>
+	                                <button type="button" class="icon-button close-sug"><i class="material-symbols-outlined">close</i></button>
+	                            </div>
+	                        </div>
 							<div class="buttons">
 								<button type="button" class="button prev-step">
 									<i class="fa fa-chevron-left"></i> Anterior
@@ -269,12 +431,38 @@
 
 
 							<div class="item">
-								<label class="item-label" for="uc">Objetivos</label>
+								<div class="sug-label">
+	                                <label class="item-label" for="uc">Objetivos</label>
+	                                <button type="button" class="agregar-sug icon-button" ><i class="material-symbols-outlined">add</i></button>
+	                            </div>
 								<h:outputText value="#{pCtrl.revisado.objetivos}" />
+								<div class="item sugerencia">
+	                                <div class="item">
+										<h:inputTextarea value="#{pCtrl.revision.objSug}"
+											validatorMessage="Se ha excedido el máximo de caracteres permitidos">
+											<f:validateLength maximum="250" />
+										</h:inputTextarea>
+										<p class="small">Máximo 250 caracteres</p>
+									</div>
+	                                <button type="button" class="icon-button close-sug"><i class="material-symbols-outlined">close</i></button>
+	                            </div>
 							</div>
 							<div class="item">
-								<label class="item-label" for="uc">Contenidos</label>
+								<div class="sug-label">
+	                                <label class="item-label" for="uc">Contenidos</label>
+	                                <button type="button" class="agregar-sug icon-button" ><i class="material-symbols-outlined">add</i></button>
+	                            </div>
 								<h:outputText value="#{pCtrl.revisado.contenidos}" />
+								<div class="item sugerencia">
+	                                <div class="item">
+										<h:inputTextarea value="#{pCtrl.revision.contSug}"
+											validatorMessage="Se ha excedido el máximo de caracteres permitidos">
+											<f:validateLength maximum="250" />
+										</h:inputTextarea>
+										<p class="small">Máximo 250 caracteres</p>
+									</div>
+	                                <button type="button" class="icon-button close-sug"><i class="material-symbols-outlined">close</i></button>
+	                            </div>
 							</div>
 
 
@@ -290,46 +478,163 @@
 						<div id="menu4" class="tab-pane fade">
 							<h3 class="headline-3">Metodología y evaluación</h3>
 							<div class="item">
-								<label class="item-label">La Unidad Curricular es</label>
+								<div class="sug-label">
+	                                <label class="item-label">La Unidad Curricular es</label>
+	                                <button type="button" class="agregar-sug icon-button" ><i class="material-symbols-outlined">add</i></button>
+	                            </div>
 								<h:outputText value="#{pCtrl.revisado.formato.label}" />
+								<div class="item sugerencia">
+	                                <div class="item">
+										<h:inputTextarea value="#{pCtrl.revision.formatoSug}"
+											validatorMessage="Se ha excedido el máximo de caracteres permitidos">
+											<f:validateLength maximum="250" />
+										</h:inputTextarea>
+										<p class="small">Máximo 250 caracteres</p>
+									</div>
+	                                <button type="button" class="icon-button close-sug"><i class="material-symbols-outlined">close</i></button>
+	                            </div>
 							</div>
 							<div class="item">
-								<label class="item-label" for="duracion">Modalidad</label>
+								<div class="sug-label">
+	                                <label class="item-label" for="duracion">Modalidad</label>
+	                                <button type="button" class="agregar-sug icon-button" ><i class="material-symbols-outlined">add</i></button>
+	                            </div>
 								<h:outputText value="#{pCtrl.revisado.modalidad.label}" />
+								<div class="item sugerencia">
+	                                <div class="item">
+										<h:inputTextarea value="#{pCtrl.revision.modalidadSug}"
+											validatorMessage="Se ha excedido el máximo de caracteres permitidos">
+											<f:validateLength maximum="250" />
+										</h:inputTextarea>
+										<p class="small">Máximo 250 caracteres</p>
+									</div>
+	                                <button type="button" class="icon-button close-sug"><i class="material-symbols-outlined">close</i></button>
+	                            </div>
 							</div>
 							<div class="item">
-								<label class="item-label" for="uc">Descripción de la
+								<div class="sug-label">
+	                                <label class="item-label" for="uc">Descripción de la
 									propuesta metodológica de la unidad curricular</label>
+	                                <button type="button" class="agregar-sug icon-button" ><i class="material-symbols-outlined">add</i></button>
+	                            </div>
 								<h:outputText value="#{pCtrl.revisado.descrMetodologia}" />
+								<div class="item sugerencia">
+	                                <div class="item">
+										<h:inputTextarea value="#{pCtrl.revision.metodologiaSug}"
+											validatorMessage="Se ha excedido el máximo de caracteres permitidos">
+											<f:validateLength maximum="250" />
+										</h:inputTextarea>
+										<p class="small">Máximo 250 caracteres</p>
+									</div>
+	                                <button type="button" class="icon-button close-sug"><i class="material-symbols-outlined">close</i></button>
+	                            </div>
 							</div>
 							<div class="item">
-								<label class="item-label">La Unidad curricular prevé
+								<div class="sug-label">
+	                                <label class="item-label">La Unidad curricular prevé
 									adecuaciones metodológicas para estudiantes en situación de
 									privación de libertad</label>
+	                                <button type="button" class="agregar-sug icon-button" ><i class="material-symbols-outlined">add</i></button>
+	                            </div>
 								<h:outputText value="#{pCtrl.revisado.adecuaciones ? 'SI' : 'NO'}" />
+								<div class="item sugerencia">
+	                                <div class="item">
+										<h:inputTextarea value="#{pCtrl.revision.adecSug}"
+											validatorMessage="Se ha excedido el máximo de caracteres permitidos">
+											<f:validateLength maximum="250" />
+										</h:inputTextarea>
+										<p class="small">Máximo 250 caracteres</p>
+									</div>
+	                                <button type="button" class="icon-button close-sug"><i class="material-symbols-outlined">close</i></button>
+	                            </div>
 							</div>
 							<h:panelGroup class="item descr" rendered="#{pCtrl.revisado.adecuaciones}">
-								<label class="item-label">Descripción de las adecuaciones metodológicas a realizar</label>
+								<div class="sug-label">
+	                                <label class="item-label">Descripción de las adecuaciones metodológicas a realizar</label>
+	                                <button type="button" class="agregar-sug icon-button" ><i class="material-symbols-outlined">add</i></button>
+	                            </div>
 								<h:outputText value="#{pCtrl.revisado.descripcionAdecuaciones}" />
+								<div class="item sugerencia">
+	                                <div class="item">
+										<h:inputTextarea value="#{pCtrl.revision.adecDescrSug}"
+											validatorMessage="Se ha excedido el máximo de caracteres permitidos">
+											<f:validateLength maximum="250" />
+										</h:inputTextarea>
+										<p class="small">Máximo 250 caracteres</p>
+									</div>
+	                                <button type="button" class="icon-button close-sug"><i class="material-symbols-outlined">close</i></button>
+	                            </div>
 							</h:panelGroup>
 							<h:panelGroup class="item" id="regimen" layout="block">
-								<label class="item-label">Régimen de asistencia</label>
+								<div class="sug-label">
+	                                <label class="item-label">Régimen de asistencia</label>
+	                                <button type="button" class="agregar-sug icon-button" ><i class="material-symbols-outlined">add</i></button>
+	                            </div>
 								<h:outputText value="#{pCtrl.revisado.regimen.label}" />
+								<div class="item sugerencia">
+	                                <div class="item">
+										<h:inputTextarea value="#{pCtrl.revision.regimenSug}"
+											validatorMessage="Se ha excedido el máximo de caracteres permitidos">
+											<f:validateLength maximum="250" />
+										</h:inputTextarea>
+										<p class="small">Máximo 250 caracteres</p>
+									</div>
+	                                <button type="button" class="icon-button close-sug"><i class="material-symbols-outlined">close</i></button>
+	                            </div>
 							</h:panelGroup>
 							<h:panelGroup class="item" id="tareasOblig" layout="block">
-								<label class="item-label">Realización obligatoria del
+								<div class="sug-label">
+	                                <label class="item-label">Realización obligatoria del
 									75% de las tareas propuestas por el equipo docente</label>
+	                                <button type="button" class="agregar-sug icon-button" ><i class="material-symbols-outlined">add</i></button>
+	                            </div>
 								<h:outputText value="#{pCtrl.revisado.tareas75obligatoria ? 'SI' : 'NO'}" />
+								<div class="item sugerencia">
+	                                <div class="item">
+										<h:inputTextarea value="#{pCtrl.revision.tareas75obligSug}"
+											validatorMessage="Se ha excedido el máximo de caracteres permitidos">
+											<f:validateLength maximum="250" />
+										</h:inputTextarea>
+										<p class="small">Máximo 250 caracteres</p>
+									</div>
+	                                <button type="button" class="icon-button close-sug"><i class="material-symbols-outlined">close</i></button>
+	                            </div>
 							</h:panelGroup>
 							<div class="item">
-								<label class="item-label">Permite aprobación directa
+								<div class="sug-label">
+	                                <label class="item-label">Permite aprobación directa
 									(exoneración)</label>
+	                                <button type="button" class="agregar-sug icon-button" ><i class="material-symbols-outlined">add</i></button>
+	                            </div>
 								<h:outputText value="#{pCtrl.revisado.aprobDirecta ? 'SI' : 'NO'}" />
+								<div class="item sugerencia">
+	                                <div class="item">
+										<h:inputTextarea value="#{pCtrl.revision.aprobDirectaSug}"
+											validatorMessage="Se ha excedido el máximo de caracteres permitidos">
+											<f:validateLength maximum="250" />
+										</h:inputTextarea>
+										<p class="small">Máximo 250 caracteres</p>
+									</div>
+	                                <button type="button" class="icon-button close-sug"><i class="material-symbols-outlined">close</i></button>
+	                            </div>
 							</div>
 							<div class="item">
-								<label class="item-label" for="uc">Descripción de la
+								<div class="sug-label">
+	                                <label class="item-label" for="uc">Descripción de la
 									forma de evaluación y aprobación</label>
+	                                <button type="button" class="agregar-sug icon-button" ><i class="material-symbols-outlined">add</i></button>
+	                            </div>
 								<h:outputText value="#{pCtrl.revisado.descrEvaluacion}" />
+								<div class="item sugerencia">
+	                                <div class="item">
+										<h:inputTextarea value="#{pCtrl.revision.evaluacionSug}"
+											validatorMessage="Se ha excedido el máximo de caracteres permitidos">
+											<f:validateLength maximum="250" />
+										</h:inputTextarea>
+										<p class="small">Máximo 250 caracteres</p>
+									</div>
+	                                <button type="button" class="icon-button close-sug"><i class="material-symbols-outlined">close</i></button>
+	                            </div>
 							</div>
 							<div class="buttons">
 								<button type="button" class="button prev-step">
@@ -343,18 +648,30 @@
 						<div id="menu5" class="tab-pane fade">
 							<h3 class="headline-3">Bibliografía básica</h3>
 							<div class="item bibliografia">
+								<div class="sug-label">
+	                                <button type="button" class="agregar-sug icon-button" ><i class="material-symbols-outlined">add</i></button>
+	                            </div>
+								<p:dataTable value="#{pCtrl.revisado.bibliografia}" var="b"
+									styleClass="table table-bibliografia">
 
-									<p:dataTable value="#{pCtrl.revisado.bibliografia}" var="b"
-										styleClass="table table-bibliografia">
+									<p:column headerText="#" class="numberColumn">
+										<h:outputText value="#{b.orden}" />
+									</p:column>
 
-										<p:column headerText="#" class="numberColumn">
-											<h:outputText value="#{b.orden}" />
-										</p:column>
-
-										<p:column headerText="Material bibliográfico">
-											<h:outputText value="#{b.titulo}" />
-										</p:column>
-									</p:dataTable>
+									<p:column headerText="Material bibliográfico">
+										<h:outputText value="#{b.titulo}" />
+									</p:column>
+								</p:dataTable>
+								<div class="item sugerencia">
+									<div class="item">
+										<h:inputTextarea value="#{pCtrl.revision.biblioSug}"
+											validatorMessage="Se ha excedido el máximo de caracteres permitidos">
+											<f:validateLength maximum="250" />
+										</h:inputTextarea>
+										<p class="small">Máximo 250 caracteres</p>
+									</div>
+	                                <button type="button" class="icon-button close-sug"><i class="material-symbols-outlined">close</i></button>
+	                            </div>
 							</div>
 							<div class="buttons">
 								<button type="button" class="button prev-step">
@@ -366,7 +683,7 @@
 
 					<div class="item">
 						<h:commandButton class="button_rojo button_large button"
-							action="#{pCtrl.guardarPrograma}" value="Enviar sugerencias"></h:commandButton>
+							action="#{pCtrl.guardarRevision}" value="Enviar sugerencias"></h:commandButton>
 					</div>
 				</h:form>
 			</article>

@@ -6,6 +6,7 @@ import java.util.List;
 import com.fhce.sgd.dto.gestion.CarreraDto;
 import com.fhce.sgd.dto.gestion.UnidadAcademicaDto;
 import com.fhce.sgd.model.enums.EnumDuracion;
+import com.fhce.sgd.model.enums.EnumEstadoPrograma;
 import com.fhce.sgd.model.enums.EnumFormato;
 import com.fhce.sgd.model.enums.EnumModalidad;
 import com.fhce.sgd.model.enums.EnumRegimen;
@@ -17,6 +18,7 @@ public class ProgramaNuevoDto {
 	private Long id;
 	private String nombreUC;
 	private Integer year;
+	private EnumEstadoPrograma estado;
 
 	private List<UnidadAcademicaDto> unidades;
 	
@@ -382,6 +384,14 @@ public class ProgramaNuevoDto {
 
 	public void setRecomNoCorresponde(boolean recomNoCorresponde) {
 		this.recomNoCorresponde = recomNoCorresponde;
+	}
+
+	public EnumEstadoPrograma getEstado() {
+		return estado;
+	}
+
+	public void setEstado(EnumEstadoPrograma estado) {
+		this.estado = estado;
 	}
 
 }

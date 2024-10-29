@@ -29,12 +29,27 @@ public class UsuarioServiceImpl implements UsuarioService {
 	@Autowired
 	private RolRepository rolRepo;
 
-	public UsuarioDto getUsuario(Long id) throws SgdServicesException {
+	public UsuarioDto getUsuarioDto(Long id) throws SgdServicesException {
 		try {
 			Optional<Usuario> u = usuarioRepository.findById(id);
 			if (u.isPresent()) {
 				return new UsuarioDto(u.get().getId(), u.get().getUsername(), u.get().getPassword(),
 						u.get().getCreationDate(), u.get().getFullname(), u.get().getRol().getId());
+			} else {
+				return null;
+			}
+		} catch (Exception e) {
+			log.error("Error en getUsuarioDto de UsuarioService: " + e.getMessage());
+			throw new SgdServicesException("Error en getUsuarioDto de UsuarioService: " + e.getMessage() , e);
+		}
+		
+	}
+	
+	public Usuario getUsuario(Long id) throws SgdServicesException {
+		try {
+			Optional<Usuario> u = usuarioRepository.findById(id);
+			if (u.isPresent()) {
+				return u.get();
 			} else {
 				return null;
 			}

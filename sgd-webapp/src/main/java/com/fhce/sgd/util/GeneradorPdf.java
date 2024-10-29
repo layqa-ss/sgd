@@ -7,6 +7,7 @@ import java.io.InputStream;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
+import com.fhce.sgd.controller.exception.SgdWebappException;
 import com.fhce.sgd.dto.gestion.CarreraDto;
 import com.fhce.sgd.dto.gestion.UnidadAcademicaDto;
 import com.fhce.sgd.dto.programas.BibliografiaDto;
@@ -27,9 +28,12 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class GeneradorPdf {
 
-	public StreamedContent generarPdf(ProgramaNuevoDto pr) {
+	public StreamedContent generarPdf(ProgramaNuevoDto pr) throws SgdWebappException {
 
 		try {
 
@@ -37,11 +41,11 @@ public class GeneradorPdf {
 
 			Document document = new Document();
 			PdfWriter writer = PdfWriter.getInstance(document, os);
-			
+
 			writer.setPageEvent(new WatermarkPageEvent());
 
 			document.open();
-			
+
 			ClassLoader classLoader = getClass().getClassLoader();
 			InputStream in = classLoader.getResourceAsStream("static/images/logo2.png");
 			Image img = Image.getInstance(in.readAllBytes());
@@ -456,7 +460,7 @@ public class GeneradorPdf {
 
 			tableBiblio.setHeaderRows(1);
 			for (BibliografiaDto b : pr.getBibliografia()) {
-				if(b.isEsTitulo()) {
+				if (b.isEsTitulo()) {
 					columnHeader = new PdfPCell(new Phrase(b.getTitulo(), fontBold));
 					tableBiblio.addCell(columnHeader);
 				} else {
@@ -467,7 +471,6 @@ public class GeneradorPdf {
 			pBiblio.add(tableBiblio);
 			pBiblio.setSpacingAfter(15);
 			document.add(pBiblio);
-			
 
 			Chunk anio = new Chunk("Año " + pr.getYear(), fontBold);
 			Paragraph pAnio = new Paragraph();
@@ -484,9 +487,9 @@ public class GeneradorPdf {
 			return file;
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("Error en generarPdf de GeneradorPdf: " + e.getMessage());
+			throw new SgdWebappException("Error en generarPdf de GeneradorPdf: " + e.getMessage(), e);
 		}
-		return null;
 	}
 
 }

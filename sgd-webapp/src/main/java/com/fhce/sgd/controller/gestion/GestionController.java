@@ -200,7 +200,7 @@ public class GestionController {
 	public String editarUsuario(Long id) {
 		try {
 			edicionUsuario = true;
-			user = usuarioService.getUsuario(id);
+			user = usuarioService.getUsuarioDto(id);
 			return "/pages/gestion/usuario.jsf?faces-redirect=true";
 		} catch (SgdServicesException e) {
 			log.error("Error en editarUsuario de GestionController");

@@ -197,17 +197,17 @@ public class ProgramaServiceImpl implements ProgramaService {
 		}
 
 	}
-
-	public void enviarCC(Long id) throws SgdServicesException {
+	
+	public void cambiarEstado(Long id, EnumEstadoPrograma estadoNuevo) throws SgdServicesException {
 		try {
 			Programa prog = programaRepository.findById(id).orElse(null);
 			if (prog != null) {
-				prog.setEstado(EnumEstadoPrograma.REVISION_CC);
+				prog.setEstado(estadoNuevo);
+				programaRepository.save(prog);
 			}
-			programaRepository.save(prog);
 		} catch (Exception e) {
-			log.error("Error en enviarCC de ProgramaService: " + e.getMessage());
-			throw new SgdServicesException("Error en enviarCC de ProgramaService: " + e.getMessage(), e);
+			log.error("Error en cambiarEstado de ProgramaService: " + e.getMessage());
+			throw new SgdServicesException("Error en cambiarEstado de ProgramaService: " + e.getMessage(), e);
 		}
 
 	}
@@ -228,8 +228,18 @@ public class ProgramaServiceImpl implements ProgramaService {
 		}
 
 	}
+	
+	public Programa obtenerProgramaPorId(Long id) throws SgdServicesException {
+		try {
+			Programa prog = programaRepository.findById(id).orElse(null);
+			return prog;
+		} catch (Exception e) {
+			log.error("Error en obtenerProgramaPorId de ProgramaService: " + e.getMessage());
+			throw new SgdServicesException("Error en obtenerProgramaPorId de ProgramaService: " + e.getMessage(), e);
+		}
+	}
 
-	public ProgramaNuevoDto obtenerProgramaPorId(Long id) throws SgdServicesException {
+	public ProgramaNuevoDto obtenerProgramaDtoPorId(Long id) throws SgdServicesException {
 		try {
 			Programa prog = programaRepository.findById(id).orElse(null);
 			if (prog != null) {
@@ -310,13 +320,14 @@ public class ProgramaServiceImpl implements ProgramaService {
 				p.setCarreras(carreras);
 
 				p.setYear(prog.getYear());
+				p.setEstado(prog.getEstado());
 				return p;
 			} else {
 				return null;
 			}
 		} catch (Exception e) {
-			log.error("Error en obtenerProgramaPorId de ProgramaService: " + e.getMessage());
-			throw new SgdServicesException("Error en obtenerProgramaPorId de ProgramaService: " + e.getMessage(), e);
+			log.error("Error en obtenerProgramaDtoPorId de ProgramaService: " + e.getMessage());
+			throw new SgdServicesException("Error en obtenerProgramaDtoPorId de ProgramaService: " + e.getMessage(), e);
 		}
 
 	}

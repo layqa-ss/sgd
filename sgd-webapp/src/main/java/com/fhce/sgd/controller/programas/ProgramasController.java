@@ -10,6 +10,8 @@ import org.primefaces.model.FilterMeta;
 import org.primefaces.model.StreamedContent;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.fhce.sgd.controller.AppController;
+import com.fhce.sgd.controller.exception.SgdWebappException;
 import com.fhce.sgd.dto.gestion.AreaTematicaDto;
 import com.fhce.sgd.dto.gestion.CarreraDto;
 import com.fhce.sgd.dto.gestion.UnidadAcademicaDto;
@@ -18,6 +20,7 @@ import com.fhce.sgd.dto.programas.BibliografiaDto;
 import com.fhce.sgd.dto.programas.ProgramaDto;
 import com.fhce.sgd.dto.programas.ProgramaIntegranteDto;
 import com.fhce.sgd.dto.programas.ProgramaNuevoDto;
+import com.fhce.sgd.dto.programas.RevisionDto;
 import com.fhce.sgd.model.enums.EnumCargo;
 import com.fhce.sgd.model.enums.EnumDuracion;
 import com.fhce.sgd.model.enums.EnumEstadoPrograma;
@@ -28,6 +31,7 @@ import com.fhce.sgd.model.enums.EnumRolDocente;
 import com.fhce.sgd.model.enums.EnumSemestre;
 import com.fhce.sgd.service.GestionService;
 import com.fhce.sgd.service.ProgramaService;
+import com.fhce.sgd.service.RevisionService;
 import com.fhce.sgd.service.exception.SgdServicesException;
 import com.fhce.sgd.util.GeneradorPdf;
 
@@ -48,6 +52,12 @@ public class ProgramasController {
 
 	@Autowired
 	private ProgramaService programaService;
+	
+	@Autowired
+	private RevisionService revisionService;
+	
+	@Autowired
+	private AppController appCtrl;
 
 	private List<UnidadAcademicaDto> unidadesAcademicas;
 
@@ -60,6 +70,7 @@ public class ProgramasController {
 
 	private ProgramaNuevoDto nuevo;
 	private ProgramaNuevoDto revisado;
+	private RevisionDto revision;
 
 	private ProgramaIntegranteDto integrante;
 
@@ -116,7 +127,7 @@ public class ProgramasController {
 
 	public String enviarCC(Long id) {
 		try {
-			programaService.enviarCC(id);
+			programaService.cambiarEstado(id, EnumEstadoPrograma.REVISION_CC);
 			programasTodos = programaService.getProgramasAll();
 		} catch (SgdServicesException e) {
 			log.error("Error en enviarCC de ProgramasController");
@@ -135,7 +146,7 @@ public class ProgramasController {
 
 	public String editarPrograma(Long id) {
 		try {
-			nuevo = programaService.obtenerProgramaPorId(id);
+			nuevo = programaService.obtenerProgramaDtoPorId(id);
 			edicion = true;
 			maxBiblio = nuevo.getBibliografia().size();
 			return "programa";
@@ -144,28 +155,64 @@ public class ProgramasController {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("No se ha podido obtener el programa"));
 			return "ver-programas";
 		}
-
 	}
 
 	public String revisarPrograma(Long id) {
 		try {
-			revisado = programaService.obtenerProgramaPorId(id);
-			return "revision";
+			revisado = programaService.obtenerProgramaDtoPorId(id);
+			revision = new RevisionDto();
+			revision.setIdUsuario(appCtrl.getUsuarioLogueadoId());
+			revision.setIdPrograma(revisado.getId());
+			return "/pages/programas/revision.jsf?faces-redirect=true";
 		} catch (SgdServicesException e) {
 			log.error("Error en revisarPrograma de GestionController");
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("No se ha podido obtener el programa"));
 			return "ver-programas";
 		}
 	}
+	
+	public String guardarRevision() {
+		try {
+			revisionService.saveOrUpdateRevision(revision);
+			EnumEstadoPrograma nuevoEstado;
+			switch (revisado.getEstado()) {
+			case REVISION_CC: 
+				nuevoEstado = EnumEstadoPrograma.SUGERENCIAS;
+				break;
+			case BEDELIAS: 
+				nuevoEstado = EnumEstadoPrograma.REVISION_CAG;
+				break;
+			case REVISION_CAG: 
+				nuevoEstado = EnumEstadoPrograma.REVISION_CC;
+				break;
+			case REVISION_CC_ABR: 
+				nuevoEstado = EnumEstadoPrograma.SUGERENCIAS_ABR;
+				break;
+			default:
+				nuevoEstado = EnumEstadoPrograma.CREADO;
+			}
+			programaService.cambiarEstado(revision.getIdPrograma(), nuevoEstado);
+			programasTodos = programaService.getProgramasAll();
+			return "/pages/programas/ver-programas.jsf?faces-redirect=true";
+		} catch (SgdServicesException e) {
+			log.error("Error en guardarRevision de ProgramasController");
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage("Ha ocurrido un error al guardar la revisión"));
+			return "revision";
+		}
+	}
 
 	public void crearPdfPrograma(Long id) {
 		try {
-			ProgramaNuevoDto p = programaService.obtenerProgramaPorId(id);
+			ProgramaNuevoDto p = programaService.obtenerProgramaDtoPorId(id);
 			GeneradorPdf generador = new GeneradorPdf();
 			file = generador.generarPdf(p);
 		} catch (SgdServicesException e) {
 			log.error("Error en crearPdfPrograma de GestionController");
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("No se ha podido generar el pdf"));
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Ha ocurrido un error al generar el pdf"));
+		} catch (SgdWebappException e) {
+			log.error("Error en crearPdfPrograma de GestionController");
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Ha ocurrido un error al generar el pdf"));
 		}
 	}
 
@@ -486,6 +533,14 @@ public class ProgramasController {
 
 	public void setTareasObligTrueDisabled(boolean tareasObligTrueDisabled) {
 		this.tareasObligTrueDisabled = tareasObligTrueDisabled;
+	}
+
+	public RevisionDto getRevision() {
+		return revision;
+	}
+
+	public void setRevision(RevisionDto revision) {
+		this.revision = revision;
 	}
 
 //	public Integer getActiva() {
