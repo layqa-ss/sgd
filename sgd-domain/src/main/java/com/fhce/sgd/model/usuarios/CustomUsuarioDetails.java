@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.fhce.sgd.model.enums.EnumOperacion;
 
 public class CustomUsuarioDetails implements UserDetails {
-	private static final long serialVersionUID = 1L;
+	
 	private Usuario user;
 
 	public CustomUsuarioDetails(Usuario u) {

@@ -1,14 +1,11 @@
 package com.fhce.sgd.controller;
 
-import java.security.Principal;
 import java.util.Collection;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,8 +20,7 @@ import jakarta.inject.Named;
 @Controller
 public class AppController {
 
-	@Autowired
-	private UserDetailsService userDetailsService;
+
 
 	@Value("${build.version}")
 	private String buildVersion;
@@ -32,19 +28,13 @@ public class AppController {
 	private boolean puedeDescargarPdf = false;
 	private boolean puedeEnviarCC = false;
 
-	@GetMapping("/home")
-	public String home(Model model, Principal principal) {
-		UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
-		model.addAttribute("userdetail", userDetails);
-		return "home";
-	}
-
 	@GetMapping("/login")
 	public String login(Model model, UsuarioDto userDto) {
 
 		model.addAttribute("user", userDto);
 		return "login";
 	}
+
 
 	public String getUsuarioLogueado() {
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();

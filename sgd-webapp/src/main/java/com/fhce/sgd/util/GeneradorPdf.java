@@ -43,7 +43,7 @@ public class GeneradorPdf {
 			document.open();
 			
 			ClassLoader classLoader = getClass().getClassLoader();
-			InputStream in = classLoader.getResourceAsStream("logo2.png");
+			InputStream in = classLoader.getResourceAsStream("static/images/logo2.png");
 			Image img = Image.getInstance(in.readAllBytes());
 			img.scaleToFit(200, 200);
 			document.add(img);
