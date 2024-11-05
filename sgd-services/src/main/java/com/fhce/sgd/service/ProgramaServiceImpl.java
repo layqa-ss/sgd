@@ -28,8 +28,10 @@ import com.fhce.sgd.model.programas.Bibliografia;
 import com.fhce.sgd.model.programas.MarcoAcademico;
 import com.fhce.sgd.model.programas.Programa;
 import com.fhce.sgd.model.programas.ProgramaIntegrante;
+import com.fhce.sgd.model.usuarios.Usuario;
 import com.fhce.sgd.repository.ProgramaRepository;
 import com.fhce.sgd.repository.UnidadCurricularRepository;
+import com.fhce.sgd.repository.UsuarioRepository;
 import com.fhce.sgd.service.exception.SgdServicesException;
 
 import lombok.extern.slf4j.Slf4j;
@@ -42,8 +44,8 @@ public class ProgramaServiceImpl implements ProgramaService {
 	@Autowired
 	private UnidadCurricularRepository ucRepository;
 
-//	@Autowired
-//	private UsuarioRepository usuarioRepository;
+	@Autowired
+	private UsuarioRepository usuarioRepository;
 
 	@Autowired
 	private ProgramaRepository programaRepository;
@@ -115,13 +117,12 @@ public class ProgramaServiceImpl implements ProgramaService {
 			for (ProgramaIntegranteDto iDto : pDto.getIntegrantes()) {
 				ProgramaIntegrante i = new ProgramaIntegrante(iDto.getRol(), iDto.getCargo(), iDto.getCargoOtro(),
 						iDto.getUnidad_academica(), iDto.getSubunidad_academica());
-				i.setNombre_docente(iDto.getNombre_docente());
-//				Iterable<Usuario> usuariosTodos = usuarioRepository.findAll();
-//				List<Usuario> usuarios = StreamSupport.stream(usuariosTodos.spliterator(), false)
-//						.filter(u -> u.getId() == iDto.getIdUsuario()).toList();
-//				if (!usuarios.isEmpty()) {
-//					i.setDocente(usuarios.get(0));
-//				}
+				Iterable<Usuario> usuariosTodos = usuarioRepository.findAll();
+				List<Usuario> usuarios = StreamSupport.stream(usuariosTodos.spliterator(), false)
+						.filter(u -> u.getId() == iDto.getIdUsuario()).toList();
+				if (!usuarios.isEmpty()) {
+					i.setDocente(usuarios.get(0));
+				}
 				i.setPrograma(p);
 				integrantes.add(i);
 			}
@@ -197,7 +198,7 @@ public class ProgramaServiceImpl implements ProgramaService {
 		}
 
 	}
-	
+
 	public void cambiarEstado(Long id, EnumEstadoPrograma estadoNuevo) throws SgdServicesException {
 		try {
 			Programa prog = programaRepository.findById(id).orElse(null);
@@ -228,7 +229,7 @@ public class ProgramaServiceImpl implements ProgramaService {
 		}
 
 	}
-	
+
 	public Programa obtenerProgramaPorId(Long id) throws SgdServicesException {
 		try {
 			Programa prog = programaRepository.findById(id).orElse(null);
@@ -292,8 +293,8 @@ public class ProgramaServiceImpl implements ProgramaService {
 				List<ProgramaIntegranteDto> integrantes = new ArrayList<>();
 				for (ProgramaIntegrante i : prog.getIntegrantes()) {
 					ProgramaIntegranteDto iDto = new ProgramaIntegranteDto(i.getId(), i.getRol(), i.getCargo(),
-							i.getCargoOtro(), i.getUnidad_academica(), i.getSubunidad_academica(), 0L,
-							i.getNombre_docente());
+							i.getCargoOtro(), i.getUnidad_academica(), i.getSubunidad_academica(),
+							i.getDocente().getId(), i.getDocente().getFullname());
 					integrantes.add(iDto);
 				}
 				p.setIntegrantes(integrantes);

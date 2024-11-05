@@ -63,32 +63,32 @@
 						</p:column>
 
 						<p:column styleClass="links-column">
-							<h:commandLink update="tableForm" styleClass="link-delete"
-								action="#{pCtrl.editarPrograma(p.id)}" rendered="#{p.estado == EnumEstadoPrograma.CREADO}">
+							<h:commandLink update="tableForm" styleClass="link-delete" title="Editar"
+								action="#{pCtrl.editarPrograma(p.id)}" rendered="#{p.estado == EnumEstadoPrograma.CREADO or p.estado == EnumEstadoPrograma.SUGERENCIAS}">
 								<i class="material-symbols-outlined">edit</i>
 							</h:commandLink>
 						</p:column>
 						<p:column styleClass="links-column">
-							<h:commandLink update="tableForm" styleClass="link-delete"
+							<h:commandLink update="tableForm" styleClass="link-delete" title="Descargar pdf"
 								actionListener="#{pCtrl.crearPdfPrograma(p.id)}" ajax="false">
 								<i class="material-symbols-outlined">picture_as_pdf</i>
 								<p:fileDownload value="#{pCtrl.file}"/>
 							</h:commandLink>
 						</p:column>
 						<p:column styleClass="links-column">
-							<h:commandLink update="tableForm" styleClass="link-delete"
+							<h:commandLink update="tableForm" styleClass="link-delete" title="Enviar a revisión"
 								action="#{pCtrl.enviarCC(p.id)}" rendered="#{p.estado == EnumEstadoPrograma.CREADO and appCtrl.puedeEnviarCC}">
 								<i class="material-symbols-outlined">send</i>
 							</h:commandLink>
 						</p:column>
 						<p:column styleClass="links-column">
-							<h:commandLink update="tableForm" styleClass="link-delete"
+							<h:commandLink update="tableForm" styleClass="link-delete" title="Revisar"
 								action="#{pCtrl.revisarPrograma(p.id)}" rendered="#{p.estado == EnumEstadoPrograma.REVISION_CC or p.estado == EnumEstadoPrograma.REVISION_CAG or p.estado == EnumEstadoPrograma.REVISION_CG}">
 								<i class="material-symbols-outlined">data_check</i>
 							</h:commandLink>
 						</p:column>
 						<p:column styleClass="links-column">
-							<h:commandLink update="tableForm" styleClass="link-delete"
+							<h:commandLink update="tableForm" styleClass="link-delete" title="Eliminar"
 								action="#{pCtrl.borrarPrograma(p.id)}" rendered="#{p.estado == EnumEstadoPrograma.CREADO}">
 								<i class="material-symbols-outlined">delete</i>
 							</h:commandLink>

@@ -1,5 +1,7 @@
 package com.fhce.sgd.controller.programas;
 
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +11,7 @@ import org.primefaces.event.ReorderEvent;
 import org.primefaces.model.FilterMeta;
 import org.primefaces.model.StreamedContent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.FileCopyUtils;
 
 import com.fhce.sgd.controller.AppController;
 import com.fhce.sgd.controller.exception.SgdWebappException;
@@ -16,6 +19,8 @@ import com.fhce.sgd.dto.gestion.AreaTematicaDto;
 import com.fhce.sgd.dto.gestion.CarreraDto;
 import com.fhce.sgd.dto.gestion.UnidadAcademicaDto;
 import com.fhce.sgd.dto.gestion.UnidadCurricularDto;
+import com.fhce.sgd.dto.gestion.UsuarioDto;
+import com.fhce.sgd.dto.programas.AprobarDto;
 import com.fhce.sgd.dto.programas.BibliografiaDto;
 import com.fhce.sgd.dto.programas.ProgramaDto;
 import com.fhce.sgd.dto.programas.ProgramaIntegranteDto;
@@ -29,9 +34,10 @@ import com.fhce.sgd.model.enums.EnumModalidad;
 import com.fhce.sgd.model.enums.EnumRegimen;
 import com.fhce.sgd.model.enums.EnumRolDocente;
 import com.fhce.sgd.model.enums.EnumSemestre;
+import com.fhce.sgd.service.AccionService;
 import com.fhce.sgd.service.GestionService;
 import com.fhce.sgd.service.ProgramaService;
-import com.fhce.sgd.service.RevisionService;
+import com.fhce.sgd.service.UsuarioService;
 import com.fhce.sgd.service.exception.SgdServicesException;
 import com.fhce.sgd.util.GeneradorPdf;
 
@@ -40,6 +46,7 @@ import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
+import jakarta.servlet.http.Part;
 import lombok.extern.slf4j.Slf4j;
 
 @Named("pCtrl")
@@ -52,10 +59,13 @@ public class ProgramasController {
 
 	@Autowired
 	private ProgramaService programaService;
-	
+
 	@Autowired
-	private RevisionService revisionService;
-	
+	private AccionService accionService;
+
+	@Autowired
+	private UsuarioService usuarioService;
+
 	@Autowired
 	private AppController appCtrl;
 
@@ -68,9 +78,14 @@ public class ProgramasController {
 	private List<ProgramaDto> programasTodos;
 	private List<UnidadCurricularDto> unidadesCurriculares;
 
+	private List<UsuarioDto> usuarios;
+
 	private ProgramaNuevoDto nuevo;
 	private ProgramaNuevoDto revisado;
 	private RevisionDto revision;
+	private List<RevisionDto> revisionesPrograma;
+	private AprobarDto aprobacion;
+	private Part fileDespacho;
 
 	private ProgramaIntegranteDto integrante;
 
@@ -101,6 +116,7 @@ public class ProgramasController {
 			areasPorCarrera = gestionService.getAreasPorCarrera();
 			unidadesCurriculares = gestionService.getUnidadesCurriculares();
 			programasTodos = programaService.getProgramasAll();
+			usuarios = usuarioService.getUsuarios();
 
 			integrante = new ProgramaIntegranteDto();
 			nuevaBibliografia = new BibliografiaDto();
@@ -149,6 +165,7 @@ public class ProgramasController {
 			nuevo = programaService.obtenerProgramaDtoPorId(id);
 			edicion = true;
 			maxBiblio = nuevo.getBibliografia().size();
+			revisionesPrograma = accionService.getRevisionesPrograma(id);
 			return "programa";
 		} catch (SgdServicesException e) {
 			log.error("Error en editarPrograma de GestionController");
@@ -156,6 +173,74 @@ public class ProgramasController {
 			return "ver-programas";
 		}
 	}
+	
+	public String aprobarPrograma() {
+		try {
+			aprobacion = new AprobarDto();
+			aprobacion.setIdUsuario(appCtrl.getUsuarioLogueadoId());
+			aprobacion.setIdPrograma(revisado.getId());
+			return "/pages/programas/aprobar.jsf?faces-redirect=true";
+		} catch (Exception e) {
+			log.error("Error en aprobarPrograma de GestionController");
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("No se ha podido obtener el programa"));
+			return "revision";
+		}
+	}
+	
+	public String guardarAprobacion() {
+		try {
+			accionService.saveOrUpdateAprobacion(aprobacion);
+			EnumEstadoPrograma nuevoEstado;
+			switch (revisado.getEstado()) {
+			case REVISION_CC:
+				if (pasoBedelias(revisado.getId()))
+					nuevoEstado = EnumEstadoPrograma.REVISION_CAG;
+				else
+					nuevoEstado = EnumEstadoPrograma.BEDELIAS;
+				break;
+			case BEDELIAS:
+				nuevoEstado = EnumEstadoPrograma.REVISION_CAG;
+				break;
+			case REVISION_CAG:
+				nuevoEstado = EnumEstadoPrograma.REVISION_CG;
+				break;
+			case REVISION_CG:
+				nuevoEstado = EnumEstadoPrograma.APROBADO;
+				break;
+			case REVISION_CC_ABR:
+				nuevoEstado = EnumEstadoPrograma.APROBADO;
+				break;
+			default:
+				nuevoEstado = EnumEstadoPrograma.CREADO;
+			}
+			programaService.cambiarEstado(revision.getIdPrograma(), nuevoEstado);
+			programasTodos = programaService.getProgramasAll();
+			return "/pages/programas/ver-programas.jsf?faces-redirect=true";
+		} catch (SgdServicesException e) {
+			log.error("Error en guardarRevision de ProgramasController");
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage("Ha ocurrido un error al guardar la revisión"));
+			return "revision";
+		}
+	}
+	
+	private boolean pasoBedelias(Long idPrograma) {
+		// Falta implementar
+		return true;
+	}
+	
+	public void upload() {
+		try {
+			String fileName = Paths.get(fileDespacho.getSubmittedFileName()).getFileName().toString(); 
+			byte[] data = FileCopyUtils.copyToByteArray(fileDespacho.getInputStream());
+			aprobacion.setDespachoFileName(fileName);
+		    aprobacion.setDespachoData(data);
+		} catch (IOException e) {
+			log.error("Error en upload de ProgramasController");
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("No se pudo cargar el archivo"));
+		}
+	}
+
 
 	public String revisarPrograma(Long id) {
 		try {
@@ -165,27 +250,30 @@ public class ProgramasController {
 			revision.setIdPrograma(revisado.getId());
 			return "/pages/programas/revision.jsf?faces-redirect=true";
 		} catch (SgdServicesException e) {
-			log.error("Error en revisarPrograma de GestionController");
+			log.error("Error en revisarPrograma de ProgramasController");
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("No se ha podido obtener el programa"));
 			return "ver-programas";
 		}
 	}
-	
+
 	public String guardarRevision() {
 		try {
-			revisionService.saveOrUpdateRevision(revision);
+			accionService.saveOrUpdateRevision(revision);
 			EnumEstadoPrograma nuevoEstado;
 			switch (revisado.getEstado()) {
-			case REVISION_CC: 
+			case REVISION_CC:
 				nuevoEstado = EnumEstadoPrograma.SUGERENCIAS;
 				break;
-			case BEDELIAS: 
+			case BEDELIAS:
 				nuevoEstado = EnumEstadoPrograma.REVISION_CAG;
 				break;
-			case REVISION_CAG: 
+			case REVISION_CAG:
 				nuevoEstado = EnumEstadoPrograma.REVISION_CC;
 				break;
-			case REVISION_CC_ABR: 
+			case REVISION_CG:
+				nuevoEstado = EnumEstadoPrograma.REVISION_CAG;
+				break;
+			case REVISION_CC_ABR:
 				nuevoEstado = EnumEstadoPrograma.SUGERENCIAS_ABR;
 				break;
 			default:
@@ -209,10 +297,12 @@ public class ProgramasController {
 			file = generador.generarPdf(p);
 		} catch (SgdServicesException e) {
 			log.error("Error en crearPdfPrograma de GestionController");
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Ha ocurrido un error al generar el pdf"));
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage("Ha ocurrido un error al generar el pdf"));
 		} catch (SgdWebappException e) {
 			log.error("Error en crearPdfPrograma de GestionController");
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Ha ocurrido un error al generar el pdf"));
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage("Ha ocurrido un error al generar el pdf"));
 		}
 	}
 
@@ -220,6 +310,11 @@ public class ProgramasController {
 		try {
 			if (validarPrograma()) {
 				programaService.saveOrUpdatePrograma(nuevo);
+				if (nuevo.getEstado() == EnumEstadoPrograma.SUGERENCIAS) {
+					programaService.cambiarEstado(nuevo.getId(), EnumEstadoPrograma.REVISION_CC);
+				} else if (nuevo.getEstado() == EnumEstadoPrograma.SUGERENCIAS_ABR) {
+					programaService.cambiarEstado(nuevo.getId(), EnumEstadoPrograma.REVISION_CC_ABR);
+				}
 				programasTodos = programaService.getProgramasAll();
 				return "/pages/programas/ver-programas.jsf?faces-redirect=true";
 			} else {
@@ -252,8 +347,7 @@ public class ProgramasController {
 				+ nuevo.getHorasTrabajosFinales() + nuevo.getHorasTrabajosSinAcompa();
 		if (sumaHoras != nuevo.getHorasTotales()) {
 			valido = false;
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage("La suma de horas no es correcta"));
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("La suma de horas no es correcta"));
 		}
 		if (nuevo.getCreditos() == 0) {
 			valido = false;
@@ -301,11 +395,13 @@ public class ProgramasController {
 				error = true;
 			}
 		}
-		if (integrante.getNombre_docente() == null) {
-			FacesContext.getCurrentInstance().addMessage("form:nombre-docente", new FacesMessage("Debe ingresar nombre"));
+		if (integrante.getIdUsuario() == null) {
+			FacesContext.getCurrentInstance().addMessage("form:id-docente", new FacesMessage("Debe ingresar nombre"));
 			error = true;
 		}
 		if (!error) {
+			integrante.setNombre_docente(usuarios.stream().filter(u -> u.getId() == integrante.getIdUsuario()).toList()
+					.get(0).getFullname());
 			nuevo.getIntegrantes().add(integrante);
 			integrante = new ProgramaIntegranteDto();
 		}
@@ -541,6 +637,38 @@ public class ProgramasController {
 
 	public void setRevision(RevisionDto revision) {
 		this.revision = revision;
+	}
+
+	public List<UsuarioDto> getUsuarios() {
+		return usuarios;
+	}
+
+	public void setUsuarios(List<UsuarioDto> usuarios) {
+		this.usuarios = usuarios;
+	}
+
+	public List<RevisionDto> getRevisionesPrograma() {
+		return revisionesPrograma;
+	}
+
+	public void setRevisionesPrograma(List<RevisionDto> revisionesPrograma) {
+		this.revisionesPrograma = revisionesPrograma;
+	}
+
+	public AprobarDto getAprobacion() {
+		return aprobacion;
+	}
+
+	public void setAprobacion(AprobarDto aprobacion) {
+		this.aprobacion = aprobacion;
+	}
+
+	public Part getFileDespacho() {
+		return fileDespacho;
+	}
+
+	public void setFileDespacho(Part fileDespacho) {
+		this.fileDespacho = fileDespacho;
 	}
 
 //	public Integer getActiva() {

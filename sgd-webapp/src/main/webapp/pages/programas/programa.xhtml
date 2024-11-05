@@ -85,6 +85,15 @@
 								<h:inputText id="uc" value="#{pCtrl.nuevo.nombreUC}"
 									required="true"
 									requiredMessage="Debe ingresar el nombre de la unidad curricular" />
+								<div class="sugerencias">
+									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
+										<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.ucSug != null}">
+											<p>#{r.ucSug}</p>
+											<p>#{r.fecha_revisionFormated}</p>
+											<p>#{r.nombre_usuario}</p>
+										</h:panelGroup>
+									</ui:repeat>
+								</div>
 							</div>
 							<div class="item">
 								<label class="item-label">Unidad académica que la ofrece<span
@@ -108,6 +117,15 @@
 												itemIndex="#{v.index+1}" />
 											<p:outputLabel value="#{u.nombre}" />
 										</div>
+									</ui:repeat>
+								</div>
+								<div class="sugerencias">
+									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
+										<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.uaSug != null}">
+											<p>#{r.uaSug}</p>
+											<p>#{r.fecha_revisionFormated}</p>
+											<p>#{r.nombre_usuario}</p>
+										</h:panelGroup>
 									</ui:repeat>
 								</div>
 							</div>
@@ -135,6 +153,15 @@
 										</div>
 									</ui:repeat>
 								</div>
+								<div class="sugerencias">
+									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
+										<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.carreraSug != null}">
+											<p>#{r.carreraSug}</p>
+											<p>#{r.fecha_revisionFormated}</p>
+											<p>#{r.nombre_usuario}</p>
+										</h:panelGroup>
+									</ui:repeat>
+								</div>
 							</div>
 
 							<h:panelGroup class="item" layout="block" id="areas">
@@ -160,6 +187,15 @@
 										</div>
 									</div>
 								</ui:repeat>
+								<div class="sugerencias">
+									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
+										<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.areaSug != null}">
+											<p>#{r.areaSug}</p>
+											<p>#{r.fecha_revisionFormated}</p>
+											<p>#{r.nombre_usuario}</p>
+										</h:panelGroup>
+									</ui:repeat>
+								</div>
 							</h:panelGroup>
 
 							<div class="item">
@@ -181,6 +217,15 @@
 										required="true"
 										requiredMessage="Debe indicar la duración de la unidad curricular" />
 								</h:panelGroup>
+								<div class="sugerencias">
+									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
+										<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.duracionSug != null}">
+											<p>#{r.duracionSug}</p>
+											<p>#{r.fecha_revisionFormated}</p>
+											<p>#{r.nombre_usuario}</p>
+										</h:panelGroup>
+									</ui:repeat>
+								</div>
 							</div>
 							<h:panelGroup id="semestre" layout="block">
 								<h:panelGroup class="item" layout="block"
@@ -197,6 +242,15 @@
 												itemValue="#{s}" itemLabel="#{s.label}" />
 										</h:selectOneRadio>
 									</div>
+									<div class="sugerencias">
+									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
+										<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.semestreSug != null}">
+											<p>#{r.semestreSug}</p>
+											<p>#{r.fecha_revisionFormated}</p>
+											<p>#{r.nombre_usuario}</p>
+										</h:panelGroup>
+									</ui:repeat>
+								</div>
 								</h:panelGroup>
 							</h:panelGroup>
 							<div class="switch-button item ingreso">
@@ -209,6 +263,15 @@
 								<p class="ayuda">Indicar si se se recomienda o no el cursado
 									de esta unidad curricular en el primer semestre de la carrera.
 								</p>
+								<div class="sugerencias">
+									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
+										<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.ingresoSug != null}">
+											<p>#{r.ingresoSug}</p>
+											<p>#{r.fecha_revisionFormated}</p>
+											<p>#{r.nombre_usuario}</p>
+										</h:panelGroup>
+									</ui:repeat>
+								</div>
 							</div>
 							<div class="switch-button item requisitos">
 								<label class="item-label">Requisitos de inscripción
@@ -224,6 +287,15 @@
 									sí, cuáles son. Incluir exclusivamente aquellos requisitos
 									previstos por el Plan de Estudios vigente y aprobados por el
 									Consejo de Facultad.</p>
+								<div class="sugerencias">
+									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
+										<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.requisitosSug != null}">
+											<p>#{r.requisitosSug}</p>
+											<p>#{r.fecha_revisionFormated}</p>
+											<p>#{r.nombre_usuario}</p>
+										</h:panelGroup>
+									</ui:repeat>
+								</div>
 							</div>
 							<h:panelGroup id="cuales" layout="block">
 								<h:panelGroup class="item" rendered="#{pCtrl.nuevo.requisitos}">
@@ -236,6 +308,15 @@
 										<f:validateLength maximum="250" />
 									</h:inputTextarea>
 									<p class="small">Máximo 250 caracteres</p>
+									<div class="sugerencias">
+										<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
+											<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.requisitosCualesSug != null}">
+												<p>#{r.requisitosCualesSug}</p>
+												<p>#{r.fecha_revisionFormated}</p>
+												<p>#{r.nombre_usuario}</p>
+											</h:panelGroup>
+										</ui:repeat>
+									</div>
 								</h:panelGroup>
 							</h:panelGroup>
 
@@ -262,6 +343,15 @@
 									<f:validateLength maximum="250" />
 								</h:inputTextarea>
 								<p class="small">Máximo 250 caracteres</p>
+								<div class="sugerencias">
+									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
+										<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.recomSug != null}">
+											<p>#{r.recomSug}</p>
+											<p>#{r.fecha_revisionFormated}</p>
+											<p>#{r.nombre_usuario}</p>
+										</h:panelGroup>
+									</ui:repeat>
+								</div>
 								<!-- 								<p:textEditor widgetVar="editor2" id="editor2" -->
 								<!-- 									value="#{pCtrl.nuevo.recomendaciones}" height="100px"> -->
 								<!-- 									<f:facet name="toolbar"> -->
@@ -287,6 +377,15 @@
 								<p class="ayuda">Indicar si la unidad curricular está
 									ofertada como electiva para otros servicios de la Udelar u
 									otras instituciones.</p>
+								<div class="sugerencias">
+									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
+										<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.otrosServSug != null}">
+											<p>#{r.otrosServSug}</p>
+											<p>#{r.fecha_revisionFormated}</p>
+											<p>#{r.nombre_usuario}</p>
+										</h:panelGroup>
+									</ui:repeat>
+								</div>
 
 							</div>
 							<label class="titulo">Integrantes del equipo docente</label>
@@ -326,16 +425,21 @@
 									<div class="item">
 										<label class="item-label" for="nombre">Nombre<span
 											class="required">*</span></label>
-										<h:inputText value="#{pCtrl.integrante.nombre_docente}" id="nombre-docente"/>
-										<h:message for="form:nombre-docente" style = "color:red" />
+										<p:selectOneMenu value="#{pCtrl.integrante.idUsuario}" id="id-docente"
+											filter="true" filterMatchMode="contains" filterNormalize="true">
+											<f:selectItem itemLabel="Selecciona" itemValue="#{null}" />
+						                    <f:selectItems value="#{pCtrl.usuarios}" var="usu"
+												itemValue="#{usu.id}" itemLabel="#{usu.fullname}"/>
+						                </p:selectOneMenu>
+										<h:message for="form:id-docente" style = "color:red" />
 									</div>
 									<div class="item">
-										<label class="item-label" for="nombre">Unidad
+										<label class="item-label">Unidad
 											Académica u otra adscripción institucional</label>
 										<h:inputText value="#{pCtrl.integrante.unidad_academica}" />
 									</div>
 									<div class="item">
-										<label class="item-label" for="nombre">Subunidad
+										<label class="item-label">Subunidad
 											académica u otra adscripción institucional</label>
 										<h:inputText value="#{pCtrl.integrante.subunidad_academica}" />
 									</div>
@@ -420,7 +524,15 @@
 										</h:commandLink>
 									</p:column>
 								</p:dataTable>
-
+								<div class="sugerencias">
+									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
+										<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.docentesSug != null}">
+											<p>#{r.docentesSug}</p>
+											<p>#{r.fecha_revisionFormated}</p>
+											<p>#{r.nombre_usuario}</p>
+										</h:panelGroup>
+									</ui:repeat>
+								</div>
 							</h:panelGroup>
 							<div class="buttons">
 								<button type="button" class="button next-step">
@@ -505,6 +617,15 @@
 								</tr>
 							</table>
 							<p class="mensaje"></p>
+							<div class="sugerencias">
+								<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
+									<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.creditosSug != null}">
+										<p>#{r.creditosSug}</p>
+										<p>#{r.fecha_revisionFormated}</p>
+										<p>#{r.nombre_usuario}</p>
+									</h:panelGroup>
+								</ui:repeat>
+							</div>
 							<div class="buttons">
 								<button type="button" class="button prev-step">
 									<i class="fa fa-chevron-left"></i> Anterior
@@ -538,6 +659,15 @@
 									<f:validateLength maximum="4000" />
 								</h:inputTextarea>
 								<p class="small">Máximo 4000 caracteres</p>
+								<div class="sugerencias">
+									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
+										<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.objSug != null}">
+											<p>#{r.objSug}</p>
+											<p>#{r.fecha_revisionFormated}</p>
+											<p>#{r.nombre_usuario}</p>
+										</h:panelGroup>
+									</ui:repeat>
+								</div>
 
 								<!-- 								<p:textEditor widgetVar="editor4" id="editor4" -->
 								<!-- 									value="#{pCtrl.nuevo.objetivos}" height="100px" rendered="#{pCtrl.estaEnContenido}"> -->
@@ -567,6 +697,15 @@
 									<f:validateLength maximum="4000" />
 								</h:inputTextarea>
 								<p class="small">Máximo 4000 caracteres</p>
+								<div class="sugerencias">
+									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
+										<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.contSug != null}">
+											<p>#{r.contSug}</p>
+											<p>#{r.fecha_revisionFormated}</p>
+											<p>#{r.nombre_usuario}</p>
+										</h:panelGroup>
+									</ui:repeat>
+								</div>
 								<!-- 								<p:textEditor widgetVar="editor5" id="editor5" -->
 								<!-- 									value="#{pCtrl.nuevo.contenidos}" height="100px"> -->
 								<!-- 									<f:facet name="toolbar"> -->
@@ -615,6 +754,15 @@
 										<f:ajax render="form:tareasOblig" />
 									</h:selectOneRadio>
 								</div>
+								<div class="sugerencias">
+									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
+										<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.formatoSug != null}">
+											<p>#{r.formatoSug}</p>
+											<p>#{r.fecha_revisionFormated}</p>
+											<p>#{r.nombre_usuario}</p>
+										</h:panelGroup>
+									</ui:repeat>
+								</div>
 							</div>
 							<div class="item">
 								<label class="item-label">Modalidad<span
@@ -628,6 +776,15 @@
 										<f:selectItems value="#{pCtrl.itemsModalidad}" var="m"
 											itemValue="#{m}" itemLabel="#{m.label}" />
 									</h:selectOneRadio>
+								</div>
+								<div class="sugerencias">
+									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
+										<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.modalidadSug != null}">
+											<p>#{r.modalidadSug}</p>
+											<p>#{r.fecha_revisionFormated}</p>
+											<p>#{r.nombre_usuario}</p>
+										</h:panelGroup>
+									</ui:repeat>
 								</div>
 							</div>
 							<div class="item">
@@ -643,6 +800,15 @@
 									<f:validateLength maximum="4000" />
 								</h:inputTextarea>
 								<p class="small">Máximo 4000 caracteres</p>
+								<div class="sugerencias">
+									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
+										<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.metodologiaSug != null}">
+											<p>#{r.metodologiaSug}</p>
+											<p>#{r.fecha_revisionFormated}</p>
+											<p>#{r.nombre_usuario}</p>
+										</h:panelGroup>
+									</ui:repeat>
+								</div>
 								<!-- 								<p:textEditor widgetVar="editor6" id="editor6" -->
 								<!-- 									value="#{pCtrl.nuevo.descrMetodologia}" height="100px"> -->
 								<!-- 									<f:facet name="toolbar"> -->
@@ -673,6 +839,15 @@
 										adecuaciones metodológicas orientadas a estudiantes en
 										privación de libertad que no pueden cursar en la modalidad
 										definida.</p>
+									<div class="sugerencias">
+									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
+										<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.adecSug != null}">
+											<p>#{r.adecSug}</p>
+											<p>#{r.fecha_revisionFormated}</p>
+											<p>#{r.nombre_usuario}</p>
+										</h:panelGroup>
+									</ui:repeat>
+								</div>
 								</div>
 
 							</div>
@@ -691,6 +866,15 @@
 										<f:validateLength maximum="250" />
 									</h:inputTextarea>
 									<p class="small">Máximo 250 caracteres</p>
+									<div class="sugerencias">
+									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
+										<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.adecDescrSug != null}">
+											<p>#{r.adecDescrSug}</p>
+											<p>#{r.fecha_revisionFormated}</p>
+											<p>#{r.nombre_usuario}</p>
+										</h:panelGroup>
+									</ui:repeat>
+								</div>
 								</h:panelGroup>
 							</h:panelGroup>
 							<h:panelGroup class="item" id="regimen" layout="block">
@@ -707,6 +891,15 @@
 										<f:ajax render="form:tareasOblig" listener="#{pCtrl.actualizarTareasOblig}"/>
 									</h:selectOneRadio>
 								</div>
+								<div class="sugerencias">
+									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
+										<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.regimenSug != null}">
+											<p>#{r.regimenSug}</p>
+											<p>#{r.fecha_revisionFormated}</p>
+											<p>#{r.nombre_usuario}</p>
+										</h:panelGroup>
+									</ui:repeat>
+								</div>
 							</h:panelGroup>
 							<h:panelGroup class="switch-button item" id="tareasOblig"
 								layout="block">
@@ -722,6 +915,15 @@
 									teórico-prácticas será obligatoria la asistencia al 75% de las
 									clases efectivamente dictadas y/o la realización del 75% de las
 									tareas propuestas.</p>
+								<div class="sugerencias">
+									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
+										<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.tareas75obligSug != null}">
+											<p>#{r.tareas75obligSug}</p>
+											<p>#{r.fecha_revisionFormated}</p>
+											<p>#{r.nombre_usuario}</p>
+										</h:panelGroup>
+									</ui:repeat>
+								</div>
 							</h:panelGroup>
 							<div class="switch-button item">
 								<label class="item-label">Permite aprobación directa
@@ -731,6 +933,15 @@
 								<label for="form:switch-label6" class="switch-button__label"></label>
 								<p class="ayuda">Señalar si la unidad curricular permite la
 									aprobación directa.</p>
+								<div class="sugerencias">
+									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
+										<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.aprobDirectaSug != null}">
+											<p>#{r.aprobDirectaSug}</p>
+											<p>#{r.fecha_revisionFormated}</p>
+											<p>#{r.nombre_usuario}</p>
+										</h:panelGroup>
+									</ui:repeat>
+								</div>
 							</div>
 							<div class="item">
 								<label class="item-label" for="uc">Descripción de la
@@ -757,6 +968,15 @@
 									<f:validateLength maximum="4000" />
 								</h:inputTextarea>
 								<p class="small">Máximo 4000 caracteres</p>
+								<div class="sugerencias">
+									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
+										<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.evaluacionSug != null}">
+											<p>#{r.evaluacionSug}</p>
+											<p>#{r.fecha_revisionFormated}</p>
+											<p>#{r.nombre_usuario}</p>
+										</h:panelGroup>
+									</ui:repeat>
+								</div>
 								<!-- 								<p:textEditor widgetVar="editor7" id="editor7" -->
 								<!-- 									value="#{pCtrl.nuevo.descrEvaluacion}" height="100px"> -->
 								<!-- 									<f:facet name="toolbar"> -->
@@ -839,7 +1059,15 @@
 											</h:commandLink>
 										</p:column>
 									</p:dataTable>
-
+									<div class="sugerencias">
+										<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
+											<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.biblioSug != null}">
+												<p>#{r.biblioSug}</p>
+												<p>#{r.fecha_revisionFormated}</p>
+												<p>#{r.nombre_usuario}</p>
+											</h:panelGroup>
+										</ui:repeat>
+									</div>
 								</h:panelGroup>
 							</div>
 							<div class="buttons">

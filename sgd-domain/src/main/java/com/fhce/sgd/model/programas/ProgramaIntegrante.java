@@ -24,8 +24,6 @@ public class ProgramaIntegrante {
     @JoinColumn(name="id_docente")
 	private Usuario docente;
 	
-	private String nombre_docente;
-	
 	private EnumRolDocente rol;
 	
 	private EnumCargo cargo;
@@ -74,14 +72,6 @@ public class ProgramaIntegrante {
 
 	public void setDocente(Usuario docente) {
 		this.docente = docente;
-	}
-
-	public String getNombre_docente() {
-		return nombre_docente;
-	}
-
-	public void setNombre_docente(String nombre_docente) {
-		this.nombre_docente = nombre_docente;
 	}
 
 	public EnumRolDocente getRol() {

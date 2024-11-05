@@ -1,12 +1,6 @@
 package com.fhce.sgd.dto.programas;
 
-import java.util.Date;
-
-public class RevisionDto {
-
-	private Long id;
-	
-	private Date fecha_revision;
+public class RevisionDto extends AccionDto {
 	
 	private String ucSug;
 	private String uaSug;
@@ -34,25 +28,10 @@ public class RevisionDto {
 	private String evaluacionSug;
 	private String biblioSug;
 	
-	private Long idUsuario;
-	private Long idPrograma;
-	
 	public RevisionDto() {
 		
 	}
 	
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
-	public Date getFecha_revision() {
-		return fecha_revision;
-	}
-	public void setFecha_revision(Date fecha_revision) {
-		this.fecha_revision = fecha_revision;
-	}
 	public String getUcSug() {
 		return ucSug;
 	}
@@ -203,17 +182,5 @@ public class RevisionDto {
 	public void setBiblioSug(String biblioSug) {
 		this.biblioSug = biblioSug;
 	}
-	public Long getIdUsuario() {
-		return idUsuario;
-	}
-	public void setIdUsuario(Long idUsuario) {
-		this.idUsuario = idUsuario;
-	}
-	public Long getIdPrograma() {
-		return idPrograma;
-	}
-	public void setIdPrograma(Long idPrograma) {
-		this.idPrograma = idPrograma;
-	}
-
+	
 }

@@ -9,9 +9,8 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.context.ServletContextAware;
 
-//import com.sun.faces.config.ConfigureListener;
-//
 import jakarta.faces.webapp.FacesServlet;
+import jakarta.servlet.MultipartConfigElement;
 import jakarta.servlet.ServletContext;
 
 @SpringBootApplication
@@ -42,6 +41,8 @@ public class SGDApplication extends SpringBootServletInitializer implements Serv
 				"*.jsf");
 		registration.setName("FacesServlet");
 		registration.setLoadOnStartup(1);
+		registration.setMultipartConfig(new MultipartConfigElement(
+				"", 1048576, 5242880, 0));
 		return registration;
 	}
 

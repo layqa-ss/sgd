@@ -16,7 +16,6 @@ public class JsfInitializer implements ServletContextInitializer {
 		servletContext.setInitParameter(UIInput.EMPTY_STRING_AS_NULL_PARAM_NAME, Boolean.TRUE.toString());
 		servletContext.setInitParameter("jakarta.faces.FACELETS_SKIP_COMMENTS", "true");
 		servletContext.setInitParameter("jakarta.faces.PROJECT_STAGE", "Development");
-//		servletContext.setInitParameter("primefaces.THEME", "luna-pink");
 		servletContext.setInitParameter("jakarta.faces.STATE_SAVING_METHOD", "client");
 
 		EnhancedListener cdiInitializer = new EnhancedListener();
