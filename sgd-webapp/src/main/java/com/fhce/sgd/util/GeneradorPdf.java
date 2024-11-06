@@ -93,7 +93,7 @@ public class GeneradorPdf {
 			document.add(pCarrera);
 			Paragraph pAclaracionCarrera = new Paragraph();
 			pAclaracionCarrera.add(new Chunk(
-					"La unidad curricular podrá ser acreditada también en carreras que no hayan sido seleccionadas o incluidas en este programa.",
+					"La unidad curricular podrá ser acreditada también en carreras que no hayan sido incluidas en este programa.",
 					fontRegularSmall));
 			pAclaracionCarrera.setSpacingAfter(15);
 			document.add(pAclaracionCarrera);

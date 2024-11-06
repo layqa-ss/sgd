@@ -169,6 +169,11 @@ public class ProgramaServiceImpl implements ProgramaService {
 			p.setEstado(EnumEstadoPrograma.CREADO);
 			p.setYear(obtenerAnioCorriente());
 
+			Usuario user = usuarioRepository.findById(pDto.getIdUsuario()).orElse(null);
+			if (user != null) {
+				p.setUsuario(user);
+			}
+
 			p = programaRepository.save(p);
 			return p.getId();
 		} catch (Exception e) {
@@ -220,6 +225,7 @@ public class ProgramaServiceImpl implements ProgramaService {
 			List<Programa> programas = StreamSupport.stream(programasTodas.spliterator(), false).toList();
 			for (Programa p : programas) {
 				ProgramaDto prog = new ProgramaDto(p.getId(), p.getUc().getNombreUC(), p.getYear(), p.getEstado());
+				prog.setIdUsuario(p.getUsuario().getId());
 				programasDto.add(prog);
 			}
 			return programasDto;
@@ -322,6 +328,7 @@ public class ProgramaServiceImpl implements ProgramaService {
 
 				p.setYear(prog.getYear());
 				p.setEstado(prog.getEstado());
+				p.setIdUsuario(prog.getUsuario().getId());
 				return p;
 			} else {
 				return null;

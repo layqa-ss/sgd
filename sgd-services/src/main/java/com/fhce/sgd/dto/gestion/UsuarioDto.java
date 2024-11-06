@@ -2,6 +2,9 @@ package com.fhce.sgd.dto.gestion;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+
+import com.fhce.sgd.model.enums.EnumTipoAdscripcion;
 
 public class UsuarioDto {
 
@@ -16,6 +19,12 @@ public class UsuarioDto {
     private Date creationDate;
     
     private Long idRol;
+    
+    private EnumTipoAdscripcion tipoAdscripcion;
+    
+    private List<UnidadAcademicaDto> unidades;
+	
+	private List<CarreraDto> carreras;
     
     public UsuarioDto() {
     	
@@ -80,5 +89,29 @@ public class UsuarioDto {
 
 	public void setIdRol(Long idRol) {
 		this.idRol = idRol;
+	}
+
+	public EnumTipoAdscripcion getTipoAdscripcion() {
+		return tipoAdscripcion;
+	}
+
+	public void setTipoAdscripcion(EnumTipoAdscripcion tipoAdscripcion) {
+		this.tipoAdscripcion = tipoAdscripcion;
+	}
+
+	public List<UnidadAcademicaDto> getUnidades() {
+		return unidades;
+	}
+
+	public void setUnidades(List<UnidadAcademicaDto> unidades) {
+		this.unidades = unidades;
+	}
+
+	public List<CarreraDto> getCarreras() {
+		return carreras;
+	}
+
+	public void setCarreras(List<CarreraDto> carreras) {
+		this.carreras = carreras;
 	}
 }

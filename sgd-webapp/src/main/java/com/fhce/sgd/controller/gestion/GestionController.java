@@ -16,6 +16,7 @@ import com.fhce.sgd.dto.gestion.RolDto;
 import com.fhce.sgd.dto.gestion.UnidadAcademicaDto;
 import com.fhce.sgd.dto.gestion.UsuarioDto;
 import com.fhce.sgd.model.enums.EnumOperacion;
+import com.fhce.sgd.model.enums.EnumTipoAdscripcion;
 import com.fhce.sgd.service.GestionService;
 import com.fhce.sgd.service.UsuarioService;
 import com.fhce.sgd.service.exception.SgdServicesException;
@@ -270,6 +271,10 @@ public class GestionController {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("No se ha podido borrar el rol"));
 		}
 		return "ver-roles";
+	}
+	
+	public EnumTipoAdscripcion[] getItemsTipoAdscripcion() {
+		return EnumTipoAdscripcion.values();
 	}
 
 	public String obtenerLabelEnum(String enumO) {

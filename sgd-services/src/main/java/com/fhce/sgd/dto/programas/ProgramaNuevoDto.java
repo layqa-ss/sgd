@@ -19,6 +19,7 @@ public class ProgramaNuevoDto {
 	private String nombreUC;
 	private Integer year;
 	private EnumEstadoPrograma estado;
+	private Long idUsuario;
 
 	private List<UnidadAcademicaDto> unidades;
 	
@@ -392,6 +393,14 @@ public class ProgramaNuevoDto {
 
 	public void setEstado(EnumEstadoPrograma estado) {
 		this.estado = estado;
+	}
+
+	public Long getIdUsuario() {
+		return idUsuario;
+	}
+
+	public void setIdUsuario(Long idUsuario) {
+		this.idUsuario = idUsuario;
 	}
 
 }

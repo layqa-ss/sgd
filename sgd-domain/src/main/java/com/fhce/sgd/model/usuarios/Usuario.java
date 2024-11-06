@@ -1,12 +1,19 @@
 package com.fhce.sgd.model.usuarios;
 
 import java.util.Date;
+import java.util.Set;
+
+import com.fhce.sgd.model.enums.EnumTipoAdscripcion;
+import com.fhce.sgd.model.gestion.Carrera;
+import com.fhce.sgd.model.gestion.UnidadAcademica;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
@@ -29,6 +36,22 @@ public class Usuario {
 	@ManyToOne
     @JoinColumn(name="id_rol")
 	private Rol rol;
+	
+	private EnumTipoAdscripcion tipoAdscripcion;
+	
+	@ManyToMany
+	@JoinTable(
+			  name = "adscripcion_ua", 
+			  joinColumns = @JoinColumn(name = "usuario_id"), 
+			  inverseJoinColumns = @JoinColumn(name = "ua_id"))
+	private Set<UnidadAcademica> unidadesAcademicas;
+	
+	@ManyToMany
+	@JoinTable(
+			  name = "adscripcion_carrera", 
+			  joinColumns = @JoinColumn(name = "usuario_id"), 
+			  inverseJoinColumns = @JoinColumn(name = "carrera_id"))
+	private Set<Carrera> carreras;
 	
 	public Usuario(String username, String password, String fullname) {
 		super();
@@ -88,5 +111,29 @@ public class Usuario {
 
 	public void setRol(Rol rol) {
 		this.rol = rol;
+	}
+
+	public EnumTipoAdscripcion getTipoAdscripcion() {
+		return tipoAdscripcion;
+	}
+
+	public void setTipoAdscripcion(EnumTipoAdscripcion tipoAdscripcion) {
+		this.tipoAdscripcion = tipoAdscripcion;
+	}
+
+	public Set<UnidadAcademica> getUnidadesAcademicas() {
+		return unidadesAcademicas;
+	}
+
+	public void setUnidadesAcademicas(Set<UnidadAcademica> unidadesAcademicas) {
+		this.unidadesAcademicas = unidadesAcademicas;
+	}
+
+	public Set<Carrera> getCarreras() {
+		return carreras;
+	}
+
+	public void setCarreras(Set<Carrera> carreras) {
+		this.carreras = carreras;
 	}
 }

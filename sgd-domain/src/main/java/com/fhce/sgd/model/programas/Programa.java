@@ -10,6 +10,7 @@ import com.fhce.sgd.model.enums.EnumModalidad;
 import com.fhce.sgd.model.enums.EnumRegimen;
 import com.fhce.sgd.model.enums.EnumSemestre;
 import com.fhce.sgd.model.gestion.UnidadCurricular;
+import com.fhce.sgd.model.usuarios.Usuario;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -36,6 +37,10 @@ public class Programa {
 	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="id_uc", nullable=false)
 	private UnidadCurricular uc;
+	
+	@ManyToOne
+    @JoinColumn(name="id_usuario", nullable=false)
+	private Usuario usuario;
 	
 	private EnumEstadoPrograma estado;
 	
@@ -414,6 +419,14 @@ public class Programa {
 
 	public void setRecomNoCorresponde(boolean recomNoCorresponde) {
 		this.recomNoCorresponde = recomNoCorresponde;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 
 }

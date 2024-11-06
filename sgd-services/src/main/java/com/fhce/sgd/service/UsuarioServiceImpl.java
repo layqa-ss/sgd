@@ -1,15 +1,22 @@
 package com.fhce.sgd.service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.StreamSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fhce.sgd.dto.gestion.CarreraDto;
+import com.fhce.sgd.dto.gestion.UnidadAcademicaDto;
 import com.fhce.sgd.dto.gestion.UsuarioDto;
+import com.fhce.sgd.model.enums.EnumTipoAdscripcion;
+import com.fhce.sgd.model.gestion.Carrera;
+import com.fhce.sgd.model.gestion.UnidadAcademica;
 import com.fhce.sgd.model.usuarios.Rol;
 import com.fhce.sgd.model.usuarios.Usuario;
 import com.fhce.sgd.repository.RolRepository;
@@ -28,13 +35,36 @@ public class UsuarioServiceImpl implements UsuarioService {
 	
 	@Autowired
 	private RolRepository rolRepo;
+	
+	@Autowired
+	private GestionService gestionService;
 
 	public UsuarioDto getUsuarioDto(Long id) throws SgdServicesException {
 		try {
 			Optional<Usuario> u = usuarioRepository.findById(id);
 			if (u.isPresent()) {
-				return new UsuarioDto(u.get().getId(), u.get().getUsername(), u.get().getPassword(),
+				UsuarioDto userDto = new UsuarioDto(u.get().getId(), u.get().getUsername(), u.get().getPassword(),
 						u.get().getCreationDate(), u.get().getFullname(), u.get().getRol().getId());
+				if (u.get().getTipoAdscripcion() != null) {
+					userDto.setTipoAdscripcion(u.get().getTipoAdscripcion());
+					if (userDto.getTipoAdscripcion() == EnumTipoAdscripcion.UA) {
+						List<UnidadAcademicaDto> unidadesAcademicas = new ArrayList<>();
+						for (UnidadAcademica ua : u.get().getUnidadesAcademicas()) {
+							UnidadAcademicaDto uaDto = new UnidadAcademicaDto(ua.getId(), ua.getNombreUA());
+							unidadesAcademicas.add(uaDto);
+						}
+						userDto.setUnidades(unidadesAcademicas);
+					} else if(userDto.getTipoAdscripcion() == EnumTipoAdscripcion.CARRERA) {
+						List<CarreraDto> carreras = new ArrayList<>();
+						for (Carrera c : u.get().getCarreras()) {
+							CarreraDto cDto = new CarreraDto(c.getId(), c.getNombreCarrera(), c.getUa().getId(),
+									c.getUa().getNombreUA());
+							carreras.add(cDto);
+						}
+						userDto.setCarreras(carreras);
+					}
+				}
+				return userDto;
 			} else {
 				return null;
 			}
@@ -88,6 +118,26 @@ public class UsuarioServiceImpl implements UsuarioService {
 			user.setUsername(userDto.getUsername());
 			Rol r = rolRepo.findById(userDto.getIdRol()).get();
 			user.setRol(r);
+			
+			if(userDto.getTipoAdscripcion() != null) {
+				user.setTipoAdscripcion(userDto.getTipoAdscripcion());
+				if(userDto.getTipoAdscripcion() == EnumTipoAdscripcion.UA) {
+					Set<UnidadAcademica> unidadesAcademicas = new HashSet<UnidadAcademica>();
+					for (UnidadAcademicaDto uaDto : userDto.getUnidades()) {
+						UnidadAcademica ua = gestionService.getUnidadAcademica(uaDto.getId());
+						unidadesAcademicas.add(ua);
+					}
+					user.setUnidadesAcademicas(unidadesAcademicas);
+				} else if (userDto.getTipoAdscripcion() == EnumTipoAdscripcion.CARRERA) {
+					Set<Carrera> carreras = new HashSet<Carrera>();
+
+					for (CarreraDto cDto : userDto.getCarreras()) {
+						Carrera c = gestionService.getCarrera(cDto.getId());
+						carreras.add(c);
+					}
+					user.setCarreras(carreras);
+				}
+			}
 			user = usuarioRepository.save(user);
 			return user.getId();
 		} catch (Exception e) {

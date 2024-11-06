@@ -72,7 +72,6 @@
 
     $('.agregar-button').on('click', function (e){
       $('.form.container').css('display', 'flex');
-      $('.group-docentes').css('display', 'flex');
       $('.close-button').css('display', 'block');
     });
 
@@ -97,7 +96,7 @@
         suma = suma + parseInt($(this).val());
       })
       $('.horas-totales').val(suma);
-      $('.creditos').val(parseInt(parseInt($('.horas-totales').val())/15));
+      $('.creditos').val(Math.round(parseInt($('.horas-totales').val())/15));
 
     });
 
@@ -108,7 +107,7 @@
       })
 
       if ($(e.target).hasClass('horas-totales')){
-        $('.creditos').val(parseInt(parseInt($('.horas-totales').val())/15));
+        $('.creditos').val(Math.round(parseInt($('.horas-totales').val())/15));
       } else {
         $('.horas-totales').val(parseInt($('.creditos').val())*15);
       }

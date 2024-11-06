@@ -8,6 +8,7 @@ public class ProgramaDto {
 	private String nombreUC;
 	private Integer year;
 	private EnumEstadoPrograma estado;
+	private Long idUsuario;
 
 	public ProgramaDto(Long id, String nombre, Integer year, EnumEstadoPrograma estado) {
 		this.id = id;
@@ -47,4 +48,13 @@ public class ProgramaDto {
 	public void setId(Long id) {
 		this.id = id;
 	}
+
+	public Long getIdUsuario() {
+		return idUsuario;
+	}
+
+	public void setIdUsuario(Long idUsuario) {
+		this.idUsuario = idUsuario;
+	}
+	
 }
