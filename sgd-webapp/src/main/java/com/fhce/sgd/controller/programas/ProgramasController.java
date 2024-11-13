@@ -169,6 +169,7 @@ public class ProgramasController {
 		mapAreas = new HashMap<Long, Object>();
 		nuevo.setEstado(EnumEstadoPrograma.CREADO);
 		nuevo.setYear(obtenerAnioCorriente());
+		nuevo.setIdUsuario(appCtrl.getIdUsuarioLogueado());
 		edicion = false;
 		maxBiblio = 0;
 		revisionesPrograma = new ArrayList<RevisionDto>();
