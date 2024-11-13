@@ -1,0 +1,677 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="jakarta.faces.core" xmlns:h="jakarta.faces.html"
+	xmlns:ui="jakarta.faces.facelets" xmlns:p="http://primefaces.org/ui"
+	template="/layout/template.xhtml">
+	<f:metadata>
+		<f:importConstants type="com.fhce.sgd.model.enums.EnumDuracion" />
+		<f:importConstants type="com.fhce.sgd.model.enums.EnumRolDocente" />
+		<f:importConstants type="com.fhce.sgd.model.enums.EnumFormato" />
+		<f:importConstants type="com.fhce.sgd.model.enums.EnumCargo" />
+	</f:metadata>
+
+	<ui:define name="content">
+		<section class="intro">
+			<article>
+				<h1 class="titulo-seccion">Editar una vez aprobado</h1>
+			</article>
+		</section>
+		<section>
+			<article>
+
+				<h:form class="form container form-programa" id="form">
+
+					<div class="process">
+						<div class="process-row nav nav-tabs">
+							<div class="process-step">
+								<button type="button" class="btn-circle active" href="#menu1"
+									id="menu1-btn">
+									<span class="material-symbols-outlined">info</span>
+								</button>
+								<p>
+									<small>General</small>
+								</p>
+							</div>
+							<div class="process-step">
+								<button type="button" class="btn-circle" href="#menu2"
+									id="menu2-btn">
+									<span class="material-symbols-outlined">school</span>
+								</button>
+								<p>
+									<small>Créditos y carga horaria</small>
+								</p>
+							</div>
+							<div class="process-step">
+								<button type="button" class="btn-circle" href="#menu3"
+									id="menu3-btn">
+									<span class="material-symbols-outlined">description</span>
+								</button>
+								<p>
+									<small>Objetivos y contenidos</small>
+								</p>
+							</div>
+							<div class="process-step">
+								<button type="button" class="btn-circle" href="#menu4"
+									id="menu4-btn">
+									<span class="material-symbols-outlined">quiz</span>
+								</button>
+								<p>
+									<small>Metodología y evaluación</small>
+								</p>
+							</div>
+							<div class="process-step">
+								<button type="button" class="btn-circle" href="#menu5"
+									id="menu5-btn">
+									<span class="material-symbols-outlined">menu_book</span>
+								</button>
+								<p>
+									<small>Bibliografía</small>
+								</p>
+							</div>
+						</div>
+					</div>
+					<div class="tab-content">
+						<h:messages id="messages" styleClass="messages error" />
+						<div id="menu1" class="tab-pane fade active in">
+							<div class="item">
+								<h3 class="headline-3">General</h3>
+								<p>El formulario debe ser completado en idioma español</p>
+							</div>
+
+							<div class="item">
+								<label class="item-label" for="uc">Unidad curricular</label>
+								<h:outputText value="#{pCtrl.nuevo.nombreUC}" />
+							</div>
+							<div class="item">
+								<label class="item-label">Año<span
+									class="required">*</span></label>
+								<p class="ayuda">Indicar el año en el que se dictará la unidad curricular.</p>
+								<h:selectOneMenu value="#{pCtrl.nuevo.year}" required="true"
+									requiredMessage="Debe indicar el año">
+
+									<f:selectItems
+										value="#{pCtrl.obtenerAnios}" var="a"
+										itemValue="#{a}" itemLabel="#{a}" />
+								</h:selectOneMenu>
+							</div>
+							<div class="item">
+								<label class="item-label">Unidad académica que la ofrece</label>
+								<ui:repeat value="#{pCtrl.nuevo.unidades}" var="unidad">
+									<div class="item">
+										<h:outputText value="#{unidad.nombre}" />
+									</div>
+								</ui:repeat>
+							</div>
+
+							<div class="item">
+								<label class="item-label">Carrera</label>
+								<ui:repeat value="#{pCtrl.nuevo.carreras}" var="c">
+									<div class="item">
+										<h:outputText value="#{c.nombre}" />
+									</div>
+								</ui:repeat>
+								<h:outputText value="#{pCtrl.nuevo.otrasAclaracionesCarrera}" />
+							</div>
+
+							<h:panelGroup class="item" layout="block" id="areas">
+								<label class="item-label">Area temática por carrera</label>
+								<ui:repeat value="#{pCtrl.nuevo.carreras}" var="c">
+									<div class="item">
+										<h:outputText value="#{c.nombre} - #{c.areaNombre}" />
+									</div>
+								</ui:repeat>
+							</h:panelGroup>
+
+							<div class="item">
+								<label class="item-label">Duración</label>
+								<h:outputText value="#{pCtrl.nuevo.duracion.label}"
+									rendered="#{pCtrl.nuevo.duracion!=EnumDuracion.OTRO}" />
+								<h:outputText value="#{pCtrl.nuevo.duracionOtro}"
+									rendered="#{pCtrl.nuevo.duracion==EnumDuracion.OTRO}" />
+
+							</div>
+							<h:panelGroup class="item" layout="block"
+								rendered="#{pCtrl.nuevo.duracion != EnumDuracion.ANUAL}">
+								<label class="item-label">Semestre en el que se ofrece<span
+									class="required">*</span></label>
+								<p class="ayuda">Indicar si la unidad curricular se ofrece
+									en el semestre par, impar o en ambos.</p>
+								<div class="items-radio item">
+									<h:selectOneRadio value="#{pCtrl.nuevo.semestre}"
+										styleClass="items-radio item" required="true"
+										requiredMessage="Debe indicar el semestre de la unidad curricular">
+										<f:selectItems value="#{pCtrl.itemsSemestre}" var="s"
+											itemValue="#{s}" itemLabel="#{s.label}" />
+									</h:selectOneRadio>
+								</div>
+								<div class="sugerencias">
+									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
+										<h:panelGroup layout="block" class="show-sugerencia"
+											rendered="#{r.semestreSug != null}">
+											<p>#{r.semestreSug}</p>
+											<p>#{r.fecha_revisionFormated}</p>
+											<p>#{r.nombre_usuario}</p>
+										</h:panelGroup>
+									</ui:repeat>
+								</div>
+							</h:panelGroup>
+							<div class="switch-button item ingreso">
+								<label class="item-label">La unidad curricular está
+									recomendada para estudiantes de ingreso</label>
+
+								<h:selectBooleanCheckbox value="#{pCtrl.nuevo.ingreso}"
+									id="switch-label" class="switch-button__checkbox" />
+								<label for="form:switch-label" class="switch-button__label"></label>
+								<p class="ayuda">Indicar si se se recomienda o no el cursado
+									de esta unidad curricular en el primer semestre de la carrera.
+								</p>
+								<div class="sugerencias">
+									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
+										<h:panelGroup layout="block" class="show-sugerencia"
+											rendered="#{r.ingresoSug != null}">
+											<p>#{r.ingresoSug}</p>
+											<p>#{r.fecha_revisionFormated}</p>
+											<p>#{r.nombre_usuario}</p>
+										</h:panelGroup>
+									</ui:repeat>
+								</div>
+							</div>
+							<div class="switch-button item requisitos">
+								<label class="item-label">Requisitos de inscripción
+									(unidades curriculares previas o cantidad de créditos
+									obtenidos)</label>
+								<h:outputText value="#{pCtrl.nuevo.requisitos ? 'SI' : 'NO'}" />
+							</div>
+							<h:panelGroup class="item" rendered="#{pCtrl.nuevo.requisitos}">
+								<label class="item-label">¿Cuáles?<span class="required">*</span></label>
+								<h:outputText value="#{pCtrl.nuevo.requisitosCuales}" />
+							</h:panelGroup>
+
+							<div class="item recomendaciones">
+								<label class="item-label" for="uc">Conocimientos previos
+									o grados de avance en la carrera recomendados<span
+									class="required">*</span>
+								</label>
+								<p class="ayuda">Señalar si existen recomendaciones respecto
+									a conocimientos previos o algún grado de avance en la carrera
+									sugerido para quienes pretendan cursar la unidad curricular. Se
+									trata de recomendaciones, no de requisitos excluyentes.</p>
+								<div class="item item-checkbox item-ua">
+									<h:selectBooleanCheckbox
+										value="#{pCtrl.nuevo.recomNoCorresponde}">
+										<f:ajax render="recom" />
+									</h:selectBooleanCheckbox>
+									<label>No corresponde</label>
+								</div>
+
+								<h:inputTextarea value="#{pCtrl.nuevo.recomendaciones}"
+									id="recom" required="#{!pCtrl.nuevo.recomNoCorresponde}"
+									disabled="#{pCtrl.nuevo.recomNoCorresponde}"
+									requiredMessage="Debe ingresar los conocimientos previos recomendados"
+									validatorMessage="Se ha excedido el máximo de caracteres permitidos en el campo Conocimientos previos recomendados">
+									<f:validateLength maximum="250" />
+								</h:inputTextarea>
+								<p class="small">Máximo 250 caracteres</p>
+								<div class="sugerencias">
+									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
+										<h:panelGroup layout="block" class="show-sugerencia"
+											rendered="#{r.recomSug != null}">
+											<p>#{r.recomSug}</p>
+											<p>#{r.fecha_revisionFormated}</p>
+											<p>#{r.nombre_usuario}</p>
+										</h:panelGroup>
+									</ui:repeat>
+								</div>
+								<!-- 								<p:textEditor widgetVar="editor2" id="editor2" -->
+								<!-- 									value="#{pCtrl.nuevo.recomendaciones}" height="100px"> -->
+								<!-- 									<f:facet name="toolbar"> -->
+								<!-- 										<span class="ql-formats"> -->
+								<!-- 											<button class="ql-bold"></button> -->
+								<!-- 											<button class="ql-italic"></button> -->
+								<!-- 											<button class="ql-underline"></button> -->
+								<!-- 											<button class="ql-strike"></button> -->
+								<!-- 										</span> -->
+								<!-- 										<span class="ql-formats"> -->
+								<!-- 											<button class="ql-list" value="ordered"></button> -->
+								<!-- 											<button class="ql-list" value="bullet"></button> -->
+								<!-- 										</span> -->
+								<!-- 									</f:facet> -->
+								<!-- 								</p:textEditor> -->
+							</div>
+							<div class="switch-button item">
+								<label class="item-label">Unidad curricular ofertada
+									como electiva para otros servicios universitarios o terciarios</label>
+								<h:selectBooleanCheckbox value="#{pCtrl.nuevo.otrosServicios}"
+									id="switch-label3" class="switch-button__checkbox" />
+								<label for="form:switch-label3" class="switch-button__label" />
+								<p class="ayuda">Indicar si la unidad curricular está
+									ofertada como electiva para otros servicios de la Udelar u
+									otras instituciones.</p>
+								<div class="sugerencias">
+									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
+										<h:panelGroup layout="block" class="show-sugerencia"
+											rendered="#{r.otrosServSug != null}">
+											<p>#{r.otrosServSug}</p>
+											<p>#{r.fecha_revisionFormated}</p>
+											<p>#{r.nombre_usuario}</p>
+										</h:panelGroup>
+									</ui:repeat>
+								</div>
+
+							</div>
+							<label class="titulo">Integrantes del equipo docente</label>
+							<p>Seleccionar rol y cargo, e indicar el nombre y la
+								adscripción institucional de cada integrante del equipo docente.</p>
+							<h:panelGroup id="docentes" class="item" layout="block">
+								<h:messages id="messages-docentes" styleClass="messages error"
+									globalOnly="true" />
+								<h:panelGroup class="group-docentes" layout="block"
+									id="group-docentes">
+									<div class="item">
+										<label class="item-label">Rol<span class="required">*</span></label>
+										<h:selectOneMenu value="#{pCtrl.integrante.rol}"
+											id="rol-docente">
+											<f:selectItem itemLabel="Selecciona" itemValue="" />
+											<f:selectItems value="#{pCtrl.roles}" var="rol"
+												itemValue="#{rol}" itemLabel="#{rol.label}" />
+											<f:ajax render="ayudas" />
+										</h:selectOneMenu>
+										<h:message for="form:rol-docente" style="color:red" />
+									</div>
+									<div class="item">
+										<label class="item-label">Cargo<span class="required">*</span></label>
+										<h:selectOneMenu value="#{pCtrl.integrante.cargo}"
+											id="cargo-docente">
+											<f:selectItem itemLabel="Selecciona" itemValue="" />
+											<f:selectItems value="#{pCtrl.cargos}" var="cargo"
+												itemValue="#{cargo}" itemLabel="#{cargo.label}" />
+											<f:ajax render="cargo-otro" />
+										</h:selectOneMenu>
+										<h:message for="form:cargo-docente" style="color:red" />
+									</div>
+									<h:panelGroup layout="block" class="item" id="cargo-otro">
+										<label class="item-label">Cargo (otro)</label>
+										<h:inputText value="#{pCtrl.integrante.cargoOtro}"
+											class="otro"
+											disabled="#{pCtrl.integrante.cargo!=EnumCargo.OTRO}"
+											id="otro-docente" />
+										<h:message for="form:otro-docente" style="color:red" />
+									</h:panelGroup>
+
+									<div class="item">
+										<label class="item-label" for="nombre">Nombre<span
+											class="required">*</span></label>
+										<p:selectOneMenu value="#{pCtrl.integrante.idUsuario}"
+											id="id-docente" filter="true" filterMatchMode="contains"
+											filterNormalize="true">
+											<f:selectItem itemLabel="Selecciona" itemValue="#{null}" />
+											<f:selectItems value="#{pCtrl.usuarios}" var="usu"
+												itemValue="#{usu.id}" itemLabel="#{usu.fullname}" />
+										</p:selectOneMenu>
+										<h:message for="form:id-docente" style="color:red" />
+									</div>
+									<div class="item">
+										<label class="item-label">Unidad Académica u otra
+											adscripción institucional</label>
+										<h:inputText value="#{pCtrl.integrante.unidad_academica}" />
+									</div>
+									<div class="item">
+										<label class="item-label">Subunidad académica u otra
+											adscripción institucional</label>
+										<h:inputText value="#{pCtrl.integrante.subunidad_academica}" />
+									</div>
+									<div class="item">
+										<h:commandButton class="button button_rojo"
+											action="#{pCtrl.agregarDocente}" value="Agregar docente">
+											<f:ajax execute="form:group-docentes"
+												render="form:table-docentes form:group-docentes form:messages-docentes" />
+										</h:commandButton>
+									</div>
+									<h:panelGroup layout="block" id="ayudas">
+										<h:panelGroup layout="block"
+											rendered="#{pCtrl.integrante.rol==EnumRolDocente.RESPONSABLE}">
+											<p class="ayuda">
+												<b>Responsables:</b> Podrán ser Responsables de unidades
+												curriculares Profesores/as Adjuntos/as (Gr.3), Agregados/as
+												(Gr.4) y Titulares (Gr.5).
+											</p>
+										</h:panelGroup>
+										<h:panelGroup layout="block"
+											rendered="#{pCtrl.integrante.rol==EnumRolDocente.ENCARGADO}">
+											<p class="ayuda">
+												<b>Encargado/a:</b> Podrán ser Encargados/as o
+												Co-encargados/as de unidades curriculares Profesores/as
+												Adjuntos/as (Gr.3), Agregados/as (Gr.4) y Titulares (Gr.5).
+												Solo en casos excepcionales, docentes en grados de formación
+												(Gr. 1 y 2) podrán incluirse como Encargados/as de cursos.
+												Para ello, el/la Director/a de Carrera, deberá completar el
+												siguiente <a href="http://www.google.com" target="_blank">formulario</a>
+												solicitando la autorización del Consejo de Facultad previo
+												al inicio de clases.
+											</p>
+										</h:panelGroup>
+										<h:panelGroup layout="block"
+											rendered="#{pCtrl.integrante.rol==EnumRolDocente.APOYO}">
+											<p class="ayuda">
+												<b>Docente de apoyo:</b> Ayudantes (Gr.1) y Asistentes
+												(Gr.2) podrán dictar clases en calidad de Docentes de apoyo
+												en proporción a su perfil de formación y carga horaria.
+												También podrán hacerlo docentes de grados superiores.
+											</p>
+										</h:panelGroup>
+										<h:panelGroup layout="block"
+											rendered="#{pCtrl.integrante.rol==EnumRolDocente.INVITADO}">
+											<p class="ayuda">
+												<b>Invitado/a:</b> Se podrá incluir como invitadas a la
+												unidad curricular a personas con o sin cargo docente.
+											</p>
+										</h:panelGroup>
+									</h:panelGroup>
+								</h:panelGroup>
+								<p:dataTable value="#{pCtrl.nuevo.integrantes}" var="i"
+									styleClass="table table-docentes" id="table-docentes"
+									emptyMessage="No se encontraron registros">
+
+									<p:column headerText="Rol">
+										<h:outputText value="#{i.rol.label}" />
+									</p:column>
+
+									<p:column headerText="Cargo">
+										<h:outputText
+											value="#{i.cargo == EnumCargo.OTRO ? i.cargoOtro : i.cargo.label}" />
+									</p:column>
+
+									<p:column headerText="Nombre">
+										<h:outputText value="#{i.nombre_docente}" />
+									</p:column>
+
+									<p:column headerText="Unidad académica">
+										<h:outputText value="#{i.unidad_academica}" />
+									</p:column>
+
+									<p:column headerText="Subunidad académica">
+										<h:outputText value="#{i.subunidad_academica}" />
+									</p:column>
+
+									<p:column styleClass="links-column">
+										<h:commandLink styleClass="link-delete"
+											action="#{pCtrl.borrarDocente(i)}"
+											rendered="#{i.rol != EnumRolDocente.RESPONSABLE and i.rol != EnumRolDocente.ENCARGADO}">
+											<i class="material-symbols-outlined">delete</i>
+											<f:ajax execute="form:table-docentes"
+												render="form:table-docentes" />
+										</h:commandLink>
+									</p:column>
+								</p:dataTable>
+								<div class="sugerencias">
+									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
+										<h:panelGroup layout="block" class="show-sugerencia"
+											rendered="#{r.docentesSug != null}">
+											<p>#{r.docentesSug}</p>
+											<p>#{r.fecha_revisionFormated}</p>
+											<p>#{r.nombre_usuario}</p>
+										</h:panelGroup>
+									</ui:repeat>
+								</div>
+							</h:panelGroup>
+							<div class="buttons">
+								<button type="button" class="button next-step">
+									Siguiente <i class="fa fa-chevron-right"></i>
+								</button>
+							</div>
+						</div>
+
+						<div id="menu2" class="tab-pane fade">
+							<h3 class="headline-3">Créditos y carga horaria del curso</h3>
+							<table class="table-creditos">
+								<tr>
+									<th colspan="2"></th>
+									<th>Horas</th>
+								</tr>
+								<tr>
+									<th rowspan="3">Con acompañamiento directo del/la docente</th>
+									<td>Horas aula, presenciales o virtuales</td>
+									<td><h:outputText value="#{pCtrl.nuevo.horasAula}" /></td>
+								</tr>
+								<tr>
+									<td>Trabajo de campo o prácticas</td>
+									<td><h:outputText
+											value="#{pCtrl.nuevo.horasTrabajosConAcompa}" /></td>
+								</tr>
+								<tr>
+									<td>Otros <h:outputText
+											value="#{pCtrl.nuevo.otrosConAcompa}" /></td>
+									<td><h:outputText
+											value="#{pCtrl.nuevo.horasOtrosConAcompa}" /></td>
+								</tr>
+								<tr>
+									<th rowspan="5">Sin acompañamiento directo del/la docente
+										(estudio autónomo)</th>
+									<td>Lecturas y estudio de materiales varios</td>
+									<td><h:outputText value="#{pCtrl.nuevo.horasLecturas}" /></td>
+								</tr>
+								<tr>
+									<td>Tareas y actividades varias (individuales, grupales,
+										actividades en EVA)</td>
+									<td><h:outputText value="#{pCtrl.nuevo.horasTareas}" /></td>
+								</tr>
+								<tr>
+									<td>Trabajo de campo o prácticas</td>
+									<td><h:outputText
+											value="#{pCtrl.nuevo.horasTrabajosSinAcompa}" /></td>
+								</tr>
+								<tr>
+									<td>Trabajos finales</td>
+									<td><h:outputText
+											value="#{pCtrl.nuevo.horasTrabajosFinales}" /></td>
+								</tr>
+								<tr>
+									<td>Otros <h:outputText
+											value="#{pCtrl.nuevo.otrosSinAcompa}" /></td>
+									<td><h:outputText
+											value="#{pCtrl.nuevo.horasOtrosSinAcompa}" /></td>
+								</tr>
+								<tr>
+									<th colspan="2">Horas totales previstas del curso</th>
+									<td><h:outputText value="#{pCtrl.nuevo.horasTotales}" /></td>
+								</tr>
+								<tr>
+									<th colspan="2">Créditos</th>
+									<td><h:outputText value="#{pCtrl.nuevo.creditos}" /></td>
+								</tr>
+							</table>
+
+							<div class="buttons">
+								<button type="button" class="button prev-step">
+									<i class="fa fa-chevron-left"></i> Anterior
+								</button>
+								<!-- 								<div class="item"> -->
+								<!-- 									<h:commandLink class="button next-step" action="#{pCtrl.siguiente}" immediate="true" ajax="true" update="form:menu4"> -->
+								<!-- 										Siguiente <i class="fa fa-chevron-right"></i> -->
+								<!-- 									</h:commandLink> -->
+								<!-- 								</div> -->
+								<button type="button" class="button next-step">
+									Siguiente <i class="fa fa-chevron-right"></i>
+								</button>
+							</div>
+						</div>
+
+						<div id="menu3" class="tab-pane fade">
+							<h3 class="headline-3">Objetivos y contenidos</h3>
+
+
+							<div class="item">
+								<label class="item-label" for="uc">Objetivos<span
+									class="required">*</span></label>
+								<h:outputText value="#{pCtrl.nuevo.objetivos}" />
+							</div>
+							<div class="item">
+								<label class="item-label" for="uc">Contenidos<span
+									class="required">*</span></label>
+								<h:outputText value="#{pCtrl.nuevo.contenidos}" />
+							</div>
+
+
+							<div class="buttons">
+								<button type="button" class="button prev-step">
+									<i class="fa fa-chevron-left"></i> Anterior
+								</button>
+								<button type="button" class="button next-step">
+									Siguiente <i class="fa fa-chevron-right"></i>
+								</button>
+							</div>
+						</div>
+						<div id="menu4" class="tab-pane fade">
+							<h3 class="headline-3">Metodología y evaluación</h3>
+							<div class="item">
+								<label class="item-label">La Unidad Curricular es</label>
+								<h:outputText value="#{pCtrl.nuevo.formato.label}" />
+							</div>
+							<div class="item">
+								<label class="item-label">Modalidad</label>
+								<h:outputText value="#{pCtrl.nuevo.modalidad.label}" />
+							</div>
+							<div class="item">
+								<label class="item-label" for="uc">Descripción de la
+									propuesta metodológica de la unidad curricular </label>
+								<h:outputText value="#{pCtrl.nuevo.descrMetodologia}" />
+							</div>
+							<div class="switch-button item adecuaciones">
+								<div class="item">
+									<label class="item-label">La Unidad curricular prevé
+										adecuaciones metodológicas para estudiantes en situación de
+										privación de libertad</label>
+									<h:outputText value="#{pCtrl.nuevo.adecuaciones ? 'SI' : 'NO'}" />
+								</div>
+
+							</div>
+							<h:panelGroup class="item descr"
+								rendered="#{pCtrl.nuevo.adecuaciones}">
+								<label class="item-label">Descripción de las
+									adecuaciones metodológicas a realizar </label>
+								<h:outputText value="#{pCtrl.nuevo.descripcionAdecuaciones}" />
+							</h:panelGroup>
+							<h:panelGroup class="item" id="regimen" layout="block">
+								<label class="item-label">Régimen de asistencia</label>
+								<h:outputText value="#{pCtrl.nuevo.regimen.label}" />
+							</h:panelGroup>
+							<h:panelGroup class="switch-button item" id="tareasOblig"
+								layout="block">
+								<label class="item-label">Realización obligatoria del
+									75% de las tareas propuestas por el equipo docente</label>
+								<h:outputText
+									value="#{pCtrl.nuevo.tareas75obligatoria ? 'SI' : 'NO'}" />
+							</h:panelGroup>
+							<div class="switch-button item">
+								<label class="item-label">Modo de aprobación</label>
+								<h:outputText value="#{pCtrl.nuevo.modoAprobacion.label}" />
+							</div>
+							<div class="item">
+								<label class="item-label" for="uc">Descripción de la
+									forma de evaluación y aprobación </label>
+								<h:outputText value="#{pCtrl.nuevo.descrEvaluacion}" />
+							</div>
+							<div class="buttons">
+								<button type="button" class="button prev-step">
+									<i class="fa fa-chevron-left"></i> Anterior
+								</button>
+								<button type="button" class="button next-step">
+									Siguiente <i class="fa fa-chevron-right"></i>
+								</button>
+							</div>
+						</div>
+						<div id="menu5" class="tab-pane fade">
+							<h3 class="headline-3">Bibliografía básica</h3>
+							<div class="item bibliografia">
+								<p class="ayuda">Listar la bibliografía básica en formato
+									APA, el resto de la bibliografía se indicará en clase. Se
+									podrán incluir aquí materiales en diversos soportes. La
+									bibliografía podrá estar organizadas según unidades temáticas o
+									módulos. Para agregar un subtítulo de sección o módulo se tilda
+									la opción "¿Es título de sección?".</p>
+								<h:panelGroup id="bibliografia">
+									<h:panelGroup class="agregar-biblio">
+										<div class="item">
+											<label class="item-label">Material bibliográfico<span
+												class="required">*</span></label>
+											<h:inputText value="#{pCtrl.nuevaBibliografia.titulo}"
+												id="titulo-biblio"
+												validatorMessage="Se ha excedido el máximo de caracteres permitidos en el campo Material bibliográfico">
+												<f:validateLength maximum="500" />
+											</h:inputText>
+											<p class="small">Máximo 500 caracteres</p>
+											<h:message for="form:titulo-biblio" style="color:red" />
+											<div class="item item-checkbox item-ua">
+												<h:selectBooleanCheckbox
+													value="#{pCtrl.nuevaBibliografia.esTitulo}">
+													<f:ajax render="recom" />
+												</h:selectBooleanCheckbox>
+												<label>¿Es título de sección?</label>
+											</div>
+										</div>
+										<div class="item">
+											<h:commandButton class="button button_gris"
+												action="#{pCtrl.agregarBibliografia}" value="Agregar"
+												update=":form:bibliografia">
+												<f:ajax execute="bibliografia" render="bibliografia" />
+											</h:commandButton>
+										</div>
+									</h:panelGroup>
+
+									<p:dataTable value="#{pCtrl.nuevo.bibliografia}" var="b"
+										styleClass="table table-bibliografia" draggableRows="true">
+										<p:ajax event="rowReorder" listener="#{pCtrl.onRowReorder}"
+											update=":form:bibliografia" />
+
+										<p:column headerText="#" class="numberColumn">
+											<h:outputText value="#{b.orden}" />
+										</p:column>
+
+										<p:column headerText="Material bibliográfico">
+											<h:outputText value="#{b.titulo}"
+												styleClass="#{b.esTitulo ? 'item-label': ''}" />
+										</p:column>
+
+										<p:column styleClass="links-column">
+											<h:commandLink styleClass="link-delete"
+												action="#{pCtrl.borrarBibliografia(b)}">
+												<i class="material-symbols-outlined">delete</i>
+												<f:ajax execute=":form:bibliografia"
+													render=":form:bibliografia" />
+											</h:commandLink>
+										</p:column>
+									</p:dataTable>
+									<div class="sugerencias">
+										<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}" varStatus="status">
+											<h:panelGroup layout="block" class="show-sugerencia #{status.last?'last':''}"
+												rendered="#{r.biblioSug != null}">
+												<p>#{r.biblioSug}</p>
+												<p>#{r.fecha_revisionFormated}</p>
+												<p>#{r.nombre_usuario}</p>
+											</h:panelGroup>
+										</ui:repeat>
+									</div>
+								</h:panelGroup>
+							</div>
+							<div class="buttons">
+								<button type="button" class="button prev-step">
+									<i class="fa fa-chevron-left"></i> Anterior
+								</button>
+							</div>
+						</div>
+					</div>
+					<div class="buttons">
+						<div class="item">
+							<h:commandButton class="button_rojo button_large button"
+								action="#{pCtrl.guardarPrograma}" value="Guardar"></h:commandButton>
+						</div>
+						<div class="item volver">
+							<a href="/pages/programas/ver-programas.jsf?faces-redirect=true"><span
+								class="fa fa-1x mr-3 fa-angle-double-left"></span><span>Volver</span></a>
+						</div>
+					</div>
+				</h:form>
+			</article>
+		</section>
+	</ui:define>
+
+</ui:composition>

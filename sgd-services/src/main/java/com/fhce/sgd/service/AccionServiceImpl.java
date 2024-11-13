@@ -9,12 +9,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fhce.sgd.dto.programas.AccionDto;
 import com.fhce.sgd.dto.programas.AprobarDto;
 import com.fhce.sgd.dto.programas.RevisionDto;
+import com.fhce.sgd.model.enums.EnumEstadoPrograma;
 import com.fhce.sgd.model.programas.AccionPrograma;
 import com.fhce.sgd.model.programas.AprobarPrograma;
 import com.fhce.sgd.model.programas.RevisionPrograma;
 import com.fhce.sgd.repository.AccionRepository;
+import com.fhce.sgd.repository.AprobacionRepository;
+import com.fhce.sgd.repository.RevisionRepository;
 import com.fhce.sgd.service.exception.SgdServicesException;
 
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +36,12 @@ public class AccionServiceImpl implements AccionService {
 
 	@Autowired
 	private AccionRepository accionRepository;
+	
+	@Autowired
+	private RevisionRepository revisionRepository;
+	
+	@Autowired
+	private AprobacionRepository aprobarRepository;
 
 	@Transactional(rollbackFor = Exception.class)
 	public Long saveOrUpdateRevision(RevisionDto rDto) throws SgdServicesException {
@@ -43,7 +53,8 @@ public class AccionServiceImpl implements AccionService {
 
 			r.setUsuario(usuarioService.getUsuario(rDto.getIdUsuario()));
 			r.setPrograma(programaService.obtenerProgramaPorId(rDto.getIdPrograma()));
-
+			r.setEstado(rDto.getEstadoPrograma());
+			
 			r.setAdecDescrSug(rDto.getAdecDescrSug());
 			r.setAdecSug(rDto.getAdecSug());
 			r.setAprobDirectaSug(rDto.getAprobDirectaSug());
@@ -73,8 +84,8 @@ public class AccionServiceImpl implements AccionService {
 			r = accionRepository.save(r);
 			return r.getId();
 		} catch (Exception e) {
-			log.error("Error en saveOrUpdateRevision de RevisionService: " + e.getMessage());
-			throw new SgdServicesException("Error en saveOrUpdateRevision de RevisionService: " + e.getMessage(), e);
+			log.error("Error en saveOrUpdateAccionService de AccionService: " + e.getMessage());
+			throw new SgdServicesException("Error en saveOrUpdateRevision de AccionService: " + e.getMessage(), e);
 		}
 	}
 	
@@ -85,6 +96,7 @@ public class AccionServiceImpl implements AccionService {
 
 			a.setUsuario(usuarioService.getUsuario(aDto.getIdUsuario()));
 			a.setPrograma(programaService.obtenerProgramaPorId(aDto.getIdPrograma()));
+			a.setEstado(aDto.getEstadoPrograma());
 
 			a.setComentarios(aDto.getComentarios());
 			a.setDespachoFileName(aDto.getDespachoFileName());
@@ -93,17 +105,17 @@ public class AccionServiceImpl implements AccionService {
 			a = accionRepository.save(a);
 			return a.getId();
 		} catch (Exception e) {
-			log.error("Error en saveOrUpdateAprobacion de RevisionService: " + e.getMessage());
-			throw new SgdServicesException("Error en saveOrUpdateAprobacion de RevisionService: " + e.getMessage(), e);
+			log.error("Error en saveOrUpdateAprobacion de AccionService: " + e.getMessage());
+			throw new SgdServicesException("Error en saveOrUpdateAprobacion de AccionService: " + e.getMessage(), e);
 		}
 	}
 
 	public List<RevisionDto> getRevisionesPrograma(Long idPrograma) throws SgdServicesException {
 		try {
 			List<RevisionDto> revisionesDto = new ArrayList<RevisionDto>();
-			Iterable<AccionPrograma> revisionesTodas = accionRepository.findAll();
-			List<AccionPrograma> revisionesPrograma = StreamSupport.stream(revisionesTodas.spliterator(), false)
-					.filter(r -> (r instanceof RevisionPrograma && r.getPrograma().getId().equals(idPrograma))).toList();
+			Iterable<RevisionPrograma> revisionesTodas = revisionRepository.findByProgramaId(idPrograma);
+			List<RevisionPrograma> revisionesPrograma = StreamSupport.stream(revisionesTodas.spliterator(), false)
+					.filter(r -> (r.getPrograma().getId().equals(idPrograma))).toList();
 			for (AccionPrograma r : revisionesPrograma) {
 				RevisionDto rDto = obtenerRevisionPorId((RevisionPrograma) r);
 				revisionesDto.add(rDto);
@@ -111,10 +123,88 @@ public class AccionServiceImpl implements AccionService {
 			revisionesDto.sort(Comparator.comparing(RevisionDto::getFecha_revision));
 			return revisionesDto;
 		} catch (Exception e) {
-			log.error("Error en getRevisionesPrograma de RevisionService: " + e.getMessage());
-			throw new SgdServicesException("Error en getRevisionesPrograma de RevisionService: " + e.getMessage(), e);
+			log.error("Error en getRevisionesPrograma de AccionService: " + e.getMessage());
+			throw new SgdServicesException("Error en getRevisionesPrograma de AccionService: " + e.getMessage(), e);
 		}
 
+	}
+	
+	public List<RevisionDto> getRevisionesProgramaAbrev(Long idPrograma) throws SgdServicesException {
+		try {
+			List<RevisionDto> revisionesDto = new ArrayList<RevisionDto>();
+			Iterable<RevisionPrograma> revisionesTodas = revisionRepository.findByProgramaId(idPrograma);
+			List<RevisionPrograma> revisionesPrograma = StreamSupport.stream(revisionesTodas.spliterator(), false)
+					.filter(r -> (r.getPrograma().getId().equals(idPrograma) && r.getEstado() == EnumEstadoPrograma.REVISION_CC_ABR)).toList();
+			for (AccionPrograma r : revisionesPrograma) {
+				RevisionDto rDto = obtenerRevisionPorId((RevisionPrograma) r);
+				revisionesDto.add(rDto);
+			}
+			revisionesDto.sort(Comparator.comparing(RevisionDto::getFecha_revision));
+			return revisionesDto;
+		} catch (Exception e) {
+			log.error("Error en getRevisionesProgramaAbrev de AccionService: " + e.getMessage());
+			throw new SgdServicesException("Error en getRevisionesProgramaAbrev de AccionService: " + e.getMessage(), e);
+		}
+
+	}
+	
+	public List<AccionDto> getAccionesPrograma(Long idPrograma) throws SgdServicesException {
+		try {
+			List<AccionDto> accionesDto = new ArrayList<AccionDto>();
+			List<RevisionPrograma> revisiones = revisionRepository.findByProgramaId(idPrograma);
+			List<AprobarPrograma> aprobaciones = aprobarRepository.findByProgramaId(idPrograma);
+			for (AccionPrograma r : revisiones) {
+				RevisionDto rDto = obtenerRevisionPorId((RevisionPrograma) r);
+				accionesDto.add(rDto);
+			}
+			for (AccionPrograma a : aprobaciones) {
+				AprobarDto aDto = obtenerAprobacionPorId((AprobarPrograma) a);
+				accionesDto.add(aDto);
+			}
+			accionesDto.sort(Comparator.comparing(AccionDto::getFecha_revision));
+			return accionesDto;
+		} catch (Exception e) {
+			log.error("Error en getAccionesPrograma de AccionService: " + e.getMessage());
+			throw new SgdServicesException("Error en getAccionesPrograma de AccionService: " + e.getMessage(), e);
+		}
+
+	}
+	
+	public boolean aprobacionBedelias(Long idPrograma) throws SgdServicesException {
+		try {
+			boolean aprobacion = false;
+			List<AprobarPrograma> aprobaciones = aprobarRepository.findByProgramaId(idPrograma);
+			for (AccionPrograma a : aprobaciones) {
+				if (a.getEstado() == EnumEstadoPrograma.BEDELIAS) {
+					aprobacion = true;
+					break;
+				}
+			}
+			return aprobacion;
+		} catch (Exception e) {
+			log.error("Error en aprobacionBedelias de AccionService: " + e.getMessage());
+			throw new SgdServicesException("Error en aprobacionBedelias de AccionService: " + e.getMessage(), e);
+		}
+
+	}
+	
+	private AprobarDto obtenerAprobacionPorId(AprobarPrograma a) throws SgdServicesException {
+		try {
+			AprobarDto dto = new AprobarDto();
+			dto.setComentarios(a.getComentarios());
+			dto.setDespachoData(a.getDespachoData());
+			dto.setDespachoFileName(a.getDespachoFileName());
+			dto.setEstadoPrograma(a.getEstado());
+			dto.setFecha_revision(a.getFecha());
+			dto.setId(a.getId());
+			dto.setIdPrograma(a.getPrograma().getId());
+			dto.setIdUsuario(a.getUsuario().getId());
+			dto.setNombre_usuario(a.getUsuario().getFullname());
+			return dto;
+		} catch (Exception e) {
+			log.error("Error en obtenerAprobacionPorId de AccionService: " + e.getMessage());
+			throw new SgdServicesException("Error en obtenerAprobacionPorId de AccionService: " + e.getMessage(), e);
+		}
 	}
 	
 	private RevisionDto obtenerRevisionPorId(RevisionPrograma r) throws SgdServicesException {
@@ -150,10 +240,12 @@ public class AccionServiceImpl implements AccionService {
 			dto.setUaSug(r.getUaSug());
 			dto.setUcSug(r.getUcSug());
 			dto.setNombre_usuario(r.getUsuario().getFullname());
+			
+			dto.setEstadoPrograma(r.getEstado());
 			return dto;
 		} catch (Exception e) {
-			log.error("Error en obtenerRevisionPorId de RevisionService: " + e.getMessage());
-			throw new SgdServicesException("Error en obtenerRevisionPorId de RevisionService: " + e.getMessage(), e);
+			log.error("Error en obtenerRevisionPorId de AccionService: " + e.getMessage());
+			throw new SgdServicesException("Error en obtenerRevisionPorId de AccionService: " + e.getMessage(), e);
 		}
 	}
 
@@ -166,8 +258,8 @@ public class AccionServiceImpl implements AccionService {
 				return null;
 			}
 		} catch (Exception e) {
-			log.error("Error en obtenerRevisionPorId de RevisionService: " + e.getMessage());
-			throw new SgdServicesException("Error en obtenerRevisionPorId de RevisionService: " + e.getMessage(), e);
+			log.error("Error en obtenerRevisionPorId de AccionService: " + e.getMessage());
+			throw new SgdServicesException("Error en obtenerRevisionPorId de AccionService: " + e.getMessage(), e);
 		}
 	}
 }

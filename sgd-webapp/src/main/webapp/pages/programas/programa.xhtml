@@ -1,6 +1,6 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:f="jakarta.faces.core" xmlns:h="jakarta.faces.html"
-	xmlns:ui="jakarta.faces.facelets" xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="jakarta.faces.facelets" xmlns:p="http://primefaces.org/ui" xmlns:fn="http://java.sun.com/jsp/jstl/functions"
 	template="/layout/template.xhtml">
 	<f:metadata>
 		<f:importConstants type="com.fhce.sgd.model.enums.EnumDuracion" />
@@ -87,13 +87,26 @@
 									requiredMessage="Debe ingresar el nombre de la unidad curricular" />
 								<div class="sugerencias">
 									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
-										<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.ucSug != null}">
+										<h:panelGroup layout="block" class="show-sugerencia"
+											rendered="#{r.ucSug != null}">
 											<p>#{r.ucSug}</p>
 											<p>#{r.fecha_revisionFormated}</p>
 											<p>#{r.nombre_usuario}</p>
 										</h:panelGroup>
 									</ui:repeat>
 								</div>
+							</div>
+							<div class="item">
+								<label class="item-label">Año<span
+									class="required">*</span></label>
+								<p class="ayuda">Indicar el año en el que se dictará la unidad curricular.</p>
+								<h:selectOneMenu value="#{pCtrl.nuevo.year}" required="true"
+									requiredMessage="Debe indicar el año">
+
+									<f:selectItems
+										value="#{pCtrl.obtenerAnios}" var="a"
+										itemValue="#{a}" itemLabel="#{a}" />
+								</h:selectOneMenu>
 							</div>
 							<div class="item">
 								<label class="item-label">Unidad académica que la ofrece<span
@@ -119,9 +132,11 @@
 										</div>
 									</ui:repeat>
 								</div>
+							
 								<div class="sugerencias">
 									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
-										<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.uaSug != null}">
+										<h:panelGroup layout="block" class="show-sugerencia"
+											rendered="#{r.uaSug != null}">
 											<p>#{r.uaSug}</p>
 											<p>#{r.fecha_revisionFormated}</p>
 											<p>#{r.nombre_usuario}</p>
@@ -131,13 +146,12 @@
 							</div>
 
 							<div class="item">
-								<label class="item-label">Carrera<span class="required">*</span></label>
+								<label class="item-label">Carrera</label>
 								<p class="ayuda">Seleccionar la o las carreras que ofrecen
 									esta unidad curricular.</p>
 
 								<p:selectManyCheckbox id="carreras"
-									value="#{pCtrl.nuevo.carreras}" layout="custom" required="true"
-									requiredMessage="Debe seleccionar al menos una carrera">
+									value="#{pCtrl.nuevo.carreras}" layout="custom">
 									<f:selectItems value="#{pCtrl.carreras}" var="carrera"
 										itemLabel="#{carrera.nombre}" itemValue="#{carrera}" />
 									<f:ajax render="form:areas" />
@@ -153,9 +167,14 @@
 										</div>
 									</ui:repeat>
 								</div>
+								<div class="item">
+									<label>Otras aclaraciones</label>
+									<h:inputText value="#{pCtrl.nuevo.otrasAclaracionesCarrera}" />
+								</div>
 								<div class="sugerencias">
 									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
-										<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.carreraSug != null}">
+										<h:panelGroup layout="block" class="show-sugerencia"
+											rendered="#{r.carreraSug != null}">
 											<p>#{r.carreraSug}</p>
 											<p>#{r.fecha_revisionFormated}</p>
 											<p>#{r.nombre_usuario}</p>
@@ -176,7 +195,7 @@
 										<div class="item item-areas">
 											<label class="item-label">Área temática<span
 												class="required">*</span></label>
-											<h:selectOneMenu value="#{carreraA.area}" required="true"
+											<h:selectOneMenu value="#{pCtrl.mapAreas[carreraA.id]}" required="true"
 												requiredMessage="Debe seleccionar área temática para #{carreraA.nombre}">
 
 												<f:selectItem itemLabel="Selecciona" itemValue="" />
@@ -189,7 +208,8 @@
 								</ui:repeat>
 								<div class="sugerencias">
 									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
-										<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.areaSug != null}">
+										<h:panelGroup layout="block" class="show-sugerencia"
+											rendered="#{r.areaSug != null}">
 											<p>#{r.areaSug}</p>
 											<p>#{r.fecha_revisionFormated}</p>
 											<p>#{r.nombre_usuario}</p>
@@ -219,7 +239,8 @@
 								</h:panelGroup>
 								<div class="sugerencias">
 									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
-										<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.duracionSug != null}">
+										<h:panelGroup layout="block" class="show-sugerencia"
+											rendered="#{r.duracionSug != null}">
 											<p>#{r.duracionSug}</p>
 											<p>#{r.fecha_revisionFormated}</p>
 											<p>#{r.nombre_usuario}</p>
@@ -243,14 +264,15 @@
 										</h:selectOneRadio>
 									</div>
 									<div class="sugerencias">
-									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
-										<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.semestreSug != null}">
-											<p>#{r.semestreSug}</p>
-											<p>#{r.fecha_revisionFormated}</p>
-											<p>#{r.nombre_usuario}</p>
-										</h:panelGroup>
-									</ui:repeat>
-								</div>
+										<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
+											<h:panelGroup layout="block" class="show-sugerencia"
+												rendered="#{r.semestreSug != null}">
+												<p>#{r.semestreSug}</p>
+												<p>#{r.fecha_revisionFormated}</p>
+												<p>#{r.nombre_usuario}</p>
+											</h:panelGroup>
+										</ui:repeat>
+									</div>
 								</h:panelGroup>
 							</h:panelGroup>
 							<div class="switch-button item ingreso">
@@ -265,7 +287,8 @@
 								</p>
 								<div class="sugerencias">
 									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
-										<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.ingresoSug != null}">
+										<h:panelGroup layout="block" class="show-sugerencia"
+											rendered="#{r.ingresoSug != null}">
 											<p>#{r.ingresoSug}</p>
 											<p>#{r.fecha_revisionFormated}</p>
 											<p>#{r.nombre_usuario}</p>
@@ -289,7 +312,8 @@
 									Consejo de Facultad.</p>
 								<div class="sugerencias">
 									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
-										<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.requisitosSug != null}">
+										<h:panelGroup layout="block" class="show-sugerencia"
+											rendered="#{r.requisitosSug != null}">
 											<p>#{r.requisitosSug}</p>
 											<p>#{r.fecha_revisionFormated}</p>
 											<p>#{r.nombre_usuario}</p>
@@ -310,7 +334,8 @@
 									<p class="small">Máximo 250 caracteres</p>
 									<div class="sugerencias">
 										<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
-											<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.requisitosCualesSug != null}">
+											<h:panelGroup layout="block" class="show-sugerencia"
+												rendered="#{r.requisitosCualesSug != null}">
 												<p>#{r.requisitosCualesSug}</p>
 												<p>#{r.fecha_revisionFormated}</p>
 												<p>#{r.nombre_usuario}</p>
@@ -330,14 +355,16 @@
 									sugerido para quienes pretendan cursar la unidad curricular. Se
 									trata de recomendaciones, no de requisitos excluyentes.</p>
 								<div class="item item-checkbox item-ua">
-									<h:selectBooleanCheckbox value="#{pCtrl.nuevo.recomNoCorresponde}">
+									<h:selectBooleanCheckbox
+										value="#{pCtrl.nuevo.recomNoCorresponde}">
 										<f:ajax render="recom" />
 									</h:selectBooleanCheckbox>
 									<label>No corresponde</label>
 								</div>
-								
-								<h:inputTextarea value="#{pCtrl.nuevo.recomendaciones}" id="recom"
-									required="#{!pCtrl.nuevo.recomNoCorresponde}" disabled="#{pCtrl.nuevo.recomNoCorresponde}"
+
+								<h:inputTextarea value="#{pCtrl.nuevo.recomendaciones}"
+									id="recom" required="#{!pCtrl.nuevo.recomNoCorresponde}"
+									disabled="#{pCtrl.nuevo.recomNoCorresponde}"
 									requiredMessage="Debe ingresar los conocimientos previos recomendados"
 									validatorMessage="Se ha excedido el máximo de caracteres permitidos en el campo Conocimientos previos recomendados">
 									<f:validateLength maximum="250" />
@@ -345,28 +372,15 @@
 								<p class="small">Máximo 250 caracteres</p>
 								<div class="sugerencias">
 									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
-										<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.recomSug != null}">
+										<h:panelGroup layout="block" class="show-sugerencia"
+											rendered="#{r.recomSug != null}">
 											<p>#{r.recomSug}</p>
 											<p>#{r.fecha_revisionFormated}</p>
 											<p>#{r.nombre_usuario}</p>
 										</h:panelGroup>
 									</ui:repeat>
 								</div>
-								<!-- 								<p:textEditor widgetVar="editor2" id="editor2" -->
-								<!-- 									value="#{pCtrl.nuevo.recomendaciones}" height="100px"> -->
-								<!-- 									<f:facet name="toolbar"> -->
-								<!-- 										<span class="ql-formats"> -->
-								<!-- 											<button class="ql-bold"></button> -->
-								<!-- 											<button class="ql-italic"></button> -->
-								<!-- 											<button class="ql-underline"></button> -->
-								<!-- 											<button class="ql-strike"></button> -->
-								<!-- 										</span> -->
-								<!-- 										<span class="ql-formats"> -->
-								<!-- 											<button class="ql-list" value="ordered"></button> -->
-								<!-- 											<button class="ql-list" value="bullet"></button> -->
-								<!-- 										</span> -->
-								<!-- 									</f:facet> -->
-								<!-- 								</p:textEditor> -->
+								
 							</div>
 							<div class="switch-button item">
 								<label class="item-label">Unidad curricular ofertada
@@ -379,7 +393,8 @@
 									otras instituciones.</p>
 								<div class="sugerencias">
 									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
-										<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.otrosServSug != null}">
+										<h:panelGroup layout="block" class="show-sugerencia"
+											rendered="#{r.otrosServSug != null}">
 											<p>#{r.otrosServSug}</p>
 											<p>#{r.fecha_revisionFormated}</p>
 											<p>#{r.nombre_usuario}</p>
@@ -392,55 +407,61 @@
 							<p>Seleccionar rol y cargo, e indicar el nombre y la
 								adscripción institucional de cada integrante del equipo docente.</p>
 							<h:panelGroup id="docentes" class="item" layout="block">
-								<h:messages id="messages-docentes" styleClass="messages error" globalOnly="true"/>
+								<h:messages id="messages-docentes" styleClass="messages error"
+									globalOnly="true" />
 								<h:panelGroup class="group-docentes" layout="block"
 									id="group-docentes">
 									<div class="item">
 										<label class="item-label">Rol<span class="required">*</span></label>
-										<h:selectOneMenu value="#{pCtrl.integrante.rol}" id="rol-docente">
+										<h:selectOneMenu value="#{pCtrl.integrante.rol}"
+											id="rol-docente">
 											<f:selectItem itemLabel="Selecciona" itemValue="" />
 											<f:selectItems value="#{pCtrl.roles}" var="rol"
 												itemValue="#{rol}" itemLabel="#{rol.label}" />
 											<f:ajax render="ayudas" />
 										</h:selectOneMenu>
-										<h:message for="form:rol-docente" style = "color:red" />
+										<h:message for="form:rol-docente" style="color:red" />
 									</div>
 									<div class="item">
 										<label class="item-label">Cargo<span class="required">*</span></label>
-										<h:selectOneMenu value="#{pCtrl.integrante.cargo}" id="cargo-docente">
+										<h:selectOneMenu value="#{pCtrl.integrante.cargo}"
+											id="cargo-docente">
 											<f:selectItem itemLabel="Selecciona" itemValue="" />
 											<f:selectItems value="#{pCtrl.cargos}" var="cargo"
 												itemValue="#{cargo}" itemLabel="#{cargo.label}" />
 											<f:ajax render="cargo-otro" />
 										</h:selectOneMenu>
-										<h:message for="form:cargo-docente" style = "color:red" />
+										<h:message for="form:cargo-docente" style="color:red" />
 									</div>
 									<h:panelGroup layout="block" class="item" id="cargo-otro">
 										<label class="item-label">Cargo (otro)</label>
-										<h:inputText value="#{pCtrl.integrante.cargoOtro}" class="otro"
-											disabled="#{pCtrl.integrante.cargo!=EnumCargo.OTRO}" id="otro-docente"/>
-										<h:message for="form:otro-docente" style = "color:red" />
+										<h:inputText value="#{pCtrl.integrante.cargoOtro}"
+											class="otro"
+											disabled="#{pCtrl.integrante.cargo!=EnumCargo.OTRO}"
+											id="otro-docente" />
+										<h:message for="form:otro-docente" style="color:red" />
 									</h:panelGroup>
-									
+
 									<div class="item">
 										<label class="item-label" for="nombre">Nombre<span
 											class="required">*</span></label>
-										<p:selectOneMenu value="#{pCtrl.integrante.idUsuario}" id="id-docente"
-											filter="true" filterMatchMode="contains" filterNormalize="true">
+										<p:selectOneMenu value="#{pCtrl.integrante.idUsuario}"
+											id="id-docente" filter="true" filterMatchMode="contains"
+											filterNormalize="true">
 											<f:selectItem itemLabel="Selecciona" itemValue="#{null}" />
-						                    <f:selectItems value="#{pCtrl.usuarios}" var="usu"
-												itemValue="#{usu.id}" itemLabel="#{usu.fullname}"/>
-						                </p:selectOneMenu>
-										<h:message for="form:id-docente" style = "color:red" />
+											<f:selectItems value="#{pCtrl.usuarios}" var="usu"
+												itemValue="#{usu.id}" itemLabel="#{usu.fullname}" />
+										</p:selectOneMenu>
+										<h:message for="form:id-docente" style="color:red" />
 									</div>
 									<div class="item">
-										<label class="item-label">Unidad
-											Académica u otra adscripción institucional</label>
+										<label class="item-label">Unidad Académica u otra
+											adscripción institucional</label>
 										<h:inputText value="#{pCtrl.integrante.unidad_academica}" />
 									</div>
 									<div class="item">
-										<label class="item-label">Subunidad
-											académica u otra adscripción institucional</label>
+										<label class="item-label">Subunidad académica u otra
+											adscripción institucional</label>
 										<h:inputText value="#{pCtrl.integrante.subunidad_academica}" />
 									</div>
 									<div class="item">
@@ -500,7 +521,8 @@
 									</p:column>
 
 									<p:column headerText="Cargo">
-										<h:outputText value="#{i.cargo == EnumCargo.OTRO ? i.cargoOtro : i.cargo.label}" />
+										<h:outputText
+											value="#{i.cargo == EnumCargo.OTRO ? i.cargoOtro : i.cargo.label}" />
 									</p:column>
 
 									<p:column headerText="Nombre">
@@ -526,7 +548,8 @@
 								</p:dataTable>
 								<div class="sugerencias">
 									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
-										<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.docentesSug != null}">
+										<h:panelGroup layout="block" class="show-sugerencia"
+											rendered="#{r.docentesSug != null}">
 											<p>#{r.docentesSug}</p>
 											<p>#{r.fecha_revisionFormated}</p>
 											<p>#{r.nombre_usuario}</p>
@@ -619,7 +642,8 @@
 							<p class="mensaje"></p>
 							<div class="sugerencias">
 								<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
-									<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.creditosSug != null}">
+									<h:panelGroup layout="block" class="show-sugerencia"
+										rendered="#{r.creditosSug != null}">
 										<p>#{r.creditosSug}</p>
 										<p>#{r.fecha_revisionFormated}</p>
 										<p>#{r.nombre_usuario}</p>
@@ -630,11 +654,6 @@
 								<button type="button" class="button prev-step">
 									<i class="fa fa-chevron-left"></i> Anterior
 								</button>
-								<!-- 								<div class="item"> -->
-								<!-- 									<h:commandLink class="button next-step" action="#{pCtrl.siguiente}" immediate="true" ajax="true" update="form:menu4"> -->
-								<!-- 										Siguiente <i class="fa fa-chevron-right"></i> -->
-								<!-- 									</h:commandLink> -->
-								<!-- 								</div> -->
 								<button type="button" class="button next-step">
 									Siguiente <i class="fa fa-chevron-right"></i>
 								</button>
@@ -653,15 +672,29 @@
 									desde el equipo docente, o de objetivos de aprendizaje,
 									planteados desde los/las estudiantes. Los objetivos específicos
 									deben conducir al logro del objetivo general.</p>
-								<h:inputTextarea value="#{pCtrl.nuevo.objetivos}"
-									placeholder="Generales y específicos" required="true"
-									requiredMessage="Debe describir los objetivos de la unidad curricular">
+								
+								<p:textEditor widgetVar="editor4" id="editor4" placeholder="Generales y específicos"
+									value="#{pCtrl.nuevo.objetivos}" height="100px" required="true" requiredMessage="Debe describir los objetivos de la unidad curricular">
+									<f:facet name="toolbar">
+										<span class="ql-formats">
+											<button class="ql-bold"></button>
+											<button class="ql-italic"></button>
+											<button class="ql-underline"></button>
+											<button class="ql-strike"></button>
+										</span>
+										<span class="ql-formats">
+											<button class="ql-list" value="ordered"></button>
+											<button class="ql-list" value="bullet"></button>
+										</span>
+									</f:facet>
 									<f:validateLength maximum="4000" />
-								</h:inputTextarea>
+								</p:textEditor>
+								
 								<p class="small">Máximo 4000 caracteres</p>
 								<div class="sugerencias">
 									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
-										<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.objSug != null}">
+										<h:panelGroup layout="block" class="show-sugerencia"
+											rendered="#{r.objSug != null}">
 											<p>#{r.objSug}</p>
 											<p>#{r.fecha_revisionFormated}</p>
 											<p>#{r.nombre_usuario}</p>
@@ -669,21 +702,7 @@
 									</ui:repeat>
 								</div>
 
-								<!-- 								<p:textEditor widgetVar="editor4" id="editor4" -->
-								<!-- 									value="#{pCtrl.nuevo.objetivos}" height="100px" rendered="#{pCtrl.estaEnContenido}"> -->
-								<!-- 									<f:facet name="toolbar"> -->
-								<!-- 										<span class="ql-formats"> -->
-								<!-- 											<button class="ql-bold"></button> -->
-								<!-- 											<button class="ql-italic"></button> -->
-								<!-- 											<button class="ql-underline"></button> -->
-								<!-- 											<button class="ql-strike"></button> -->
-								<!-- 										</span> -->
-								<!-- 										<span class="ql-formats"> -->
-								<!-- 											<button class="ql-list" value="ordered"></button> -->
-								<!-- 											<button class="ql-list" value="bullet"></button> -->
-								<!-- 										</span> -->
-								<!-- 									</f:facet> -->
-								<!-- 								</p:textEditor> -->
+								
 							</div>
 							<div class="item">
 								<label class="item-label" for="uc">Contenidos<span
@@ -691,36 +710,35 @@
 								<p class="ayuda">Detallar los contenidos de la unidad
 									curricular en coherencia con los objetivos planteados. Podrán
 									organizarse en una secuencia de unidades temáticas o módulos.</p>
-								<h:inputTextarea value="#{pCtrl.nuevo.contenidos}"
+								<p:textEditor widgetVar="editor5" id="editor5"
+									value="#{pCtrl.nuevo.contenidos}" height="100px"
 									required="true"
 									requiredMessage="Debe describir los contenidos de la unidad curricular">
+									<f:facet name="toolbar">
+										<span class="ql-formats">
+											<button class="ql-bold"></button>
+											<button class="ql-italic"></button>
+											<button class="ql-underline"></button>
+											<button class="ql-strike"></button>
+										</span>
+										<span class="ql-formats">
+											<button class="ql-list" value="ordered"></button>
+											<button class="ql-list" value="bullet"></button>
+										</span>
+									</f:facet>
 									<f:validateLength maximum="4000" />
-								</h:inputTextarea>
+								</p:textEditor>
 								<p class="small">Máximo 4000 caracteres</p>
 								<div class="sugerencias">
 									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
-										<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.contSug != null}">
+										<h:panelGroup layout="block" class="show-sugerencia"
+											rendered="#{r.contSug != null}">
 											<p>#{r.contSug}</p>
 											<p>#{r.fecha_revisionFormated}</p>
 											<p>#{r.nombre_usuario}</p>
 										</h:panelGroup>
 									</ui:repeat>
 								</div>
-								<!-- 								<p:textEditor widgetVar="editor5" id="editor5" -->
-								<!-- 									value="#{pCtrl.nuevo.contenidos}" height="100px"> -->
-								<!-- 									<f:facet name="toolbar"> -->
-								<!-- 										<span class="ql-formats"> -->
-								<!-- 											<button class="ql-bold"></button> -->
-								<!-- 											<button class="ql-italic"></button> -->
-								<!-- 											<button class="ql-underline"></button> -->
-								<!-- 											<button class="ql-strike"></button> -->
-								<!-- 										</span> -->
-								<!-- 										<span class="ql-formats"> -->
-								<!-- 											<button class="ql-list" value="ordered"></button> -->
-								<!-- 											<button class="ql-list" value="bullet"></button> -->
-								<!-- 										</span> -->
-								<!-- 									</f:facet> -->
-								<!-- 								</p:textEditor> -->
 							</div>
 
 
@@ -756,7 +774,8 @@
 								</div>
 								<div class="sugerencias">
 									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
-										<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.formatoSug != null}">
+										<h:panelGroup layout="block" class="show-sugerencia"
+											rendered="#{r.formatoSug != null}">
 											<p>#{r.formatoSug}</p>
 											<p>#{r.fecha_revisionFormated}</p>
 											<p>#{r.nombre_usuario}</p>
@@ -779,7 +798,8 @@
 								</div>
 								<div class="sugerencias">
 									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
-										<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.modalidadSug != null}">
+										<h:panelGroup layout="block" class="show-sugerencia"
+											rendered="#{r.modalidadSug != null}">
 											<p>#{r.modalidadSug}</p>
 											<p>#{r.fecha_revisionFormated}</p>
 											<p>#{r.nombre_usuario}</p>
@@ -794,36 +814,36 @@
 								</label>
 								<p class="ayuda">Detallar la metodología de trabajo y las
 									actividades previstas.</p>
-								<h:inputTextarea value="#{pCtrl.nuevo.descrMetodologia}"
+								<p:textEditor widgetVar="editor6" id="editor6"
+									value="#{pCtrl.nuevo.descrMetodologia}" height="100px"
 									required="true"
 									requiredMessage="Debe describir la propuesta metodológica de la unidad curricular">
+									<f:facet name="toolbar">
+										<span class="ql-formats">
+											<button class="ql-bold"></button>
+											<button class="ql-italic"></button>
+											<button class="ql-underline"></button>
+											<button class="ql-strike"></button>
+										</span>
+										<span class="ql-formats">
+											<button class="ql-list" value="ordered"></button>
+											<button class="ql-list" value="bullet"></button>
+										</span>
+									</f:facet>
 									<f:validateLength maximum="4000" />
-								</h:inputTextarea>
+								</p:textEditor>
 								<p class="small">Máximo 4000 caracteres</p>
 								<div class="sugerencias">
 									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
-										<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.metodologiaSug != null}">
+										<h:panelGroup layout="block" class="show-sugerencia"
+											rendered="#{r.metodologiaSug != null}">
 											<p>#{r.metodologiaSug}</p>
 											<p>#{r.fecha_revisionFormated}</p>
 											<p>#{r.nombre_usuario}</p>
 										</h:panelGroup>
 									</ui:repeat>
 								</div>
-								<!-- 								<p:textEditor widgetVar="editor6" id="editor6" -->
-								<!-- 									value="#{pCtrl.nuevo.descrMetodologia}" height="100px"> -->
-								<!-- 									<f:facet name="toolbar"> -->
-								<!-- 										<span class="ql-formats"> -->
-								<!-- 											<button class="ql-bold"></button> -->
-								<!-- 											<button class="ql-italic"></button> -->
-								<!-- 											<button class="ql-underline"></button> -->
-								<!-- 											<button class="ql-strike"></button> -->
-								<!-- 										</span> -->
-								<!-- 										<span class="ql-formats"> -->
-								<!-- 											<button class="ql-list" value="ordered"></button> -->
-								<!-- 											<button class="ql-list" value="bullet"></button> -->
-								<!-- 										</span> -->
-								<!-- 									</f:facet> -->
-								<!-- 								</p:textEditor> -->
+								
 							</div>
 							<div class="switch-button item adecuaciones">
 								<div class="item">
@@ -840,18 +860,19 @@
 										privación de libertad que no pueden cursar en la modalidad
 										definida.</p>
 									<div class="sugerencias">
-									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
-										<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.adecSug != null}">
-											<p>#{r.adecSug}</p>
-											<p>#{r.fecha_revisionFormated}</p>
-											<p>#{r.nombre_usuario}</p>
-										</h:panelGroup>
-									</ui:repeat>
-								</div>
+										<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
+											<h:panelGroup layout="block" class="show-sugerencia"
+												rendered="#{r.adecSug != null}">
+												<p>#{r.adecSug}</p>
+												<p>#{r.fecha_revisionFormated}</p>
+												<p>#{r.nombre_usuario}</p>
+											</h:panelGroup>
+										</ui:repeat>
+									</div>
 								</div>
 
 							</div>
-							<h:panelGroup id="adecuaciones">
+							<h:panelGroup id="adecuaciones" layout="block">
 								<h:panelGroup class="item descr"
 									rendered="#{pCtrl.nuevo.adecuaciones}">
 									<label class="item-label">Descripción de las
@@ -867,14 +888,15 @@
 									</h:inputTextarea>
 									<p class="small">Máximo 250 caracteres</p>
 									<div class="sugerencias">
-									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
-										<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.adecDescrSug != null}">
-											<p>#{r.adecDescrSug}</p>
-											<p>#{r.fecha_revisionFormated}</p>
-											<p>#{r.nombre_usuario}</p>
-										</h:panelGroup>
-									</ui:repeat>
-								</div>
+										<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
+											<h:panelGroup layout="block" class="show-sugerencia"
+												rendered="#{r.adecDescrSug != null}">
+												<p>#{r.adecDescrSug}</p>
+												<p>#{r.fecha_revisionFormated}</p>
+												<p>#{r.nombre_usuario}</p>
+											</h:panelGroup>
+										</ui:repeat>
+									</div>
 								</h:panelGroup>
 							</h:panelGroup>
 							<h:panelGroup class="item" id="regimen" layout="block">
@@ -888,12 +910,14 @@
 										requiredMessage="Debe seleccionar el régimen de asistencia de la unidad curricular">
 										<f:selectItems value="#{pCtrl.itemsRegimen}" var="r"
 											itemValue="#{r}" itemLabel="#{r.label}" />
-										<f:ajax render="form:tareasOblig" listener="#{pCtrl.actualizarTareasOblig}"/>
+										<f:ajax render="form:tareasOblig"
+											listener="#{pCtrl.actualizarTareasOblig}" />
 									</h:selectOneRadio>
 								</div>
 								<div class="sugerencias">
 									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
-										<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.regimenSug != null}">
+										<h:panelGroup layout="block" class="show-sugerencia"
+											rendered="#{r.regimenSug != null}">
 											<p>#{r.regimenSug}</p>
 											<p>#{r.fecha_revisionFormated}</p>
 											<p>#{r.nombre_usuario}</p>
@@ -909,7 +933,8 @@
 									value="#{pCtrl.nuevo.tareas75obligatoria}" id="switch-label5"
 									class="switch-button__checkbox"
 									disabled="#{pCtrl.tareasObligTrueDisabled}" />
-								<label for="form:switch-label5" class="switch-button__label #{pCtrl.tareasObligTrueDisabled ? 'disabled': ''}"></label>
+								<label for="form:switch-label5"
+									class="switch-button__label #{pCtrl.tareasObligTrueDisabled ? 'disabled': ''}"></label>
 								<p class="ayuda">Indicar si se exige la realización del 75%
 									de las tareas. En las unidades curriculares prácticas o
 									teórico-prácticas será obligatoria la asistencia al 75% de las
@@ -917,7 +942,8 @@
 									tareas propuestas.</p>
 								<div class="sugerencias">
 									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
-										<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.tareas75obligSug != null}">
+										<h:panelGroup layout="block" class="show-sugerencia"
+											rendered="#{r.tareas75obligSug != null}">
 											<p>#{r.tareas75obligSug}</p>
 											<p>#{r.fecha_revisionFormated}</p>
 											<p>#{r.nombre_usuario}</p>
@@ -926,16 +952,21 @@
 								</div>
 							</h:panelGroup>
 							<div class="switch-button item">
-								<label class="item-label">Permite aprobación directa
-									(exoneración)</label>
-								<h:selectBooleanCheckbox value="#{pCtrl.nuevo.aprobDirecta}"
-									id="switch-label6" class="switch-button__checkbox" />
-								<label for="form:switch-label6" class="switch-button__label"></label>
-								<p class="ayuda">Señalar si la unidad curricular permite la
-									aprobación directa.</p>
+								<label class="item-label">Modo de aprobación</label>
+								<p class="ayuda">Seleccionar el modo de aprobación de la
+									unidad curricular.</p>
+								<div class="items-radio item">
+									<h:selectOneRadio value="#{pCtrl.nuevo.modoAprobacion}"
+										styleClass="items-radio item" required="true"
+										requiredMessage="Debe seleccionar el modo de aprobación de la unidad curricular">
+										<f:selectItems value="#{pCtrl.itemsModoAprobacion}" var="r"
+											itemValue="#{r}" itemLabel="#{r.label}" />
+									</h:selectOneRadio>
+								</div>
 								<div class="sugerencias">
 									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
-										<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.aprobDirectaSug != null}">
+										<h:panelGroup layout="block" class="show-sugerencia"
+											rendered="#{r.aprobDirectaSug != null}">
 											<p>#{r.aprobDirectaSug}</p>
 											<p>#{r.fecha_revisionFormated}</p>
 											<p>#{r.nombre_usuario}</p>
@@ -962,36 +993,36 @@
 									realizar una prueba de recuperación y qué se entenderá por
 									Excelente, Muy bueno, Bueno, Aceptable, Insuficiente o Muy
 									insuficiente en el marco de esta unidad curricular.</p>
-								<h:inputTextarea value="#{pCtrl.nuevo.descrEvaluacion}"
+								<p:textEditor widgetVar="editor7" id="editor7"
+									value="#{pCtrl.nuevo.descrEvaluacion}" height="100px"
 									required="true"
 									requiredMessage="Debe describir la forma de evaluación y aprobación">
+									<f:facet name="toolbar">
+										<span class="ql-formats">
+											<button class="ql-bold"></button>
+											<button class="ql-italic"></button>
+											<button class="ql-underline"></button>
+											<button class="ql-strike"></button>
+										</span>
+										<span class="ql-formats">
+											<button class="ql-list" value="ordered"></button>
+											<button class="ql-list" value="bullet"></button>
+										</span>
+									</f:facet>
 									<f:validateLength maximum="4000" />
-								</h:inputTextarea>
+								</p:textEditor>
 								<p class="small">Máximo 4000 caracteres</p>
 								<div class="sugerencias">
 									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
-										<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.evaluacionSug != null}">
+										<h:panelGroup layout="block" class="show-sugerencia"
+											rendered="#{r.evaluacionSug != null}">
 											<p>#{r.evaluacionSug}</p>
 											<p>#{r.fecha_revisionFormated}</p>
 											<p>#{r.nombre_usuario}</p>
 										</h:panelGroup>
 									</ui:repeat>
 								</div>
-								<!-- 								<p:textEditor widgetVar="editor7" id="editor7" -->
-								<!-- 									value="#{pCtrl.nuevo.descrEvaluacion}" height="100px"> -->
-								<!-- 									<f:facet name="toolbar"> -->
-								<!-- 										<span class="ql-formats"> -->
-								<!-- 											<button class="ql-bold"></button> -->
-								<!-- 											<button class="ql-italic"></button> -->
-								<!-- 											<button class="ql-underline"></button> -->
-								<!-- 											<button class="ql-strike"></button> -->
-								<!-- 										</span> -->
-								<!-- 										<span class="ql-formats"> -->
-								<!-- 											<button class="ql-list" value="ordered"></button> -->
-								<!-- 											<button class="ql-list" value="bullet"></button> -->
-								<!-- 										</span> -->
-								<!-- 									</f:facet> -->
-								<!-- 								</p:textEditor> -->
+								
 							</div>
 							<div class="buttons">
 								<button type="button" class="button prev-step">
@@ -1009,20 +1040,23 @@
 									APA, el resto de la bibliografía se indicará en clase. Se
 									podrán incluir aquí materiales en diversos soportes. La
 									bibliografía podrá estar organizadas según unidades temáticas o
-									módulos. Para agregar un subtítulo de sección o módulo se tilda la opción "¿Es título de sección?".</p>
+									módulos. Para agregar un subtítulo de sección o módulo se tilda
+									la opción "¿Es título de sección?".</p>
 								<h:panelGroup id="bibliografia">
 									<h:panelGroup class="agregar-biblio">
 										<div class="item">
 											<label class="item-label">Material bibliográfico<span
 												class="required">*</span></label>
-											<h:inputText value="#{pCtrl.nuevaBibliografia.titulo}" id="titulo-biblio"
+											<h:inputText value="#{pCtrl.nuevaBibliografia.titulo}"
+												id="titulo-biblio"
 												validatorMessage="Se ha excedido el máximo de caracteres permitidos en el campo Material bibliográfico">
 												<f:validateLength maximum="500" />
 											</h:inputText>
 											<p class="small">Máximo 500 caracteres</p>
-											<h:message for="form:titulo-biblio" style = "color:red" />
+											<h:message for="form:titulo-biblio" style="color:red" />
 											<div class="item item-checkbox item-ua">
-												<h:selectBooleanCheckbox value="#{pCtrl.nuevaBibliografia.esTitulo}">
+												<h:selectBooleanCheckbox
+													value="#{pCtrl.nuevaBibliografia.esTitulo}">
 													<f:ajax render="recom" />
 												</h:selectBooleanCheckbox>
 												<label>¿Es título de sección?</label>
@@ -1047,7 +1081,8 @@
 										</p:column>
 
 										<p:column headerText="Material bibliográfico">
-											<h:outputText value="#{b.titulo}" styleClass="#{b.esTitulo ? 'item-label': ''}"/>
+											<h:outputText value="#{b.titulo}"
+												styleClass="#{b.esTitulo ? 'item-label': ''}" />
 										</p:column>
 
 										<p:column styleClass="links-column">
@@ -1061,7 +1096,8 @@
 									</p:dataTable>
 									<div class="sugerencias">
 										<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
-											<h:panelGroup layout="block" class="show-sugerencia" rendered="#{r.biblioSug != null}">
+											<h:panelGroup layout="block" class="show-sugerencia"
+												rendered="#{r.biblioSug != null}">
 												<p>#{r.biblioSug}</p>
 												<p>#{r.fecha_revisionFormated}</p>
 												<p>#{r.nombre_usuario}</p>
@@ -1077,10 +1113,15 @@
 							</div>
 						</div>
 					</div>
-
-					<div class="item">
-						<h:commandButton class="button_rojo button_large button"
-							action="#{pCtrl.guardarPrograma}" value="Guardar"></h:commandButton>
+					<div class="buttons">
+						<div class="item">
+							<h:commandButton class="button_rojo button_large button"
+								action="#{pCtrl.guardarPrograma}" value="Guardar"></h:commandButton>
+						</div>
+						<div class="item volver">
+							<a href="/pages/programas/ver-programas.jsf?faces-redirect=true"><span
+								class="fa fa-1x mr-3 fa-angle-double-left"></span><span>Volver</span></a>
+						</div>
 					</div>
 				</h:form>
 			</article>

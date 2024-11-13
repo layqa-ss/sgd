@@ -16,16 +16,19 @@ public class CarreraDto {
     
     private String areaNombre;
     
+    private boolean habilitada;
+    
     public CarreraDto() {
     	
     }
 
-	public CarreraDto(Long id, String nombre, Long uaId, String nombreUA) {
+	public CarreraDto(Long id, String nombre, Long uaId, String nombreUA, boolean habilitada) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
 		this.uaId = uaId;
 		this.nombreUA = nombreUA;
+		this.habilitada = habilitada;
 	}
 
 	public Long getId() {
@@ -76,9 +79,17 @@ public class CarreraDto {
 		this.areaNombre = areaNombre;
 	}
 
+	public boolean isHabilitada() {
+		return habilitada;
+	}
+
+	public void setHabilitada(boolean habilitada) {
+		this.habilitada = habilitada;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, nombre, nombreUA, uaId);
+		return Objects.hash(nombre, nombreUA);
 	}
 
 	@Override
@@ -90,8 +101,8 @@ public class CarreraDto {
 		if (getClass() != obj.getClass())
 			return false;
 		CarreraDto other = (CarreraDto) obj;
-		return Objects.equals(id, other.id) && Objects.equals(nombre, other.nombre)
-				&& Objects.equals(nombreUA, other.nombreUA) && Objects.equals(uaId, other.uaId);
+		return Objects.equals(nombre, other.nombre)
+				&& Objects.equals(nombreUA, other.nombreUA);
 	}
    
 }

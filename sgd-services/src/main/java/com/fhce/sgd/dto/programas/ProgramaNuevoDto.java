@@ -1,6 +1,8 @@
 package com.fhce.sgd.dto.programas;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.fhce.sgd.dto.gestion.CarreraDto;
@@ -9,6 +11,7 @@ import com.fhce.sgd.model.enums.EnumDuracion;
 import com.fhce.sgd.model.enums.EnumEstadoPrograma;
 import com.fhce.sgd.model.enums.EnumFormato;
 import com.fhce.sgd.model.enums.EnumModalidad;
+import com.fhce.sgd.model.enums.EnumModoAprobacion;
 import com.fhce.sgd.model.enums.EnumRegimen;
 import com.fhce.sgd.model.enums.EnumSemestre;
 
@@ -20,10 +23,12 @@ public class ProgramaNuevoDto {
 	private Integer year;
 	private EnumEstadoPrograma estado;
 	private Long idUsuario;
+	private Date fecha;
 
 	private List<UnidadAcademicaDto> unidades;
 	
 	private List<CarreraDto> carreras;
+	private String otrasAclaracionesCarrera;
 
 	private EnumDuracion duracion;
 	private String duracionOtro;
@@ -61,7 +66,7 @@ public class ProgramaNuevoDto {
 	private String contenidos;
 	private String descrMetodologia;
 	private boolean tareas75obligatoria;
-	private boolean aprobDirecta;
+	private EnumModoAprobacion modoAprobacion;
 	private String descrEvaluacion;
 	private List<BibliografiaDto> bibliografia;
 	
@@ -299,12 +304,12 @@ public class ProgramaNuevoDto {
 		this.tareas75obligatoria = tareas75obligatoria;
 	}
 
-	public boolean isAprobDirecta() {
-		return aprobDirecta;
+	public EnumModoAprobacion getModoAprobacion() {
+		return modoAprobacion;
 	}
 
-	public void setAprobDirecta(boolean aprobDirecta) {
-		this.aprobDirecta = aprobDirecta;
+	public void setModoAprobacion(EnumModoAprobacion modoAprobacion) {
+		this.modoAprobacion = modoAprobacion;
 	}
 
 	public String getDescrEvaluacion() {
@@ -401,6 +406,25 @@ public class ProgramaNuevoDto {
 
 	public void setIdUsuario(Long idUsuario) {
 		this.idUsuario = idUsuario;
+	}
+
+	public Date getFecha() {
+		return fecha;
+	}
+
+	public void setFecha(Date fecha) {
+		this.fecha = fecha;
+	}
+	public String getFechaFormatted() {
+		return new SimpleDateFormat("dd/MM/yyyy HH:mm").format(fecha);
+	}
+
+	public String getOtrasAclaracionesCarrera() {
+		return otrasAclaracionesCarrera;
+	}
+
+	public void setOtrasAclaracionesCarrera(String otrasAclaracionesCarrera) {
+		this.otrasAclaracionesCarrera = otrasAclaracionesCarrera;
 	}
 
 }

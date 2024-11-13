@@ -1,20 +1,19 @@
 package com.fhce.sgd.model.gestion;
 
 import java.util.List;
-import java.util.Set;
 
-import com.fhce.sgd.model.programas.MarcoAcademico;
+import org.hibernate.envers.Audited;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "unidades_academicas")
+@Audited
 public class UnidadAcademica {
 
 	@Id
@@ -26,8 +25,7 @@ public class UnidadAcademica {
 	@OneToMany(mappedBy = "ua")
 	private List<Carrera> carreras;
 
-	@ManyToMany(mappedBy = "unidadesAcademicas")
-	private Set<MarcoAcademico> marcos;
+	private boolean habilitada;
 
 	public Long getId() {
 		return id;
@@ -53,12 +51,11 @@ public class UnidadAcademica {
 		this.carreras = carreras;
 	}
 
-	public Set<MarcoAcademico> getMarcos() {
-		return marcos;
+	public boolean isHabilitada() {
+		return habilitada;
 	}
 
-	public void setMarcos(Set<MarcoAcademico> marcos) {
-		this.marcos = marcos;
+	public void setHabilitada(boolean habilitada) {
+		this.habilitada = habilitada;
 	}
-
 }

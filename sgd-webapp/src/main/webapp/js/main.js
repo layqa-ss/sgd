@@ -1,15 +1,20 @@
 ;(function( window, document, $, undefined ) {
     "use strict";
-  
+
+    $(document).ready(function () {
+      $(".tab-pane").hide();
+      $(".tab-pane.active").show();
+    });
+
     // Menu Toggle
     (function() {
       $(function() {
-  
+
         var $toggle = $("#botonMenu");
         var $container = $(".navigation-menu");
-  
+
         if( ! $toggle.length || ! $container.length ) return;
-  
+
         $toggle.click(function() {
           $container.toggleClass("navigation-menu_mobile");
         });
@@ -19,18 +24,18 @@
     // Cerrar Toggle
     (function() {
       $(function() {
-  
+
         var $toggle = $("#botonCerrar");
         var $container = $(".navigation-menu");
-  
+
         if( ! $toggle.length || ! $container.length ) return;
-  
+
         $toggle.click(function() {
           $container.toggleClass("navigation-menu_mobile");
         });
       });
     })();
-  
+
   })( window, document, jQuery );
 
   $(function(){
@@ -41,15 +46,15 @@
 
       $activeButtonTab.removeClass('active');
       $(e.currentTarget).addClass('active');
-      
+
       $(tab).addClass('active').show();
       $activeTab.removeClass('active').hide();
     });
-   
+
     $('.next-step, .prev-step').on('click', function (e){
       var $activeTab = $('.tab-pane.active');
       var $activeMenu = $('.btn-circle.active');
-   
+
       if ( $(e.target).hasClass('next-step') )
       {
          var nextTab = $activeTab.next('.tab-pane').attr('id');
@@ -150,5 +155,20 @@
       $('#content').toggleClass('content-expanded content-collapsed');
       $('.side-bar .group').toggleClass('d-none');
       $('#collapse-icon').toggleClass('fa-angle-double-left fa-angle-double-right');
-  }
+  };
+
+  $(".datepicker").datepicker({
+          format: 'dd/mm/yy',
+          dateFormat: 'dd/mm/yy'
+      });
+
+      $.datepicker.regional['es'] = {
+   monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+   monthNamesShort: ['Ene','Feb','Mar','Abr', 'May','Jun','Jul','Ago','Sep', 'Oct','Nov','Dic'],
+   dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+   dayNamesShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
+   dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá']
+   };
+
+   $.datepicker.setDefaults($.datepicker.regional['es']);
   })

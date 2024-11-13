@@ -3,6 +3,8 @@ package com.fhce.sgd.dto.programas;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.fhce.sgd.model.enums.EnumEstadoPrograma;
+
 public class AccionDto {
 	
 	private Long id;
@@ -10,6 +12,7 @@ public class AccionDto {
 	private Long idUsuario;
 	private Long idPrograma;
 	private String nombre_usuario;
+	private EnumEstadoPrograma estadoPrograma;
 	
 	public Long getId() {
 		return id;
@@ -44,6 +47,12 @@ public class AccionDto {
 	}
 	public void setNombre_usuario(String nombre_usuario) {
 		this.nombre_usuario = nombre_usuario;
+	}
+	public EnumEstadoPrograma getEstadoPrograma() {
+		return estadoPrograma;
+	}
+	public void setEstadoPrograma(EnumEstadoPrograma estadoPrograma) {
+		this.estadoPrograma = estadoPrograma;
 	}
 
 }

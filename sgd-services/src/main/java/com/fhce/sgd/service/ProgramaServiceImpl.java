@@ -1,7 +1,6 @@
 package com.fhce.sgd.service;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -102,6 +101,7 @@ public class ProgramaServiceImpl implements ProgramaService {
 			ma.setPrograma(p);
 			p.setMa(ma);
 
+			p.setOtrasAclaracionesCarrera(pDto.getOtrasAclaracionesCarrera());
 			p.setDuracion(pDto.getDuracion());
 			p.setDuracionOtro(pDto.getDuracionOtro());
 			p.setSemestre(pDto.getSemestre());
@@ -152,7 +152,7 @@ public class ProgramaServiceImpl implements ProgramaService {
 			p.setContenidos(pDto.getContenidos());
 			p.setDescrMetodologia(pDto.getDescrMetodologia());
 			p.setTareas75obligatoria(pDto.isTareas75obligatoria());
-			p.setAprobDirecta(pDto.isAprobDirecta());
+			p.setModoAprobacion(pDto.getModoAprobacion());
 			p.setDescrEvaluacion(pDto.getDescrEvaluacion());
 
 			p.getBibliografia().clear();
@@ -166,8 +166,8 @@ public class ProgramaServiceImpl implements ProgramaService {
 			}
 			p.getBibliografia().addAll(biblio);
 
-			p.setEstado(EnumEstadoPrograma.CREADO);
-			p.setYear(obtenerAnioCorriente());
+			p.setYear(pDto.getYear());
+			p.setEstado(pDto.getEstado());
 
 			Usuario user = usuarioRepository.findById(pDto.getIdUsuario()).orElse(null);
 			if (user != null) {
@@ -180,18 +180,6 @@ public class ProgramaServiceImpl implements ProgramaService {
 			log.error("Error en saveOrUpdatePrograma de ProgramaService: " + e.getMessage());
 			throw new SgdServicesException("Error en saveOrUpdatePrograma de ProgramaService: " + e.getMessage(), e);
 		}
-	}
-
-	private Integer obtenerAnioCorriente() throws SgdServicesException {
-		try {
-			Calendar c = Calendar.getInstance();
-			int year = c.get(Calendar.YEAR);
-			return Integer.valueOf(year);
-		} catch (Exception e) {
-			log.error("Error en obtenerAnioCorriente de ProgramaService: " + e.getMessage());
-			throw new SgdServicesException("Error en obtenerAnioCorriente de ProgramaService: " + e.getMessage(), e);
-		}
-
 	}
 
 	public void borrarPrograma(Long id) throws SgdServicesException {
@@ -226,6 +214,37 @@ public class ProgramaServiceImpl implements ProgramaService {
 			for (Programa p : programas) {
 				ProgramaDto prog = new ProgramaDto(p.getId(), p.getUc().getNombreUC(), p.getYear(), p.getEstado());
 				prog.setIdUsuario(p.getUsuario().getId());
+				
+				List<UnidadAcademicaDto> unidadesAcademicas = new ArrayList<>();
+				for (UnidadAcademica ua : p.getMa().getUnidadesAcademicas()) {
+					UnidadAcademicaDto uaDto = new UnidadAcademicaDto(ua.getId(), ua.getNombreUA(), ua.isHabilitada());
+					unidadesAcademicas.add(uaDto);
+				}
+				prog.setUnidades(unidadesAcademicas);
+
+				List<CarreraDto> carreras = new ArrayList<>();
+				for (Carrera c : p.getMa().getCarreras()) {
+					CarreraDto cDto = new CarreraDto(c.getId(), c.getNombreCarrera(), c.getUa().getId(),
+							c.getUa().getNombreUA(), c.isHabilitada());
+					for (AreaTematica a : p.getMa().getAreasTematicas()) {
+						if (a.getCarrera().getId() == c.getId()) {
+							cDto.setArea(a.getId());
+							cDto.setAreaNombre(a.getNombreArea());
+						}
+					}
+					carreras.add(cDto);
+				}
+				prog.setCarreras(carreras);
+				
+				List<ProgramaIntegranteDto> integrantes = new ArrayList<>();
+				for (ProgramaIntegrante i : p.getIntegrantes()) {
+					ProgramaIntegranteDto iDto = new ProgramaIntegranteDto(i.getId(), i.getRol(), i.getCargo(),
+							i.getCargoOtro(), i.getUnidad_academica(), i.getSubunidad_academica(),
+							i.getDocente().getId(), i.getDocente().getFullname());
+					integrantes.add(iDto);
+				}
+				prog.setIntegrantes(integrantes);
+				
 				programasDto.add(prog);
 			}
 			return programasDto;
@@ -253,6 +272,7 @@ public class ProgramaServiceImpl implements ProgramaService {
 				ProgramaNuevoDto p = new ProgramaNuevoDto();
 				p.setId(id);
 				p.setNombreUC(prog.getUc().getNombreUC());
+				p.setOtrasAclaracionesCarrera(prog.getOtrasAclaracionesCarrera());
 				p.setDuracion(prog.getDuracion());
 				p.setDuracionOtro(prog.getDuracionOtro());
 				p.setSemestre(prog.getSemestre());
@@ -285,7 +305,7 @@ public class ProgramaServiceImpl implements ProgramaService {
 				p.setContenidos(prog.getContenidos());
 				p.setDescrMetodologia(prog.getDescrMetodologia());
 				p.setTareas75obligatoria(prog.isTareas75obligatoria());
-				p.setAprobDirecta(prog.isAprobDirecta());
+				p.setModoAprobacion(prog.getModoAprobacion());
 				p.setDescrEvaluacion(prog.getDescrEvaluacion());
 
 				List<BibliografiaDto> biblio = new ArrayList<>();
@@ -307,7 +327,7 @@ public class ProgramaServiceImpl implements ProgramaService {
 
 				List<UnidadAcademicaDto> unidadesAcademicas = new ArrayList<>();
 				for (UnidadAcademica ua : prog.getMa().getUnidadesAcademicas()) {
-					UnidadAcademicaDto uaDto = new UnidadAcademicaDto(ua.getId(), ua.getNombreUA());
+					UnidadAcademicaDto uaDto = new UnidadAcademicaDto(ua.getId(), ua.getNombreUA(), ua.isHabilitada());
 					unidadesAcademicas.add(uaDto);
 				}
 				p.setUnidades(unidadesAcademicas);
@@ -315,7 +335,7 @@ public class ProgramaServiceImpl implements ProgramaService {
 				List<CarreraDto> carreras = new ArrayList<>();
 				for (Carrera c : prog.getMa().getCarreras()) {
 					CarreraDto cDto = new CarreraDto(c.getId(), c.getNombreCarrera(), c.getUa().getId(),
-							c.getUa().getNombreUA());
+							c.getUa().getNombreUA(), c.isHabilitada());
 					for (AreaTematica a : prog.getMa().getAreasTematicas()) {
 						if (a.getCarrera().getId() == c.getId()) {
 							cDto.setArea(a.getId());
@@ -329,6 +349,7 @@ public class ProgramaServiceImpl implements ProgramaService {
 				p.setYear(prog.getYear());
 				p.setEstado(prog.getEstado());
 				p.setIdUsuario(prog.getUsuario().getId());
+				p.setFecha(prog.getFecha());
 				return p;
 			} else {
 				return null;

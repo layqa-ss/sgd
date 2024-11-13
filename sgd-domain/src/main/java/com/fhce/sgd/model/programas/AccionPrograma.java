@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fhce.sgd.model.enums.EnumEstadoPrograma;
 import com.fhce.sgd.model.usuarios.Usuario;
 
 import jakarta.persistence.GeneratedValue;
@@ -22,6 +23,8 @@ public class AccionPrograma {
 	
 	@CreationTimestamp
 	private Date fecha;
+	
+	private EnumEstadoPrograma estado;
 	
 	@ManyToOne
     @JoinColumn(name="id_usuario", nullable=false)
@@ -61,6 +64,14 @@ public class AccionPrograma {
 
 	public void setPrograma(Programa programa) {
 		this.programa = programa;
+	}
+
+	public EnumEstadoPrograma getEstado() {
+		return estado;
+	}
+
+	public void setEstado(EnumEstadoPrograma estado) {
+		this.estado = estado;
 	}
 
 }

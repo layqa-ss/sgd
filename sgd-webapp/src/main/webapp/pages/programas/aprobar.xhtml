@@ -12,7 +12,7 @@
 		<section>
 			<article>
 				<h:form class="form container" enctype="multipart/form-data">
-					<h:messages styleClass="messages error"/>
+					<h:messages styleClass="messages error" />
 					<div class="item">
 						<label class="item-label">Unidad curricular</label>
 						<h:outputText value="#{pCtrl.revisado.nombreUC}" />
@@ -27,16 +27,23 @@
 					</div>
 					<div class="item">
 						<label class="item-label">Despacho<span class="required">*</span></label>
-						
-						<h:inputFile id="file" value="#{pCtrl.fileDespacho}" required="true" requiredMessage="Debe seleccionar un archivo">
-        					<f:ajax execute="@form" listener="#{pCtrl.upload}" />
+
+						<h:inputFile id="file" value="#{pCtrl.fileDespacho}"
+							required="true" requiredMessage="Debe seleccionar un archivo">
+							<f:ajax execute="@form" listener="#{pCtrl.upload}" />
 						</h:inputFile>
 						<p class="small">Máximo permitido 1MB</p>
 
 					</div>
-					<div class="item">
-						<h:commandButton styleClass="button button_rojo button_large"
-							action="#{pCtrl.guardarAprobacion}" value="Guardar"/>
+					<div class="buttons">
+						<div class="item">
+							<h:commandButton styleClass="button button_rojo button_large"
+								action="#{pCtrl.guardarAprobacion}" value="Guardar" />
+						</div>
+						<div class="item volver">
+							<a href="/pages/programas/ver-programas.jsf?faces-redirect=true"><span
+								class="fa fa-1x mr-3 fa-angle-double-left"></span><span>Volver</span></a>
+						</div>
 					</div>
 				</h:form>
 			</article>

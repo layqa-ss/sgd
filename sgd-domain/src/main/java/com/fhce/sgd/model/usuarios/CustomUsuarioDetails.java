@@ -8,9 +8,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fhce.sgd.model.enums.EnumOperacion;
+import com.fhce.sgd.model.enums.EnumTipoAdscripcion;
 
 public class CustomUsuarioDetails implements UserDetails {
-	
+
 	private Usuario user;
 
 	public CustomUsuarioDetails(Usuario u) {
@@ -20,9 +21,13 @@ public class CustomUsuarioDetails implements UserDetails {
 	public String getFullname() {
 		return user.getFullname();
 	}
-	
+
 	public Long getId() {
 		return user.getId();
+	}
+	
+	public boolean isSinAdscripcion() {
+		return user.getTipoAdscripcion() != null && user.getTipoAdscripcion() == EnumTipoAdscripcion.SIN_ADSCRIPCION;
 	}
 
 	@Override

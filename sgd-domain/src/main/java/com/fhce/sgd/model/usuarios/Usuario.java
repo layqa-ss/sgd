@@ -3,6 +3,9 @@ package com.fhce.sgd.model.usuarios;
 import java.util.Date;
 import java.util.Set;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.envers.Audited;
+
 import com.fhce.sgd.model.enums.EnumTipoAdscripcion;
 import com.fhce.sgd.model.gestion.Carrera;
 import com.fhce.sgd.model.gestion.UnidadAcademica;
@@ -19,6 +22,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "usuarios")
+@Audited
 public class Usuario {
 
 	@Id
@@ -31,6 +35,7 @@ public class Usuario {
 	
 	private String fullname;
 
+	@CreationTimestamp
 	private Date creationDate;
 	
 	@ManyToOne

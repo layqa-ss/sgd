@@ -3,6 +3,8 @@ package com.fhce.sgd.util;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.io.StringReader;
+import java.util.List;
 
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
@@ -15,6 +17,7 @@ import com.fhce.sgd.dto.programas.ProgramaIntegranteDto;
 import com.fhce.sgd.dto.programas.ProgramaNuevoDto;
 import com.fhce.sgd.model.enums.EnumCargo;
 import com.fhce.sgd.model.enums.EnumDuracion;
+import com.fhce.sgd.model.enums.EnumEstadoPrograma;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
@@ -24,6 +27,7 @@ import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
+import com.itextpdf.text.html.simpleparser.HTMLWorker;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -42,7 +46,9 @@ public class GeneradorPdf {
 			Document document = new Document();
 			PdfWriter writer = PdfWriter.getInstance(document, os);
 
-			writer.setPageEvent(new WatermarkPageEvent());
+			if (pr.getEstado() != EnumEstadoPrograma.APROBADO) {
+				writer.setPageEvent(new WatermarkPageEvent());
+			}
 
 			document.open();
 
@@ -82,11 +88,20 @@ public class GeneradorPdf {
 			document.add(pUa);
 
 			String carreras = "";
-			for (CarreraDto cDto : pr.getCarreras()) {
-				carreras += cDto.getNombre() + ", ";
+			if (pr.getCarreras() == null || pr.getCarreras().size() == 0) {
+				carreras = pr.getOtrasAclaracionesCarrera();
+			} else {
+				for (CarreraDto cDto : pr.getCarreras()) {
+					carreras += cDto.getNombre() + ", ";
+				}
+				carreras = carreras.substring(0, carreras.length() - 2) + ". ";
+				if (pr.getOtrasAclaracionesCarrera() != null) {
+					carreras += pr.getOtrasAclaracionesCarrera();
+				}
 			}
+
 			Chunk carreraLabel = new Chunk(pr.getCarreras().size() > 1 ? "Carreras: " : "Carrera: ", fontBold);
-			Chunk carreraValue = new Chunk(carreras.substring(0, carreras.length() - 2), fontRegular);
+			Chunk carreraValue = new Chunk(carreras, fontRegular);
 			Paragraph pCarrera = new Paragraph();
 			pCarrera.add(carreraLabel);
 			pCarrera.add(carreraValue);
@@ -344,18 +359,24 @@ public class GeneradorPdf {
 			document.add(pCreditos);
 
 			Chunk objetivos = new Chunk("Objetivos \n", fontBold);
-			Chunk objetivosV = new Chunk(pr.getObjetivos(), fontRegular);
+			StringReader strReader = new StringReader(pr.getObjetivos());
 			Paragraph pObj = new Paragraph();
 			pObj.add(objetivos);
-			pObj.add(objetivosV);
+			List<Element> objElem = HTMLWorker.parseToList(strReader, null);
+			for (Element e : objElem) {
+				pObj.add(e);
+			}
 			pObj.setSpacingAfter(15);
 			document.add(pObj);
 
 			Chunk contenidos = new Chunk("Contenidos \n ", fontBold);
-			Chunk contenidosV = new Chunk(pr.getObjetivos(), fontRegular);
+			StringReader strReader2 = new StringReader(pr.getContenidos());
 			Paragraph pCont = new Paragraph();
 			pCont.add(contenidos);
-			pCont.add(contenidosV);
+			List<Element> contElem = HTMLWorker.parseToList(strReader2, null);
+			for (Element e : contElem) {
+				pCont.add(e);
+			}
 			pCont.setSpacingAfter(15);
 			document.add(pCont);
 
@@ -377,10 +398,13 @@ public class GeneradorPdf {
 
 			Chunk metogologia = new Chunk("Descripción de la propuesta metodológica de la unidad curricular: ",
 					fontBold);
-			Chunk metodologiaV = new Chunk(pr.getDescrMetodologia(), fontRegular);
+			StringReader strReader3 = new StringReader(pr.getDescrMetodologia());
 			Paragraph pMeto = new Paragraph();
 			pMeto.add(metogologia);
-			pMeto.add(metodologiaV);
+			List<Element> metElem = HTMLWorker.parseToList(strReader3, null);
+			for (Element e : metElem) {
+				pMeto.add(e);
+			}
 			pMeto.setSpacingAfter(15);
 			document.add(pMeto);
 
@@ -422,8 +446,8 @@ public class GeneradorPdf {
 			pTareas.setSpacingAfter(15);
 			document.add(pTareas);
 
-			Chunk exonera = new Chunk("Permite aprobación directa (exoneración): ", fontBold);
-			Chunk exoneraV = new Chunk(pr.isAprobDirecta() ? "SI" : "NO", fontRegular);
+			Chunk exonera = new Chunk("Modo de aprobación: ", fontBold);
+			Chunk exoneraV = new Chunk(pr.getModoAprobacion().getLabel(), fontRegular);
 			Paragraph pExonera = new Paragraph();
 			pExonera.add(exonera);
 			pExonera.add(exoneraV);
@@ -431,10 +455,13 @@ public class GeneradorPdf {
 			document.add(pExonera);
 
 			Chunk evaluacion = new Chunk("Descripción de la forma de evaluación y aprobación: \n", fontBold);
-			Chunk evauacionV = new Chunk(pr.getDescrEvaluacion(), fontRegular);
+			StringReader strReader4 = new StringReader(pr.getDescrEvaluacion());
 			Paragraph pEvaluacion = new Paragraph();
 			pEvaluacion.add(evaluacion);
-			pEvaluacion.add(evauacionV);
+			List<Element> evaElem = HTMLWorker.parseToList(strReader4, null);
+			for (Element e : evaElem) {
+				pEvaluacion.add(e);
+			}
 			pEvaluacion.setSpacingAfter(15);
 			document.add(pEvaluacion);
 

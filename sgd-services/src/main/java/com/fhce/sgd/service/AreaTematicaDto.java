@@ -1,23 +1,28 @@
-package com.fhce.sgd.dto.gestion;
+package com.fhce.sgd.service;
 
 import java.util.Objects;
 
-public class UnidadAcademicaDto {
+public class AreaTematicaDto {
 
     private Long id;
 
     private String nombre;
     
+    private Long carreraId;
+    
+    private String nombreCarrera;
+    
     private boolean habilitada;
     
-    public UnidadAcademicaDto() {
+    public AreaTematicaDto() {
     	
     }
 
-	public UnidadAcademicaDto(Long id, String nombre, boolean habilitada) {
+	public AreaTematicaDto(Long id, String nombre, Long carreraId, boolean habilitada) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
+		this.carreraId = carreraId;
 		this.habilitada = habilitada;
 	}
 
@@ -37,6 +42,22 @@ public class UnidadAcademicaDto {
 		this.nombre = nombre;
 	}
 
+	public Long getCarreraId() {
+		return carreraId;
+	}
+
+	public void setCarreraId(Long carreraId) {
+		this.carreraId = carreraId;
+	}
+
+	public String getNombreCarrera() {
+		return nombreCarrera;
+	}
+
+	public void setNombreCarrera(String nombreCarrera) {
+		this.nombreCarrera = nombreCarrera;
+	}
+
 	public boolean isHabilitada() {
 		return habilitada;
 	}
@@ -47,7 +68,7 @@ public class UnidadAcademicaDto {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, nombre);
+		return Objects.hash(nombre, nombreCarrera);
 	}
 
 	@Override
@@ -58,8 +79,8 @@ public class UnidadAcademicaDto {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		UnidadAcademicaDto other = (UnidadAcademicaDto) obj;
-		return Objects.equals(id, other.id) && Objects.equals(nombre, other.nombre);
+		AreaTematicaDto other = (AreaTematicaDto) obj;
+		return Objects.equals(nombre, other.nombre) && Objects.equals(nombreCarrera, other.nombreCarrera);
 	}
     
 }

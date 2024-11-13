@@ -22,6 +22,7 @@
 		href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;800"
 		rel="stylesheet" />
 	<link rel="stylesheet" href="/assets/css/styles.min.css" />
+	<link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css"/>
 
 	<title>SGD - FHCE</title>
 
@@ -54,21 +55,21 @@
 	<main>
 		<h:form id="sidebar-container" class="side-bar sidebar-collapsed">
 			<a href="#" data-toggle="sidebar-colapse" class="collapse content-collapsed"> <span
-				id="collapse-icon" class="fa fa-2x mr-3 fa-angle-double-right"></span>
+				id="collapse-icon" class="fa fa-1x mr-3 fa-angle-double-right"></span>
 				<span id="collapse-text" class="menu-collapsed d-none">Cerrar</span>
 			</a>
-			<div class="group d-none">
+			<h:panelGroup layout="block" class="group d-none" rendered="#{appCtrl.puedeGestionarUsuarios}">
 				<div class="group-title">Usuarios</div>
 				<ul class="group-wrapper">
 					<li><a href="/pages/gestion/usuarios.jsf"> <span
 							class="material-symbols-outlined"> group </span> Ver usuarios
 					</a></li>
 					<li><a href="/pages/gestion/ver-roles.jsf"> <span
-							class="material-symbols-outlined"> manufacturing </span> Ver roles
+							class="material-symbols-outlined"> manage_accounts </span> Ver roles
 					</a></li>
 				</ul>
-			</div>
-			<div class="group d-none">
+			</h:panelGroup>
+			<h:panelGroup layout="block" class="group d-none" rendered="#{appCtrl.puedeGestionarUCA}">
 				<div class="group-title">Gestión FHCE</div>
 				<ul class="group-wrapper">
 					<li><a href="/pages/gestion/areas-tematicas.jsf"> <span
@@ -84,18 +85,27 @@
 							<p>Ver unidades académicas</p>
 					</a></li>
 				</ul>
-			</div>
+			</h:panelGroup>
+			<h:panelGroup layout="block" class="group d-none" rendered="#{appCtrl.puedeConfigurar}">
+				<div class="group-title">Gestión SGD</div>
+				<ul class="group-wrapper">
+					<li><a href="/pages/gestion/configs.jsf"> <span
+							class="material-symbols-outlined"> manufacturing </span>
+							<p>Ver configuraciones</p>
+					</a></li>
+				</ul>
+			</h:panelGroup>
 			<div class="group d-none">
 				<div class="group-title">Programas</div>
 				<ul class="group-wrapper">
-					<li><h:commandLink action="#{pCtrl.agregarPrograma}">
+					<li><h:commandLink action="#{pCtrl.agregarPrograma}" rendered="#{appCtrl.puedeCrearPrograma}">
 							<span class="material-symbols-outlined"> note_add </span>
 							<p>Programa nuevo</p>
 						</h:commandLink></li>
-					<li><a href="/pages/programas/ver-programas.jsf"> <span
+					<li><h:commandLink action="/pages/programas/ver-programas.jsf" rendered="#{appCtrl.puedeVerProgramas}"> <span
 							class="material-symbols-outlined"> hourglass_top </span>
 							<p>Ver programas en proceso de creación</p>
-					</a></li>
+					</h:commandLink></li>
 <!-- 					<li><a href="/pages/programas/ver-programas.jsf"> <span -->
 <!-- 							class="material-symbols-outlined"> view_list </span> -->
 <!-- 							<p>Ver programas aprobados</p> -->
@@ -113,6 +123,7 @@
 			<script src="/js/main.js"></script>
 			<script src="https://kit.fontawesome.com/0b69af8f69.js"
 				crossorigin="anonymous"></script>
+
 		</div>
 	</main>
 	<footer> 

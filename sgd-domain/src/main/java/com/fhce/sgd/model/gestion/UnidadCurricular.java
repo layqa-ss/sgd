@@ -2,6 +2,8 @@ package com.fhce.sgd.model.gestion;
 
 import java.util.List;
 
+import org.hibernate.envers.Audited;
+
 import com.fhce.sgd.model.programas.Programa;
 
 import jakarta.persistence.Entity;
@@ -13,6 +15,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "unidades_curriculares")
+@Audited
 public class UnidadCurricular {
 
 	@Id

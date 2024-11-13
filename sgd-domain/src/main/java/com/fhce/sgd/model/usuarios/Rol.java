@@ -1,5 +1,7 @@
 package com.fhce.sgd.model.usuarios;
 
+import org.hibernate.envers.Audited;
+
 import com.fhce.sgd.model.enums.EnumOperacion;
 
 import jakarta.persistence.Entity;
@@ -10,6 +12,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "roles")
+@Audited
 public class Rol {
 	
 	@Id

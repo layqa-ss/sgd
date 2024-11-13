@@ -9,6 +9,7 @@ import java.util.stream.Stream;
 import org.primefaces.model.DualListModel;
 import org.primefaces.model.FilterMeta;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.annotation.SessionScope;
 
 import com.fhce.sgd.dto.gestion.AreaTematicaDto;
 import com.fhce.sgd.dto.gestion.CarreraDto;
@@ -24,12 +25,11 @@ import com.fhce.sgd.service.exception.SgdServicesException;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
-import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
 import lombok.extern.slf4j.Slf4j;
 
 @Named("gestionController")
-@ViewScoped
+@SessionScope
 @Slf4j
 public class GestionController {
 
@@ -103,9 +103,9 @@ public class GestionController {
 		}
 	}
 
-	public String borrarAreaTematica(Long id) {
+	public String borrarAreaTematica(Long id, boolean habilitada) {
 		try {
-			gestionService.deleteAreaTematica(id);
+			gestionService.deleteAreaTematica(id, habilitada);
 			areas = gestionService.getAreasTematicas();
 		} catch (SgdServicesException e) {
 			log.error("Error en borrarAreaTematica de GestionController");
@@ -130,9 +130,9 @@ public class GestionController {
 		
 	}
 
-	public String borrarCarrera(Long id) {
+	public String borrarCarrera(Long id, boolean habilitada) {
 		try {
-			gestionService.deleteCarrera(id);
+			gestionService.deleteCarrera(id, habilitada);
 			carreras = gestionService.getCarreras();
 		} catch (SgdServicesException e) {
 			log.error("Error en borrarCarrera de GestionController");
@@ -155,9 +155,9 @@ public class GestionController {
 		}
 	}
 
-	public String borrarUA(Long id) {
+	public String borrarUA(Long id, boolean habilitada) {
 		try {
-			gestionService.deleteUA(id);
+			gestionService.deleteUA(id, habilitada);
 			unidades = gestionService.getUnidadesAcademicas();
 		} catch (SgdServicesException e) {
 			log.error("Error en borrarUA de GestionController");

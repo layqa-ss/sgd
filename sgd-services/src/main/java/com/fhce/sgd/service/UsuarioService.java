@@ -19,4 +19,8 @@ public interface UsuarioService {
 	List<UsuarioDto> getUsuarios() throws SgdServicesException;
 	
 	void deleteUsuario(Long id) throws SgdServicesException;
+	
+	List<Long> obtenerCarrerasUsuario(Long id) throws SgdServicesException;
+	
+	List<Long> obtenerUnidadesUsuario(Long id) throws SgdServicesException;
 }

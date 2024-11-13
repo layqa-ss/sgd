@@ -1,5 +1,7 @@
 package com.fhce.sgd.model.programas;
 
+import org.hibernate.envers.Audited;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,6 +14,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "bibliografia")
+@Audited
 public class Bibliografia {
 
 	@Id

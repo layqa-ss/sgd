@@ -54,11 +54,12 @@ public class GestionServiceImpl implements GestionService {
 		try {
 			Iterable<AreaTematica> areasTodas = areaTematicaRepository.findAll();
 			List<AreaTematica> areas = StreamSupport.stream(areasTodas.spliterator(), false)
-					.filter(a -> a.getCarrera().getId().equals(carreraId)).toList();
+					.filter(a -> a.getCarrera().getId().equals(carreraId) && a.isHabilitada()).toList();
 			if (!areas.isEmpty()) {
 				List<AreaTematicaDto> areasDto = new ArrayList<AreaTematicaDto>();
 				for (AreaTematica a : areas) {
-					AreaTematicaDto areaDto = new AreaTematicaDto(a.getId(), a.getNombreArea(), carreraId);
+					AreaTematicaDto areaDto = new AreaTematicaDto(a.getId(), a.getNombreArea(), carreraId,
+							a.isHabilitada());
 					areasDto.add(areaDto);
 				}
 				return areasDto;
@@ -76,7 +77,7 @@ public class GestionServiceImpl implements GestionService {
 	public Map<Long, List<AreaTematicaDto>> getAreasPorCarrera() throws SgdServicesException {
 		try {
 			Map<Long, List<AreaTematicaDto>> map = new HashMap<>();
-			List<CarreraDto> carreras = getCarreras();
+			List<CarreraDto> carreras = getCarrerasHabilitadas();
 			if (carreras != null) {
 				for (CarreraDto c : carreras) {
 					map.put(c.getId(), getAreasTematicasForCarrera(c.getId()));
@@ -97,7 +98,8 @@ public class GestionServiceImpl implements GestionService {
 			if (!areas.isEmpty()) {
 				List<AreaTematicaDto> areasDto = new ArrayList<AreaTematicaDto>();
 				for (AreaTematica a : areas) {
-					AreaTematicaDto areaDto = new AreaTematicaDto(a.getId(), a.getNombreArea(), a.getCarrera().getId());
+					AreaTematicaDto areaDto = new AreaTematicaDto(a.getId(), a.getNombreArea(), a.getCarrera().getId(),
+							a.isHabilitada());
 					areaDto.setNombreCarrera(a.getCarrera().getNombreCarrera());
 					areasDto.add(areaDto);
 				}
@@ -117,6 +119,7 @@ public class GestionServiceImpl implements GestionService {
 			area.setNombreArea(areaDto.getNombre());
 			Optional<Carrera> carrera = carreraRepository.findById(areaDto.getCarreraId());
 			area.setCarrera(carrera.get());
+			area.setHabilitada(true);
 			area = areaTematicaRepository.save(area);
 			return area.getId();
 		} catch (Exception e) {
@@ -125,9 +128,11 @@ public class GestionServiceImpl implements GestionService {
 		}
 	}
 
-	public void deleteAreaTematica(Long id) throws SgdServicesException {
+	public void deleteAreaTematica(Long id, boolean habilitada) throws SgdServicesException {
 		try {
-			areaTematicaRepository.deleteById(id);
+			AreaTematica a = getAreaTematica(id);
+			a.setHabilitada(habilitada);
+			areaTematicaRepository.save(a);
 		} catch (Exception e) {
 			log.error("Error en deleteAreaTematica de GestionService: " + e.getMessage());
 			throw new SgdServicesException("Error en deleteAreaTematica de GestionService: " + e.getMessage(), e);
@@ -142,6 +147,28 @@ public class GestionServiceImpl implements GestionService {
 			throw new SgdServicesException("Error en getAreaTematica de GestionService: " + e.getMessage(), e);
 		}
 	}
+	
+	public List<CarreraDto> getCarrerasHabilitadas() throws SgdServicesException {
+		try {
+			Iterable<Carrera> carrerasTodas = carreraRepository.findAll();
+			List<Carrera> carreras = StreamSupport.stream(carrerasTodas.spliterator(), false).filter(c -> c.isHabilitada()).toList();
+			if (!carreras.isEmpty()) {
+				List<CarreraDto> carrerasDto = new ArrayList<CarreraDto>();
+				for (Carrera c : carreras) {
+					CarreraDto carreraDto = new CarreraDto(c.getId(), c.getNombreCarrera(), c.getUa().getId(),
+							c.getUa().getNombreUA(), c.isHabilitada());
+					carreraDto.setNombreUA(c.getUa().getNombreUA());
+					carrerasDto.add(carreraDto);
+				}
+				return carrerasDto;
+			} else {
+				return null;
+			}
+		} catch (Exception e) {
+			log.error("Error en getCarreras de GestionService: " + e.getMessage());
+			throw new SgdServicesException("Error en getCarreras de GestionService: " + e.getMessage(), e);
+		}
+	}
 
 	public List<CarreraDto> getCarreras() throws SgdServicesException {
 		try {
@@ -149,9 +176,9 @@ public class GestionServiceImpl implements GestionService {
 			List<Carrera> carreras = StreamSupport.stream(carrerasTodas.spliterator(), false).toList();
 			if (!carreras.isEmpty()) {
 				List<CarreraDto> carrerasDto = new ArrayList<CarreraDto>();
-				for (Carrera c : carrerasTodas) {
+				for (Carrera c : carreras) {
 					CarreraDto carreraDto = new CarreraDto(c.getId(), c.getNombreCarrera(), c.getUa().getId(),
-							c.getUa().getNombreUA());
+							c.getUa().getNombreUA(), c.isHabilitada());
 					carreraDto.setNombreUA(c.getUa().getNombreUA());
 					carrerasDto.add(carreraDto);
 				}
@@ -171,6 +198,7 @@ public class GestionServiceImpl implements GestionService {
 			carrera.setNombreCarrera(carreraDto.getNombre());
 			Optional<UnidadAcademica> ua = uaRepository.findById(carreraDto.getUaId());
 			carrera.setUa(ua.get());
+			carrera.setHabilitada(true);
 			carrera = carreraRepository.save(carrera);
 			return carrera.getId();
 		} catch (Exception e) {
@@ -179,9 +207,11 @@ public class GestionServiceImpl implements GestionService {
 		}
 	}
 
-	public void deleteCarrera(Long id) throws SgdServicesException {
+	public void deleteCarrera(Long id, boolean habilitada) throws SgdServicesException {
 		try {
-			carreraRepository.deleteById(id);
+			Carrera c = getCarrera(id);
+			c.setHabilitada(habilitada);
+			carreraRepository.save(c);
 		} catch (Exception e) {
 			log.error("Error en deleteCarrera de GestionService: " + e.getMessage());
 			throw new SgdServicesException("Error en deleteCarrera de GestionService: " + e.getMessage(), e);
@@ -204,7 +234,28 @@ public class GestionServiceImpl implements GestionService {
 			if (!unidades.isEmpty()) {
 				List<UnidadAcademicaDto> unidadesDto = new ArrayList<UnidadAcademicaDto>();
 				for (UnidadAcademica ua : unidadesTodas) {
-					UnidadAcademicaDto uaDto = new UnidadAcademicaDto(ua.getId(), ua.getNombreUA());
+					UnidadAcademicaDto uaDto = new UnidadAcademicaDto(ua.getId(), ua.getNombreUA(), ua.isHabilitada());
+					unidadesDto.add(uaDto);
+				}
+				return unidadesDto;
+			} else {
+				return null;
+			}
+		} catch (Exception e) {
+			log.error("Error en getUnidadesAcademicas de GestionService: " + e.getMessage());
+			throw new SgdServicesException("Error en getUnidadesAcademicas de GestionService: " + e.getMessage(), e);
+		}
+
+	}
+	
+	public List<UnidadAcademicaDto> getUnidadesAcademicasHabilitadas() throws SgdServicesException {
+		try {
+			Iterable<UnidadAcademica> unidadesTodas = uaRepository.findAll();
+			List<UnidadAcademica> unidades = StreamSupport.stream(unidadesTodas.spliterator(), false).filter(ua -> ua.isHabilitada()).toList();
+			if (!unidades.isEmpty()) {
+				List<UnidadAcademicaDto> unidadesDto = new ArrayList<UnidadAcademicaDto>();
+				for (UnidadAcademica ua : unidades) {
+					UnidadAcademicaDto uaDto = new UnidadAcademicaDto(ua.getId(), ua.getNombreUA(), ua.isHabilitada());
 					unidadesDto.add(uaDto);
 				}
 				return unidadesDto;
@@ -222,6 +273,7 @@ public class GestionServiceImpl implements GestionService {
 		try {
 			UnidadAcademica ua = new UnidadAcademica();
 			ua.setNombreUA(uaDto.getNombre());
+			ua.setHabilitada(true);
 			ua = uaRepository.save(ua);
 			return ua.getId();
 		} catch (Exception e) {
@@ -231,9 +283,11 @@ public class GestionServiceImpl implements GestionService {
 
 	}
 
-	public void deleteUA(Long id) throws SgdServicesException {
+	public void deleteUA(Long id, boolean habilitada) throws SgdServicesException {
 		try {
-			uaRepository.deleteById(id);
+			UnidadAcademica ua = getUnidadAcademica(id);
+			ua.setHabilitada(habilitada);
+			uaRepository.save(ua);
 		} catch (Exception e) {
 			log.error("Error en deleteUA de GestionService: " + e.getMessage());
 			throw new SgdServicesException("Error en deleteUA de GestionService: " + e.getMessage(), e);

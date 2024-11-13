@@ -23,23 +23,27 @@ public interface GestionService {
 
 	Long addAreaTematica(AreaTematicaDto areaDto) throws SgdServicesException;
 	
-	void deleteAreaTematica(Long id) throws SgdServicesException;
+	void deleteAreaTematica(Long id, boolean habilitada) throws SgdServicesException;
 	
 	AreaTematica getAreaTematica(Long id) throws SgdServicesException;
 	
 	List<CarreraDto> getCarreras() throws SgdServicesException;
 	
+	List<CarreraDto> getCarrerasHabilitadas() throws SgdServicesException;
+	
 	Long addCarrera(CarreraDto carreraDto) throws SgdServicesException;
 	
-	void deleteCarrera(Long id) throws SgdServicesException;
+	void deleteCarrera(Long id, boolean habilitada) throws SgdServicesException;
 	
 	Carrera getCarrera(Long id) throws SgdServicesException;
 	
 	List<UnidadAcademicaDto> getUnidadesAcademicas() throws SgdServicesException;
+
+	List<UnidadAcademicaDto> getUnidadesAcademicasHabilitadas() throws SgdServicesException;
 	
 	Long addUA(UnidadAcademicaDto uaDto) throws SgdServicesException;
 	
-	void deleteUA(Long id) throws SgdServicesException;
+	void deleteUA(Long id, boolean habilitada) throws SgdServicesException;
 	
 	UnidadAcademica getUnidadAcademica(Long id) throws SgdServicesException;
 	

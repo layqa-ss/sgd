@@ -2,7 +2,7 @@
 	xmlns:f="jakarta.faces.core" xmlns:h="jakarta.faces.html"
 	xmlns:ui="jakarta.faces.facelets" xmlns:p="http://primefaces.org/ui"
 	template="/layout/template.xhtml">
-	
+
 	<f:metadata>
 		<f:importConstants type="com.fhce.sgd.model.enums.EnumEstadoPrograma" />
 	</f:metadata>
@@ -20,7 +20,7 @@
 				<h:form>
 					<div class="item">
 						<h:commandLink class="button agregar-button"
-							action="#{pCtrl.agregarPrograma}">
+							action="#{pCtrl.agregarPrograma}" rendered="#{appCtrl.puedeCrearPrograma}">
 						Nuevo programa<i class="fa-solid fa-plus"></i>
 						</h:commandLink>
 					</div>
@@ -43,7 +43,7 @@
 						</p:column>
 
 						<p:column headerText="Año" sortBy="#{p.year}" filterBy="#{p.year}"
-							filterMatchMode="contains" filterPlaceholder="Filtrar por año">
+							filterMatchMode="contains" filterPlaceholder="Filtrar por año" class="columnQuince">
 							<h:outputText value="#{p.year}" />
 						</p:column>
 
@@ -63,37 +63,69 @@
 						</p:column>
 
 						<p:column styleClass="links-column">
-							<h:commandLink update="tableForm" styleClass="link-delete" title="Editar"
-								action="#{pCtrl.editarPrograma(p.id)}" rendered="#{p.estado == EnumEstadoPrograma.CREADO or p.estado == EnumEstadoPrograma.SUGERENCIAS}">
+							<h:commandLink update="tableForm" styleClass="link-delete"
+								title="Editar" action="#{pCtrl.editarPrograma(p.id)}"
+								rendered="#{appCtrl.puedeEditarPrograma(p)}">
 								<i class="material-symbols-outlined">edit</i>
 							</h:commandLink>
 						</p:column>
 						<p:column styleClass="links-column">
-							<h:commandLink update="tableForm" styleClass="link-delete" title="Descargar pdf"
+							<h:commandLink update="tableForm" styleClass="link-delete"
+								title="Descargar pdf" rendered="#{appCtrl.puedeDescargarPrograma(p.estado)}"
 								actionListener="#{pCtrl.crearPdfPrograma(p.id)}" ajax="false">
 								<i class="material-symbols-outlined">picture_as_pdf</i>
-								<p:fileDownload value="#{pCtrl.file}"/>
+								<p:fileDownload value="#{pCtrl.file}" />
 							</h:commandLink>
 						</p:column>
 						<p:column styleClass="links-column">
-							<h:commandLink update="tableForm" styleClass="link-delete" title="Enviar a revisión"
-								action="#{pCtrl.enviarCC(p.id)}" rendered="#{p.estado == EnumEstadoPrograma.CREADO and appCtrl.puedeEnviarCC}">
+							<h:commandLink update="tableForm" styleClass="link-delete"
+								title="Enviar a revisión" action="#{pCtrl.enviarCC(p.id)}"
+								rendered="#{appCtrl.puedeEnviarCC(p)}">
 								<i class="material-symbols-outlined">send</i>
 							</h:commandLink>
 						</p:column>
 						<p:column styleClass="links-column">
-							<h:commandLink update="tableForm" styleClass="link-delete" title="Revisar"
-								action="#{pCtrl.revisarPrograma(p.id)}" rendered="#{p.estado == EnumEstadoPrograma.REVISION_CC or p.estado == EnumEstadoPrograma.REVISION_CAG or p.estado == EnumEstadoPrograma.REVISION_CG}">
+							<h:commandLink update="tableForm" styleClass="link-delete"
+								title="Revisar" action="#{pCtrl.revisarPrograma(p.id)}"
+								rendered="#{appCtrl.puedeHacerRevision(p)}">
 								<i class="material-symbols-outlined">data_check</i>
 							</h:commandLink>
 						</p:column>
 						<p:column styleClass="links-column">
-							<h:commandLink update="tableForm" styleClass="link-delete" title="Eliminar"
-								action="#{pCtrl.borrarPrograma(p.id)}" rendered="#{p.estado == EnumEstadoPrograma.CREADO}">
+							<h:commandLink update="tableForm" styleClass="link-delete"
+								title="Aprobar" action="#{pCtrl.aprobarPrograma(p.id)}"
+								rendered="#{appCtrl.puedeAprobar(p)}">
+								<i class="material-symbols-outlined">check_circle</i>
+							</h:commandLink>
+						</p:column>
+						<p:column styleClass="links-column">
+							<h:commandLink update="tableForm" styleClass="link-delete"
+								title="Eliminar" action="#{pCtrl.borrarPrograma(p.id)}"
+								rendered="#{p.estado == EnumEstadoPrograma.CREADO}">
 								<i class="material-symbols-outlined">delete</i>
 							</h:commandLink>
 						</p:column>
-
+						<p:column styleClass="links-column">
+							<h:commandLink update="tableForm" styleClass="link-delete"
+								title="Editar una vez aprobado"
+								action="#{pCtrl.editarProgramaAbrev(p.id)}"
+								rendered="#{appCtrl.puedeEditarAprobado(p) and pCtrl.estaVigente(p.year)}">
+								<i class="material-symbols-outlined">recycling</i>
+							</h:commandLink>
+						</p:column>
+						<p:column styleClass="links-column">
+							<h:commandLink styleClass="link-delete" rendered="#{appCtrl.puedeVerHistorial(p)}"
+								title="Historial de acciones" action="#{pCtrl.verHistorialPrograma(p.id)}">
+								<i class="material-symbols-outlined">history</i>
+							</h:commandLink>
+						</p:column>
+						<p:column styleClass="links-column">
+							<h:commandLink styleClass="link-delete"
+								title="Duplicar" action="#{pCtrl.duplicarPrograma(p.id)}"
+								rendered="#{appCtrl.puedeDuplicarPrograma(p)}">
+								<i class="material-symbols-outlined">content_copy</i>
+							</h:commandLink>
+						</p:column>
 					</p:dataTable>
 				</h:form>
 			</article>

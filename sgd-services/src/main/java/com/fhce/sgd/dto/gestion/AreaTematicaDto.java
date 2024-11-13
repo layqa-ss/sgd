@@ -12,15 +12,18 @@ public class AreaTematicaDto {
     
     private String nombreCarrera;
     
+    private boolean habilitada;
+    
     public AreaTematicaDto() {
     	
     }
 
-	public AreaTematicaDto(Long id, String nombre, Long carreraId) {
+	public AreaTematicaDto(Long id, String nombre, Long carreraId, boolean habilitada) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
 		this.carreraId = carreraId;
+		this.habilitada = habilitada;
 	}
 
 	public Long getId() {
@@ -55,9 +58,17 @@ public class AreaTematicaDto {
 		this.nombreCarrera = nombreCarrera;
 	}
 
+	public boolean isHabilitada() {
+		return habilitada;
+	}
+
+	public void setHabilitada(boolean habilitada) {
+		this.habilitada = habilitada;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(carreraId, id, nombre, nombreCarrera);
+		return Objects.hash(nombre, nombreCarrera);
 	}
 
 	@Override
@@ -69,8 +80,7 @@ public class AreaTematicaDto {
 		if (getClass() != obj.getClass())
 			return false;
 		AreaTematicaDto other = (AreaTematicaDto) obj;
-		return Objects.equals(carreraId, other.carreraId) && Objects.equals(id, other.id)
-				&& Objects.equals(nombre, other.nombre) && Objects.equals(nombreCarrera, other.nombreCarrera);
+		return Objects.equals(nombre, other.nombre) && Objects.equals(nombreCarrera, other.nombreCarrera);
 	}
     
 }

@@ -1,0 +1,43 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="jakarta.faces.core" xmlns:h="jakarta.faces.html"
+	xmlns:ui="jakarta.faces.facelets" xmlns:p="http://primefaces.org/ui"
+	template="/layout/template.xhtml">
+
+	<f:metadata>
+		<f:importConstants type="com.fhce.sgd.model.enums.EnumTipoAdscripcion" />
+	</f:metadata>
+
+	<ui:define name="content">
+		<section class="intro">
+			<article>
+				<h1 class="titulo-seccion">Configuraciones</h1>
+			</article>
+		</section>
+		<section>
+			<article>
+				<h:form class="form container" id="form">
+					<h:messages id="messages" styleClass="messages error" />
+					<ui:repeat value="#{configCtrl.configs}" var="c">
+						<h:panelGroup rendered="#{not c.date}" class="item">
+							<label class="item-label">#{c.config.label}</label>
+							<h:inputText value="#{c.value}"/>
+						</h:panelGroup>
+						<h:panelGroup rendered="#{c.date}" class="item">
+							<label class="item-label">#{c.config.label}</label>
+							<h:inputText value="#{c.value}" styleClass="datepicker">  
+<!-- 							   <f:convertDateTime pattern="dd/mm/yyyy"/>   -->
+							</h:inputText>
+							<p class="ayuda">Formato: dd/mm/yyyy</p>
+						</h:panelGroup>
+					</ui:repeat>
+					<div class="item">
+						<h:commandButton styleClass="button button_rojo button_large"
+							action="#{configCtrl.saveConfigs}" value="Guardar" />
+					</div>
+				</h:form>
+			</article>
+		</section>
+		
+	</ui:define>
+
+</ui:composition>

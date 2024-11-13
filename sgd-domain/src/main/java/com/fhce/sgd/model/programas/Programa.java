@@ -1,12 +1,17 @@
 package com.fhce.sgd.model.programas;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.envers.Audited;
 
 import com.fhce.sgd.model.enums.EnumDuracion;
 import com.fhce.sgd.model.enums.EnumEstadoPrograma;
 import com.fhce.sgd.model.enums.EnumFormato;
 import com.fhce.sgd.model.enums.EnumModalidad;
+import com.fhce.sgd.model.enums.EnumModoAprobacion;
 import com.fhce.sgd.model.enums.EnumRegimen;
 import com.fhce.sgd.model.enums.EnumSemestre;
 import com.fhce.sgd.model.gestion.UnidadCurricular;
@@ -20,7 +25,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -28,6 +32,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "programas")
+@Audited
 public class Programa {
 
 	@Id
@@ -37,7 +42,7 @@ public class Programa {
 	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="id_uc", nullable=false)
 	private UnidadCurricular uc;
-	
+
 	@ManyToOne
     @JoinColumn(name="id_usuario", nullable=false)
 	private Usuario usuario;
@@ -46,7 +51,11 @@ public class Programa {
 	
 	private Integer year;
 	
+	@CreationTimestamp
+	private Date fecha;
+	
 	/* General */
+	private String otrasAclaracionesCarrera;
 	private EnumDuracion duracion;
 	private String duracionOtro;
 	private EnumSemestre semestre;
@@ -83,19 +92,15 @@ public class Programa {
 	private EnumModalidad modalidad;
 	private boolean adecuaciones;
 	private String descripcionAdecuaciones;
-	@Lob
-	@Column(length=4096)
+	@Column(length = 4096,columnDefinition="text")
 	private String objetivos;
-	@Lob
-	@Column(length=4096)
+	@Column(length = 4096,columnDefinition="text")
 	private String contenidos;
-	@Lob
-	@Column(length=4096)
+	@Column(length = 4096,columnDefinition="text")
 	private String descrMetodologia;
 	private boolean tareas75obligatoria;
-	private boolean aprobDirecta;
-	@Lob
-	@Column(length=4096)
+	private EnumModoAprobacion modoAprobacion;
+	@Column(length = 4096,columnDefinition="text")
 	private String descrEvaluacion;
 	
 	@OneToMany(mappedBy="programa", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
@@ -325,14 +330,6 @@ public class Programa {
 		this.tareas75obligatoria = tareas75obligatoria;
 	}
 
-	public boolean isAprobDirecta() {
-		return aprobDirecta;
-	}
-
-	public void setAprobDirecta(boolean aprobDirecta) {
-		this.aprobDirecta = aprobDirecta;
-	}
-
 	public String getDescrEvaluacion() {
 		return descrEvaluacion;
 	}
@@ -427,6 +424,30 @@ public class Programa {
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
+	}
+
+	public EnumModoAprobacion getModoAprobacion() {
+		return modoAprobacion;
+	}
+
+	public void setModoAprobacion(EnumModoAprobacion modoAprobacion) {
+		this.modoAprobacion = modoAprobacion;
+	}
+
+	public Date getFecha() {
+		return fecha;
+	}
+
+	public void setFecha(Date fecha) {
+		this.fecha = fecha;
+	}
+
+	public String getOtrasAclaracionesCarrera() {
+		return otrasAclaracionesCarrera;
+	}
+
+	public void setOtrasAclaracionesCarrera(String otrasAclaracionesCarrera) {
+		this.otrasAclaracionesCarrera = otrasAclaracionesCarrera;
 	}
 
 }

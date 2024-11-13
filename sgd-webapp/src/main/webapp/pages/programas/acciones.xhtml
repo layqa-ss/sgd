@@ -1,0 +1,63 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="jakarta.faces.core" xmlns:h="jakarta.faces.html"
+	xmlns:ui="jakarta.faces.facelets" xmlns:p="http://primefaces.org/ui"
+	template="/layout/template.xhtml">
+
+	<f:metadata>
+		<f:importConstants type="com.fhce.sgd.dto.programas.RevisionDto" />
+	</f:metadata>
+
+	<ui:define name="content">
+		<section class="intro">
+			<article>
+				<h1 class="titulo-seccion">Historial de acciones</h1>
+			</article>
+		</section>
+		<section>
+			<article>
+				<h:form class="form container" enctype="multipart/form-data">
+					<h:messages styleClass="messages error" />
+					<div class="item">
+						<label class="item-label">Unidad curricular</label>
+						<h:outputText value="#{pCtrl.revisado.nombreUC}" />
+					</div>
+					<div class="item">
+						<label class="item-label">Creación</label>
+						<h:outputText value="#{pCtrl.revisado.fechaFormatted}" />
+					</div>
+					<div class="item">
+						<label class="item-label">Estado actual</label>
+						<h:outputText value="#{pCtrl.revisado.estado.label}" />
+					</div>
+					<p:dataTable value="#{pCtrl.accionesPrograma}" var="a"
+						styleClass="table table-bibliografia">
+
+						<p:column headerText="Estado">
+							<h:outputText value="#{a.estadoPrograma.label}" />
+						</p:column>
+						
+						<p:column headerText="Tipo">
+							<h:outputText
+								value="#{(a['class'].simpleName eq 'RevisionDto') ? 'Sugerencias' : 'Aprobación'}" />
+						</p:column>
+
+						<p:column headerText="Fecha">
+							<h:outputText value="#{a.fecha_revisionFormated}" />
+						</p:column>
+
+						<p:column headerText="Usuario">
+							<h:outputText value="#{a.nombre_usuario}" />
+						</p:column>
+
+					</p:dataTable>
+
+					<div class="item volver">
+						<a href="/pages/programas/ver-programas.jsf?faces-redirect=true"><span
+							class="fa fa-1x mr-3 fa-angle-double-left"></span><span>Volver</span></a>
+					</div>
+				</h:form>
+			</article>
+		</section>
+	</ui:define>
+
+</ui:composition>

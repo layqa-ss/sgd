@@ -1,20 +1,18 @@
 package com.fhce.sgd.model.gestion;
 
-import java.util.Set;
-
-import com.fhce.sgd.model.programas.MarcoAcademico;
+import org.hibernate.envers.Audited;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "areas")
+@Audited
 public class AreaTematica {
 
 	@Id
@@ -27,8 +25,7 @@ public class AreaTematica {
     @JoinColumn(name="id_carrera", nullable=false)
 	private Carrera carrera;
 	
-	@ManyToMany(mappedBy = "areasTematicas")
-	private Set<MarcoAcademico> marcos;
+	private boolean habilitada;
 
 	public Long getId() {
 		return id;
@@ -54,12 +51,12 @@ public class AreaTematica {
 		this.carrera = carrera;
 	}
 
-	public Set<MarcoAcademico> getMarcos() {
-		return marcos;
+	public boolean isHabilitada() {
+		return habilitada;
 	}
 
-	public void setMarcos(Set<MarcoAcademico> marcos) {
-		this.marcos = marcos;
+	public void setHabilitada(boolean habilitada) {
+		this.habilitada = habilitada;
 	}
 
 }

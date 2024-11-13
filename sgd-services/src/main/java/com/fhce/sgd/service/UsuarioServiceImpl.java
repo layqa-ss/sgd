@@ -32,10 +32,10 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	@Autowired
 	private UsuarioRepository usuarioRepository;
-	
+
 	@Autowired
 	private RolRepository rolRepo;
-	
+
 	@Autowired
 	private GestionService gestionService;
 
@@ -50,15 +50,16 @@ public class UsuarioServiceImpl implements UsuarioService {
 					if (userDto.getTipoAdscripcion() == EnumTipoAdscripcion.UA) {
 						List<UnidadAcademicaDto> unidadesAcademicas = new ArrayList<>();
 						for (UnidadAcademica ua : u.get().getUnidadesAcademicas()) {
-							UnidadAcademicaDto uaDto = new UnidadAcademicaDto(ua.getId(), ua.getNombreUA());
+							UnidadAcademicaDto uaDto = new UnidadAcademicaDto(ua.getId(), ua.getNombreUA(),
+									ua.isHabilitada());
 							unidadesAcademicas.add(uaDto);
 						}
 						userDto.setUnidades(unidadesAcademicas);
-					} else if(userDto.getTipoAdscripcion() == EnumTipoAdscripcion.CARRERA) {
+					} else if (userDto.getTipoAdscripcion() == EnumTipoAdscripcion.CARRERA) {
 						List<CarreraDto> carreras = new ArrayList<>();
 						for (Carrera c : u.get().getCarreras()) {
 							CarreraDto cDto = new CarreraDto(c.getId(), c.getNombreCarrera(), c.getUa().getId(),
-									c.getUa().getNombreUA());
+									c.getUa().getNombreUA(), c.isHabilitada());
 							carreras.add(cDto);
 						}
 						userDto.setCarreras(carreras);
@@ -70,11 +71,11 @@ public class UsuarioServiceImpl implements UsuarioService {
 			}
 		} catch (Exception e) {
 			log.error("Error en getUsuarioDto de UsuarioService: " + e.getMessage());
-			throw new SgdServicesException("Error en getUsuarioDto de UsuarioService: " + e.getMessage() , e);
+			throw new SgdServicesException("Error en getUsuarioDto de UsuarioService: " + e.getMessage(), e);
 		}
-		
+
 	}
-	
+
 	public Usuario getUsuario(Long id) throws SgdServicesException {
 		try {
 			Optional<Usuario> u = usuarioRepository.findById(id);
@@ -85,9 +86,9 @@ public class UsuarioServiceImpl implements UsuarioService {
 			}
 		} catch (Exception e) {
 			log.error("Error en getUsuario de UsuarioService: " + e.getMessage());
-			throw new SgdServicesException("Error en getUsuario de UsuarioService: " + e.getMessage() , e);
+			throw new SgdServicesException("Error en getUsuario de UsuarioService: " + e.getMessage(), e);
 		}
-		
+
 	}
 
 	public Usuario getUsuarioByUsername(String username) throws SgdServicesException {
@@ -102,7 +103,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 			}
 		} catch (Exception e) {
 			log.error("Error en getUsuarioByUsername de UsuarioService: " + e.getMessage());
-			throw new SgdServicesException("Error en getUsuarioByUsername de UsuarioService: " + e.getMessage() , e);
+			throw new SgdServicesException("Error en getUsuarioByUsername de UsuarioService: " + e.getMessage(), e);
 		}
 	}
 
@@ -118,10 +119,10 @@ public class UsuarioServiceImpl implements UsuarioService {
 			user.setUsername(userDto.getUsername());
 			Rol r = rolRepo.findById(userDto.getIdRol()).get();
 			user.setRol(r);
-			
-			if(userDto.getTipoAdscripcion() != null) {
+
+			if (userDto.getTipoAdscripcion() != null) {
 				user.setTipoAdscripcion(userDto.getTipoAdscripcion());
-				if(userDto.getTipoAdscripcion() == EnumTipoAdscripcion.UA) {
+				if (userDto.getTipoAdscripcion() == EnumTipoAdscripcion.UA) {
 					Set<UnidadAcademica> unidadesAcademicas = new HashSet<UnidadAcademica>();
 					for (UnidadAcademicaDto uaDto : userDto.getUnidades()) {
 						UnidadAcademica ua = gestionService.getUnidadAcademica(uaDto.getId());
@@ -142,41 +143,79 @@ public class UsuarioServiceImpl implements UsuarioService {
 			return user.getId();
 		} catch (Exception e) {
 			log.error("Error en saveOrUpdateUsuario de UsuarioService: " + e.getMessage());
-			throw new SgdServicesException("Error en saveOrUpdateUsuario de UsuarioService: " + e.getMessage() , e);
+			throw new SgdServicesException("Error en saveOrUpdateUsuario de UsuarioService: " + e.getMessage(), e);
 		}
-		
+
 	}
-	
+
 	public List<UsuarioDto> getUsuarios() throws SgdServicesException {
 		try {
 			Iterable<Usuario> usuariosTodos = usuarioRepository.findAll();
-	    	List<Usuario> usuarios = StreamSupport.stream(usuariosTodos.spliterator(), false).toList();
-	        if (!usuarios.isEmpty()) {
-	        	List<UsuarioDto> usuariosDto = new ArrayList<UsuarioDto>();
-	        	for (Usuario u : usuarios) {
-	        		UsuarioDto uDto = new UsuarioDto(u.getId(), u.getUsername(), u.getPassword(), u.getCreationDate(), u.getFullname(), u.getRol().getId());
-	        		usuariosDto.add(uDto);
-	        	}
-	        	return usuariosDto;
-	        } else {
-	            return null;
-	        }
+			List<Usuario> usuarios = StreamSupport.stream(usuariosTodos.spliterator(), false).toList();
+			if (!usuarios.isEmpty()) {
+				List<UsuarioDto> usuariosDto = new ArrayList<UsuarioDto>();
+				for (Usuario u : usuarios) {
+					UsuarioDto uDto = new UsuarioDto(u.getId(), u.getUsername(), u.getPassword(), u.getCreationDate(),
+							u.getFullname(), u.getRol().getId());
+					usuariosDto.add(uDto);
+				}
+				return usuariosDto;
+			} else {
+				return null;
+			}
 		} catch (Exception e) {
 			log.error("Error en getUsuarios de UsuarioService: " + e.getMessage());
 			e.printStackTrace();
-			throw new SgdServicesException("Error en getUsuarios de UsuarioService: " + e.getMessage() , e);
+			throw new SgdServicesException("Error en getUsuarios de UsuarioService: " + e.getMessage(), e);
 		}
-    	
-    }
-	
+
+	}
+
 	public void deleteUsuario(Long id) throws SgdServicesException {
 		try {
 			usuarioRepository.deleteById(id);
 		} catch (Exception e) {
 			log.error("Error en deleteUsuario de UsuarioService: " + e.getMessage());
-			throw new SgdServicesException("Error en deleteUsuario de UsuarioService: " + e.getMessage() , e);
+			throw new SgdServicesException("Error en deleteUsuario de UsuarioService: " + e.getMessage(), e);
 		}
-		
+
+	}
+
+	public List<Long> obtenerUnidadesUsuario(Long id) throws SgdServicesException {
+		try {
+			Usuario user = getUsuario(id);
+			if (user.getTipoAdscripcion() == EnumTipoAdscripcion.UA) {
+				List<Long> uaIds = new ArrayList<Long>();
+				for (UnidadAcademica ua : user.getUnidadesAcademicas()) {
+					uaIds.add(ua.getId());
+				}
+				return uaIds;
+			} else {
+				return null;
+			}
+		} catch (Exception e) {
+			log.error("Error en obtenerUnidadesUsuario de UsuarioService: " + e.getMessage());
+			throw new SgdServicesException("Error en obtenerUnidadesUsuario de UsuarioService: " + e.getMessage(), e);
+		}
+
+	}
+
+	public List<Long> obtenerCarrerasUsuario(Long id) throws SgdServicesException {
+		try {
+			Usuario user = getUsuario(id);
+			if (user.getTipoAdscripcion() == EnumTipoAdscripcion.CARRERA) {
+				List<Long> carreraIds = new ArrayList<Long>();
+				for (Carrera c : user.getCarreras()) {
+					carreraIds.add(c.getId());
+				}
+				return carreraIds;
+			} else {
+				return null;
+			}
+		} catch (Exception e) {
+			log.error("Error en obtenerCarrerasUsuario de UsuarioService: " + e.getMessage());
+			throw new SgdServicesException("Error en obtenerCarrerasUsuario de UsuarioService: " + e.getMessage(), e);
+		}
 	}
 
 }

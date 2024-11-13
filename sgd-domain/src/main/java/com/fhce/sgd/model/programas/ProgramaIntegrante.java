@@ -1,5 +1,7 @@
 package com.fhce.sgd.model.programas;
 
+import org.hibernate.envers.Audited;
+
 import com.fhce.sgd.model.enums.EnumCargo;
 import com.fhce.sgd.model.enums.EnumRolDocente;
 import com.fhce.sgd.model.usuarios.Usuario;
@@ -14,6 +16,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "integrantes")
+@Audited
 public class ProgramaIntegrante {
 
 	@Id

@@ -61,7 +61,7 @@
 							<h:outputText value="#{carreraVar.nombre}" />
 						</p:column>
 
-						<p:column headerText="Unidad Académica" sortBy="#{areaVar.nombreUA}"
+						<p:column headerText="Unidad Académica" sortBy="#{carreraVar.nombreUA}"
 							field="nombreUA" filterMatchMode="exact">
 
 							<f:facet name="filter">
@@ -78,8 +78,14 @@
 
 						<p:column styleClass="links-column">
 							<h:commandLink update="tableForm" styleClass="link-delete"
-								action="#{gestionController.borrarCarrera(carreraVar.id)}">
-								<i class="material-symbols-outlined">delete</i>
+								action="#{gestionController.borrarCarrera(carreraVar.id, true)}" title="Habilitar"
+								rendered="#{not carreraVar.habilitada}">
+								<i class="material-symbols-outlined">check</i>
+							</h:commandLink>
+							<h:commandLink update="tableForm" styleClass="link-delete"
+								action="#{gestionController.borrarCarrera(carreraVar.id, false)}" title="Deshabilitar"
+								rendered="#{carreraVar.habilitada}">
+								<i class="material-symbols-outlined">do_not_disturb_on</i>
 							</h:commandLink>
 						</p:column>
 

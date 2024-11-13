@@ -82,8 +82,14 @@
 
 						<p:column styleClass="links-column">
 							<h:commandLink update="tableForm" styleClass="link-delete"
-								action="#{gestionController.borrarAreaTematica(areaVar.id)}">
-								<i class="material-symbols-outlined">delete</i>
+								action="#{gestionController.borrarAreaTematica(areaVar.id, true)}" title="Habilitar"
+								rendered="#{not areaVar.habilitada}">
+								<i class="material-symbols-outlined">check</i>
+							</h:commandLink>
+							<h:commandLink update="tableForm" styleClass="link-delete"
+								action="#{gestionController.borrarAreaTematica(areaVar.id, false)}" title="Deshabilitar"
+								rendered="#{areaVar.habilitada}">
+								<i class="material-symbols-outlined">do_not_disturb_on</i>
 							</h:commandLink>
 						</p:column>
 

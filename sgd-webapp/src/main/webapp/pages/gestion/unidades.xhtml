@@ -54,8 +54,14 @@
 
 						<p:column styleClass="links-column">
 							<h:commandLink update="tableForm" styleClass="link-delete"
-								action="#{gestionController.borrarUA(unidadVar.id)}">
-								<i class="material-symbols-outlined">delete</i>
+								action="#{gestionController.borrarUA(unidadVar.id, true)}" title="Habilitar"
+								rendered="#{not unidadVar.habilitada}">
+								<i class="material-symbols-outlined">check</i>
+							</h:commandLink>
+							<h:commandLink update="tableForm" styleClass="link-delete"
+								action="#{gestionController.borrarUA(unidadVar.id, false)}" title="Deshabilitar"
+								rendered="#{unidadVar.habilitada}">
+								<i class="material-symbols-outlined">do_not_disturb_on</i>
 							</h:commandLink>
 						</p:column>
 

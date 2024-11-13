@@ -3,6 +3,8 @@ package com.fhce.sgd.model.programas;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.hibernate.envers.Audited;
+
 import com.fhce.sgd.model.gestion.AreaTematica;
 import com.fhce.sgd.model.gestion.Carrera;
 import com.fhce.sgd.model.gestion.UnidadAcademica;
@@ -19,6 +21,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "marcos")
+@Audited
 public class MarcoAcademico {
 
 	@Id
