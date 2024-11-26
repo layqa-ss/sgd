@@ -106,10 +106,10 @@
 							class="material-symbols-outlined"> hourglass_top </span>
 							<p>Ver programas en proceso de creación</p>
 					</h:commandLink></li>
-<!-- 					<li><a href="/pages/programas/ver-programas.jsf"> <span -->
-<!-- 							class="material-symbols-outlined"> view_list </span> -->
-<!-- 							<p>Ver programas aprobados</p> -->
-<!-- 					</a></li> -->
+					<li><h:commandLink action="/pages/programas/ver-programas-aprobados.jsf" rendered="#{appCtrl.puedeVerProgramas}"> <span
+							class="material-symbols-outlined"> verified </span>
+							<p>Ver programas aprobados</p>
+					</h:commandLink></li>
 				</ul>
 			</div>
 		</h:form>

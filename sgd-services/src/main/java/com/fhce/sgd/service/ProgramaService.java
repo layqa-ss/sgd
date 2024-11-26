@@ -16,6 +16,10 @@ public interface ProgramaService {
 	
 	List<ProgramaDto> getProgramasAll() throws SgdServicesException;
 	
+	List<ProgramaDto> getProgramasEnProceso() throws SgdServicesException;
+	
+	List<ProgramaDto> getProgramasAprobados() throws SgdServicesException;
+	
 	ProgramaNuevoDto obtenerProgramaDtoPorId(Long id) throws SgdServicesException;
 	
 	Programa obtenerProgramaPorId(Long id) throws SgdServicesException;

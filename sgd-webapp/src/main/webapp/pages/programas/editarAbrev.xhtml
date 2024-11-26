@@ -113,10 +113,16 @@
 							</div>
 
 							<h:panelGroup class="item" layout="block" id="areas">
-								<label class="item-label">Area temática por carrera</label>
+								<label class="item-label">Area de formación</label>
 								<ui:repeat value="#{pCtrl.nuevo.carreras}" var="c">
 									<div class="item">
-										<h:outputText value="#{c.nombre} - #{c.areaNombre}" />
+										<h:outputText value="#{c.nombre}" />
+										<ul class="item ul-list">
+											<ui:repeat value="#{pCtrl.nuevo.areas}" var="a">
+												<li><h:outputText value="#{a.nombre}"
+														rendered="#{a.carreraId==c.id}" /></li>
+											</ui:repeat>
+										</ul>
 									</div>
 								</ui:repeat>
 							</h:panelGroup>
@@ -502,12 +508,16 @@
 							<div class="item">
 								<label class="item-label" for="uc">Objetivos<span
 									class="required">*</span></label>
-								<h:outputText value="#{pCtrl.nuevo.objetivos}" />
+								<div class="item">
+									<h:outputText value="#{pCtrl.nuevo.objetivos}" escape="false" />
+								</div>
 							</div>
 							<div class="item">
 								<label class="item-label" for="uc">Contenidos<span
 									class="required">*</span></label>
-								<h:outputText value="#{pCtrl.nuevo.contenidos}" />
+								<div class="item">
+									<h:outputText value="#{pCtrl.nuevo.contenidos}" escape="false" />
+								</div>
 							</div>
 
 
@@ -533,7 +543,9 @@
 							<div class="item">
 								<label class="item-label" for="uc">Descripción de la
 									propuesta metodológica de la unidad curricular </label>
-								<h:outputText value="#{pCtrl.nuevo.descrMetodologia}" />
+								<div class="item">
+									<h:outputText value="#{pCtrl.nuevo.descrMetodologia}" escape="false" />
+								</div>
 							</div>
 							<div class="switch-button item adecuaciones">
 								<div class="item">
@@ -568,7 +580,9 @@
 							<div class="item">
 								<label class="item-label" for="uc">Descripción de la
 									forma de evaluación y aprobación </label>
-								<h:outputText value="#{pCtrl.nuevo.descrEvaluacion}" />
+								<div class="item">
+									<h:outputText value="#{pCtrl.nuevo.descrEvaluacion}" escape="false" />
+								</div>
 							</div>
 							<div class="buttons">
 								<button type="button" class="button prev-step">
@@ -659,13 +673,17 @@
 							</div>
 						</div>
 					</div>
+					<div class="usuario">
+						<label class="item-label">Creado por:</label>
+						<h:outputText value="#{pCtrl.nuevo.nombreUsuario}" />
+					</div>
 					<div class="buttons">
 						<div class="item">
 							<h:commandButton class="button_rojo button_large button"
 								action="#{pCtrl.guardarPrograma}" value="Guardar"></h:commandButton>
 						</div>
 						<div class="item volver">
-							<a href="/pages/programas/ver-programas.jsf?faces-redirect=true"><span
+							<a href="/pages/programas/ver-programas-aprobados.jsf?faces-redirect=true"><span
 								class="fa fa-1x mr-3 fa-angle-double-left"></span><span>Volver</span></a>
 						</div>
 					</div>

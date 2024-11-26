@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.fhce.sgd.dto.gestion.AreaTematicaDto;
 import com.fhce.sgd.dto.gestion.CarreraDto;
 import com.fhce.sgd.dto.gestion.UnidadAcademicaDto;
 import com.fhce.sgd.model.enums.EnumDuracion;
@@ -23,12 +24,15 @@ public class ProgramaNuevoDto {
 	private Integer year;
 	private EnumEstadoPrograma estado;
 	private Long idUsuario;
+	private String nombreUsuario;
 	private Date fecha;
 
 	private List<UnidadAcademicaDto> unidades;
 	
 	private List<CarreraDto> carreras;
 	private String otrasAclaracionesCarrera;
+	
+	private List<AreaTematicaDto> areas;
 
 	private EnumDuracion duracion;
 	private String duracionOtro;
@@ -427,4 +431,19 @@ public class ProgramaNuevoDto {
 		this.otrasAclaracionesCarrera = otrasAclaracionesCarrera;
 	}
 
+	public String getNombreUsuario() {
+		return nombreUsuario;
+	}
+
+	public void setNombreUsuario(String nombreUsuario) {
+		this.nombreUsuario = nombreUsuario;
+	}
+
+	public List<AreaTematicaDto> getAreas() {
+		return areas;
+	}
+
+	public void setAreas(List<AreaTematicaDto> areas) {
+		this.areas = areas;
+	}
 }

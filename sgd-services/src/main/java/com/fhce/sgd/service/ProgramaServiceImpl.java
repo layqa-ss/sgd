@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fhce.sgd.dto.gestion.AreaTematicaDto;
 import com.fhce.sgd.dto.gestion.CarreraDto;
 import com.fhce.sgd.dto.gestion.UnidadAcademicaDto;
 import com.fhce.sgd.dto.programas.BibliografiaDto;
@@ -86,16 +87,18 @@ public class ProgramaServiceImpl implements ProgramaService {
 			ma.setUnidadesAcademicas(unidadesAcademicas);
 
 			Set<Carrera> carreras = new HashSet<Carrera>();
-			Set<AreaTematica> areasTematicas = new HashSet<AreaTematica>();
 
 			for (CarreraDto cDto : pDto.getCarreras()) {
 				Carrera c = gestionService.getCarrera(cDto.getId());
 				carreras.add(c);
-
-				AreaTematica a = gestionService.getAreaTematica(cDto.getArea());
-				areasTematicas.add(a);
 			}
 			ma.setCarreras(carreras);
+			
+			Set<AreaTematica> areasTematicas = new HashSet<AreaTematica>();
+			for (AreaTematicaDto aDto: pDto.getAreas()) {
+				AreaTematica a = gestionService.getAreaTematica(aDto.getId());
+				areasTematicas.add(a);
+			}
 			ma.setAreasTematicas(areasTematicas);
 
 			ma.setPrograma(p);
@@ -212,39 +215,7 @@ public class ProgramaServiceImpl implements ProgramaService {
 			Iterable<Programa> programasTodas = programaRepository.findAll();
 			List<Programa> programas = StreamSupport.stream(programasTodas.spliterator(), false).toList();
 			for (Programa p : programas) {
-				ProgramaDto prog = new ProgramaDto(p.getId(), p.getUc().getNombreUC(), p.getYear(), p.getEstado());
-				prog.setIdUsuario(p.getUsuario().getId());
-				
-				List<UnidadAcademicaDto> unidadesAcademicas = new ArrayList<>();
-				for (UnidadAcademica ua : p.getMa().getUnidadesAcademicas()) {
-					UnidadAcademicaDto uaDto = new UnidadAcademicaDto(ua.getId(), ua.getNombreUA(), ua.isHabilitada());
-					unidadesAcademicas.add(uaDto);
-				}
-				prog.setUnidades(unidadesAcademicas);
-
-				List<CarreraDto> carreras = new ArrayList<>();
-				for (Carrera c : p.getMa().getCarreras()) {
-					CarreraDto cDto = new CarreraDto(c.getId(), c.getNombreCarrera(), c.getUa().getId(),
-							c.getUa().getNombreUA(), c.isHabilitada());
-					for (AreaTematica a : p.getMa().getAreasTematicas()) {
-						if (a.getCarrera().getId() == c.getId()) {
-							cDto.setArea(a.getId());
-							cDto.setAreaNombre(a.getNombreArea());
-						}
-					}
-					carreras.add(cDto);
-				}
-				prog.setCarreras(carreras);
-				
-				List<ProgramaIntegranteDto> integrantes = new ArrayList<>();
-				for (ProgramaIntegrante i : p.getIntegrantes()) {
-					ProgramaIntegranteDto iDto = new ProgramaIntegranteDto(i.getId(), i.getRol(), i.getCargo(),
-							i.getCargoOtro(), i.getUnidad_academica(), i.getSubunidad_academica(),
-							i.getDocente().getId(), i.getDocente().getFullname());
-					integrantes.add(iDto);
-				}
-				prog.setIntegrantes(integrantes);
-				
+				ProgramaDto prog = obtenerProgramaDto(p);
 				programasDto.add(prog);
 			}
 			return programasDto;
@@ -253,6 +224,78 @@ public class ProgramaServiceImpl implements ProgramaService {
 			throw new SgdServicesException("Error en getProgramasAll de ProgramaService: " + e.getMessage(), e);
 		}
 
+	}
+
+	public List<ProgramaDto> getProgramasEnProceso() throws SgdServicesException {
+		try {
+			List<ProgramaDto> programasDto = new ArrayList<ProgramaDto>();
+			Iterable<Programa> programasTodas = programaRepository.findAll();
+			List<Programa> programas = StreamSupport.stream(programasTodas.spliterator(), false)
+					.filter(p -> p.getEstado() != EnumEstadoPrograma.APROBADO).toList();
+			for (Programa p : programas) {
+				ProgramaDto prog = obtenerProgramaDto(p);
+				programasDto.add(prog);
+			}
+			return programasDto;
+		} catch (Exception e) {
+			log.error("Error en getProgramasEnProceso de ProgramaService: " + e.getMessage());
+			throw new SgdServicesException("Error en getProgramasEnProceso de ProgramaService: " + e.getMessage(), e);
+		}
+
+	}
+	
+	public List<ProgramaDto> getProgramasAprobados() throws SgdServicesException {
+		try {
+			List<ProgramaDto> programasDto = new ArrayList<ProgramaDto>();
+			Iterable<Programa> programasTodas = programaRepository.findAll();
+			List<Programa> programas = StreamSupport.stream(programasTodas.spliterator(), false)
+					.filter(p -> p.getEstado() == EnumEstadoPrograma.APROBADO).toList();
+			for (Programa p : programas) {
+				ProgramaDto prog = obtenerProgramaDto(p);
+				programasDto.add(prog);
+			}
+			return programasDto;
+		} catch (Exception e) {
+			log.error("Error en getProgramasAprobados de ProgramaService: " + e.getMessage());
+			throw new SgdServicesException("Error en getProgramasAprobados de ProgramaService: " + e.getMessage(), e);
+		}
+
+	}
+	
+	private ProgramaDto obtenerProgramaDto(Programa p) {
+		ProgramaDto prog = new ProgramaDto(p.getId(), p.getUc().getNombreUC(), p.getYear(), p.getEstado());
+		prog.setIdUsuario(p.getUsuario().getId());
+
+		List<UnidadAcademicaDto> unidadesAcademicas = new ArrayList<>();
+		for (UnidadAcademica ua : p.getMa().getUnidadesAcademicas()) {
+			UnidadAcademicaDto uaDto = new UnidadAcademicaDto(ua.getId(), ua.getNombreUA(), ua.isHabilitada());
+			unidadesAcademicas.add(uaDto);
+		}
+		prog.setUnidades(unidadesAcademicas);
+
+		List<CarreraDto> carreras = new ArrayList<>();
+		for (Carrera c : p.getMa().getCarreras()) {
+			CarreraDto cDto = new CarreraDto(c.getId(), c.getNombreCarrera(), c.getUa().getId(),
+					c.getUa().getNombreUA(), c.isHabilitada());
+			for (AreaTematica a : p.getMa().getAreasTematicas()) {
+				if (a.getCarrera().getId() == c.getId()) {
+					cDto.setArea(a.getId());
+					cDto.setAreaNombre(a.getNombreArea());
+				}
+			}
+			carreras.add(cDto);
+		}
+		prog.setCarreras(carreras);
+
+		List<ProgramaIntegranteDto> integrantes = new ArrayList<>();
+		for (ProgramaIntegrante i : p.getIntegrantes()) {
+			ProgramaIntegranteDto iDto = new ProgramaIntegranteDto(i.getId(), i.getRol(), i.getCargo(),
+					i.getCargoOtro(), i.getUnidad_academica(), i.getSubunidad_academica(),
+					i.getDocente().getId(), i.getDocente().getFullname());
+			integrantes.add(iDto);
+		}
+		prog.setIntegrantes(integrantes);
+		return prog;
 	}
 
 	public Programa obtenerProgramaPorId(Long id) throws SgdServicesException {
@@ -336,19 +379,21 @@ public class ProgramaServiceImpl implements ProgramaService {
 				for (Carrera c : prog.getMa().getCarreras()) {
 					CarreraDto cDto = new CarreraDto(c.getId(), c.getNombreCarrera(), c.getUa().getId(),
 							c.getUa().getNombreUA(), c.isHabilitada());
-					for (AreaTematica a : prog.getMa().getAreasTematicas()) {
-						if (a.getCarrera().getId() == c.getId()) {
-							cDto.setArea(a.getId());
-							cDto.setAreaNombre(a.getNombreArea());
-						}
-					}
 					carreras.add(cDto);
 				}
 				p.setCarreras(carreras);
+				
+				List<AreaTematicaDto> areas = new ArrayList<>();
+				for (AreaTematica a : prog.getMa().getAreasTematicas()) {
+					AreaTematicaDto aDto = new AreaTematicaDto(a.getId(), a.getNombreArea(), a.getCarrera().getId(), a.isHabilitada());
+					areas.add(aDto);
+				}
+				p.setAreas(areas);
 
 				p.setYear(prog.getYear());
 				p.setEstado(prog.getEstado());
 				p.setIdUsuario(prog.getUsuario().getId());
+				p.setNombreUsuario(prog.getUsuario().getFullname());
 				p.setFecha(prog.getFecha());
 				return p;
 			} else {

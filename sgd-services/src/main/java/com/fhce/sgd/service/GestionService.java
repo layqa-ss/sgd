@@ -27,6 +27,8 @@ public interface GestionService {
 	
 	AreaTematica getAreaTematica(Long id) throws SgdServicesException;
 	
+	AreaTematicaDto getAreaTematicaDto(Long id) throws SgdServicesException;
+	
 	List<CarreraDto> getCarreras() throws SgdServicesException;
 	
 	List<CarreraDto> getCarrerasHabilitadas() throws SgdServicesException;

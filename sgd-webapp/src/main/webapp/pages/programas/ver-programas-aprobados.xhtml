@@ -10,7 +10,7 @@
 	<ui:define name="content">
 		<section class="intro">
 			<article>
-				<h1 class="titulo-seccion">Ver programas en proceso de aprobación</h1>
+				<h1 class="titulo-seccion">Ver programas aprobados</h1>
 			</article>
 		</section>
 
@@ -26,7 +26,7 @@
 					</div>
 				</h:form>
 				<h:form id="tableForm">
-					<p:dataTable value="#{pCtrl.programasEnProceso}" var="p"
+					<p:dataTable value="#{pCtrl.programasAprobados}" var="p"
 						widgetVar="programasTable" styleClass="table"
 						emptyMessage="No se encontraron programas"
 						filteredValue="#{pCtrl.programasFiltrados}"
@@ -47,28 +47,6 @@
 							<h:outputText value="#{p.year}" />
 						</p:column>
 
-						<p:column headerText="Estado" sortBy="#{p.estado.step}"
-							field="estado" filterMatchMode="exact">
-
-							<f:facet name="filter">
-								<h:selectOneMenu onchange="PF('programasTable').filter()"
-									styleClass="ui-custom-filter custom-filter">
-									<f:selectItem itemLabel="Todas" itemValue="#{null}"
-										noSelectionOption="true" />
-									<f:selectItems value="#{pCtrl.estados}" var="e"
-										itemValue="#{e}" itemLabel="#{e.label}" />
-								</h:selectOneMenu>
-							</f:facet>
-							<h:outputText value="#{p.estado.label}" />
-						</p:column>
-
-						<p:column styleClass="links-column">
-							<h:commandLink update="tableForm" styleClass="link-delete"
-								title="Editar" action="#{pCtrl.editarPrograma(p.id)}"
-								rendered="#{appCtrl.puedeEditarPrograma(p)}">
-								<i class="material-symbols-outlined">edit</i>
-							</h:commandLink>
-						</p:column>
 						<p:column styleClass="links-column">
 							<h:commandLink update="tableForm" styleClass="link-delete"
 								title="Descargar pdf" rendered="#{appCtrl.puedeDescargarPrograma(p.estado)}"
@@ -79,36 +57,23 @@
 						</p:column>
 						<p:column styleClass="links-column">
 							<h:commandLink update="tableForm" styleClass="link-delete"
-								title="Enviar a revisión" action="#{pCtrl.enviarCC(p.id)}"
-								rendered="#{appCtrl.puedeEnviarCC(p)}">
-								<i class="material-symbols-outlined">send</i>
-							</h:commandLink>
-						</p:column>
-						<p:column styleClass="links-column">
-							<h:commandLink update="tableForm" styleClass="link-delete"
-								title="Revisar" action="#{pCtrl.revisarPrograma(p.id)}"
-								rendered="#{appCtrl.puedeHacerRevision(p)}">
-								<i class="material-symbols-outlined">data_check</i>
-							</h:commandLink>
-						</p:column>
-						<p:column styleClass="links-column">
-							<h:commandLink update="tableForm" styleClass="link-delete"
-								title="Aprobar" action="#{pCtrl.aprobarPrograma(p.id)}"
-								rendered="#{appCtrl.puedeAprobar(p)}">
-								<i class="material-symbols-outlined">check_circle</i>
-							</h:commandLink>
-						</p:column>
-						<p:column styleClass="links-column">
-							<h:commandLink update="tableForm" styleClass="link-delete"
-								title="Eliminar" action="#{pCtrl.borrarPrograma(p.id)}"
-								rendered="#{p.estado == EnumEstadoPrograma.CREADO}">
-								<i class="material-symbols-outlined">delete</i>
+								title="Editar una vez aprobado"
+								action="#{pCtrl.editarProgramaAbrev(p.id)}"
+								rendered="#{appCtrl.puedeEditarAprobado(p) and pCtrl.estaVigente(p.year)}">
+								<i class="material-symbols-outlined">recycling</i>
 							</h:commandLink>
 						</p:column>
 						<p:column styleClass="links-column">
 							<h:commandLink styleClass="link-delete" rendered="#{appCtrl.puedeVerHistorial(p)}"
 								title="Historial de acciones" action="#{pCtrl.verHistorialPrograma(p.id)}">
 								<i class="material-symbols-outlined">history</i>
+							</h:commandLink>
+						</p:column>
+						<p:column styleClass="links-column">
+							<h:commandLink styleClass="link-delete"
+								title="Duplicar" action="#{pCtrl.duplicarPrograma(p.id)}"
+								rendered="#{appCtrl.puedeDuplicarPrograma(p)}">
+								<i class="material-symbols-outlined">content_copy</i>
 							</h:commandLink>
 						</p:column>
 					</p:dataTable>

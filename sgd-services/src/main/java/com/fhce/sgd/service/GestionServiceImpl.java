@@ -148,6 +148,19 @@ public class GestionServiceImpl implements GestionService {
 		}
 	}
 	
+	public AreaTematicaDto getAreaTematicaDto(Long id) throws SgdServicesException {
+		try {
+			AreaTematica a = areaTematicaRepository.findById(id).orElse(null);
+			if (a != null) {
+				return new AreaTematicaDto(a.getId(), a.getNombreArea(), a.getCarrera().getId(), a.isHabilitada());
+			}
+			return null;
+		} catch (Exception e) {
+			log.error("Error en getAreaTematicaDto de GestionService: " + e.getMessage());
+			throw new SgdServicesException("Error en getAreaTematicaDto de GestionService: " + e.getMessage(), e);
+		}
+	}
+	
 	public List<CarreraDto> getCarrerasHabilitadas() throws SgdServicesException {
 		try {
 			Iterable<Carrera> carrerasTodas = carreraRepository.findAll();

@@ -8,6 +8,6 @@ RUN mvn clean install
 
 FROM openjdk:17-jdk-slim
 WORKDIR /app
-COPY --from=build /app/sgd-webapp/target/sgd-webapp-0.0.2.war .
+COPY --from=build /app/sgd-webapp/target/sgd-webapp-0.1.0.war .
 EXPOSE 8090
-ENTRYPOINT ["java", "-jar", "sgd-webapp-0.0.2.war"]
+ENTRYPOINT ["java", "-jar", "sgd-webapp-0.1.0.war"]

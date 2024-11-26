@@ -184,25 +184,25 @@
 							</div>
 
 							<h:panelGroup class="item" layout="block" id="areas">
-								<label class="item-label">Area temática por carrera</label>
-								<p class="ayuda">Seleccionar por cada carrera el área
-									temática a la que pertenece la unidad curricular.</p>
+								<label class="item-label">Area de formación por carrera</label>
+								<p class="ayuda">Seleccionar por cada carrera el área de formación a la que pertenece la unidad curricular. Si correspondiere, es posible seleccionar más de una opción.</p>
 								<ui:repeat value="#{pCtrl.nuevo.carreras}" var="carreraA">
 									<div class="item item-carrera-area">
 										<div class="item-checkbox">
 											<p:outputLabel value="#{carreraA.nombre}" />
 										</div>
 										<div class="item item-areas">
-											<label class="item-label">Área temática<span
+											<label class="item-label">Área de formación<span
 												class="required">*</span></label>
-											<h:selectOneMenu value="#{pCtrl.mapAreas[carreraA.id]}" required="true"
-												requiredMessage="Debe seleccionar área temática para #{carreraA.nombre}">
+											<p:selectManyMenu value="#{pCtrl.mapAreas[carreraA.id]}" required="true"
+												requiredMessage="Debe seleccionar área de formación para #{carreraA.nombre}" 
+												showCheckbox="true" styleClass="manymenu-advanced"
+												collectionType="java.util.ArrayList">
 
-												<f:selectItem itemLabel="Selecciona" itemValue="" />
 												<f:selectItems
 													value="#{pCtrl.areasPorCarrera.get(carreraA.id)}" var="a"
-													itemValue="#{a.id}" itemLabel="#{a.nombre}" />
-											</h:selectOneMenu>
+													itemValue="#{a}" itemLabel="#{a.nombre}" />
+											</p:selectManyMenu>
 										</div>
 									</div>
 								</ui:repeat>
@@ -1112,6 +1112,10 @@
 								</button>
 							</div>
 						</div>
+					</div>
+					<div class="usuario">
+						<label class="item-label">Creado por:</label>
+						<h:outputText value="#{pCtrl.nuevo.nombreUsuario}" />
 					</div>
 					<div class="buttons">
 						<div class="item">

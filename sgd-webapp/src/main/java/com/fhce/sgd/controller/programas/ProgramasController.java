@@ -85,7 +85,8 @@ public class ProgramasController {
 
 	private Map<Long, List<AreaTematicaDto>> areasPorCarrera;
 
-	private List<ProgramaDto> programasTodos;
+	private List<ProgramaDto> programasEnProceso;
+	private List<ProgramaDto> programasAprobados;
 	private List<UnidadCurricularDto> unidadesCurriculares;
 
 	private List<UsuarioDto> usuarios;
@@ -103,7 +104,7 @@ public class ProgramasController {
 	private BibliografiaDto nuevaBibliografia;
 	private Integer maxBiblio = 0;
 
-	private Map<Long, Object> mapAreas;
+	private Map<Long, List<AreaTematicaDto>> mapAreas;
 
 	private List<FilterMeta> filterBy;
 	private List<ProgramaDto> programasFiltrados;
@@ -127,7 +128,8 @@ public class ProgramasController {
 			carreras = gestionService.getCarrerasHabilitadas();
 			areasPorCarrera = gestionService.getAreasPorCarrera();
 			unidadesCurriculares = gestionService.getUnidadesCurriculares();
-			programasTodos = programaService.getProgramasAll();
+			programasEnProceso = programaService.getProgramasEnProceso();
+			programasAprobados = programaService.getProgramasAprobados();
 			usuarios = usuarioService.getUsuarios();
 
 			integrante = new ProgramaIntegranteDto();
@@ -155,7 +157,7 @@ public class ProgramasController {
 	public String enviarCC(Long id) {
 		try {
 			programaService.cambiarEstado(id, EnumEstadoPrograma.REVISION_CC);
-			programasTodos = programaService.getProgramasAll();
+			programasEnProceso = programaService.getProgramasEnProceso();
 		} catch (SgdServicesException e) {
 			log.error("Error en enviarCC de ProgramasController");
 			FacesContext.getCurrentInstance().addMessage(null,
@@ -166,10 +168,11 @@ public class ProgramasController {
 
 	public String agregarPrograma() {
 		nuevo = new ProgramaNuevoDto();
-		mapAreas = new HashMap<Long, Object>();
+		mapAreas = new HashMap<Long, List<AreaTematicaDto>>();
 		nuevo.setEstado(EnumEstadoPrograma.CREADO);
 		nuevo.setYear(obtenerAnioCorriente());
 		nuevo.setIdUsuario(appCtrl.getIdUsuarioLogueado());
+		nuevo.setNombreUsuario(appCtrl.getUsuarioLogueado());
 		edicion = false;
 		maxBiblio = 0;
 		revisionesPrograma = new ArrayList<RevisionDto>();
@@ -179,7 +182,7 @@ public class ProgramasController {
 	public String editarPrograma(Long id) {
 		try {
 			nuevo = programaService.obtenerProgramaDtoPorId(id);
-			mapAreas = obtenerMapAreas(nuevo.getCarreras());
+			mapAreas = obtenerMapAreas(nuevo.getAreas());
 			edicion = true;
 			maxBiblio = nuevo.getBibliografia().size();
 			revisionesPrograma = accionService.getRevisionesPrograma(id);
@@ -194,13 +197,15 @@ public class ProgramasController {
 	public String duplicarPrograma(Long id) {
 		try {
 			nuevo = programaService.obtenerProgramaDtoPorId(id);
-			mapAreas = obtenerMapAreas(nuevo.getCarreras());
+			mapAreas = obtenerMapAreas(nuevo.getAreas());
 			edicion = false;
 			maxBiblio = nuevo.getBibliografia().size();
 			revisionesPrograma = new ArrayList<RevisionDto>();
 			nuevo.setId(null);
 			nuevo.setEstado(EnumEstadoPrograma.CREADO);
 			nuevo.setYear(obtenerAnioCorriente());
+			nuevo.setIdUsuario(appCtrl.getIdUsuarioLogueado());
+			nuevo.setNombreUsuario(appCtrl.getUsuarioLogueado());
 			return "programa";
 		} catch (SgdServicesException e) {
 			log.error("Error en duplicarPrograma de ProgramasController");
@@ -209,10 +214,13 @@ public class ProgramasController {
 		}
 	}
 
-	private Map<Long, Object> obtenerMapAreas(List<CarreraDto> carreras) {
-		Map<Long, Object> map = new HashMap<Long, Object>();
-		for (CarreraDto c : carreras) {
-			map.put(c.getId(), c.getArea());
+	private Map<Long, List<AreaTematicaDto>> obtenerMapAreas(List<AreaTematicaDto> areas) {
+		Map<Long, List<AreaTematicaDto>> map = new HashMap<Long, List<AreaTematicaDto>>();
+		for (AreaTematicaDto c : areas) {
+			if (!map.containsKey(c.getCarreraId())) {
+				map.put(c.getCarreraId(), new ArrayList<>());
+			}
+			map.get(c.getCarreraId()).add(c);
 		}
 		return map;
 	}
@@ -259,7 +267,7 @@ public class ProgramasController {
 				nuevoEstado = EnumEstadoPrograma.CREADO;
 			}
 			programaService.cambiarEstado(aprobacion.getIdPrograma(), nuevoEstado);
-			programasTodos = programaService.getProgramasAll();
+			programasEnProceso = programaService.getProgramasEnProceso();
 			return "/pages/programas/ver-programas.jsf?faces-redirect=true";
 		} catch (SgdServicesException e) {
 			log.error("Error en guardarRevision de ProgramasController");
@@ -336,7 +344,7 @@ public class ProgramasController {
 				nuevoEstado = EnumEstadoPrograma.CREADO;
 			}
 			programaService.cambiarEstado(revision.getIdPrograma(), nuevoEstado);
-			programasTodos = programaService.getProgramasAll();
+			programasEnProceso = programaService.getProgramasEnProceso();
 			return "/pages/programas/ver-programas.jsf?faces-redirect=true";
 		} catch (SgdServicesException e) {
 			log.error("Error en guardarRevision de ProgramasController");
@@ -364,9 +372,7 @@ public class ProgramasController {
 
 	public String guardarPrograma() {
 		try {
-			for (CarreraDto c : nuevo.getCarreras()) {
-				c.setArea(Long.valueOf(mapAreas.get(c.getId()).toString()));
-			}
+			nuevo.setAreas(obtenerAreas());
 			if (validarPrograma()) {
 				programaService.saveOrUpdatePrograma(nuevo);
 				if (nuevo.getEstado() == EnumEstadoPrograma.SUGERENCIAS) {
@@ -375,7 +381,8 @@ public class ProgramasController {
 						|| nuevo.getEstado() == EnumEstadoPrograma.APROBADO) {
 					programaService.cambiarEstado(nuevo.getId(), EnumEstadoPrograma.REVISION_CC_ABR);
 				}
-				programasTodos = programaService.getProgramasAll();
+				programasEnProceso = programaService.getProgramasEnProceso();
+				programasAprobados = programaService.getProgramasAprobados();
 				return "/pages/programas/ver-programas.jsf?faces-redirect=true";
 			} else {
 				return "programa";
@@ -388,6 +395,14 @@ public class ProgramasController {
 			return "programa";
 		}
 
+	}
+	
+	private List<AreaTematicaDto> obtenerAreas() {
+		List<AreaTematicaDto> areas = new ArrayList<AreaTematicaDto>();
+		for (Long c : mapAreas.keySet()) {
+			areas.addAll(new ArrayList<>(mapAreas.get(c)));
+		}
+		return areas;
 	}
 
 	public boolean validarPrograma() {
@@ -426,7 +441,7 @@ public class ProgramasController {
 	public String borrarPrograma(Long id) {
 		try {
 			programaService.borrarPrograma(id);
-			programasTodos = programaService.getProgramasAll();
+			programasEnProceso = programaService.getProgramasEnProceso();
 		} catch (SgdServicesException e) {
 			log.error("Error en borrarPrograma de ProgramasController");
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("No se ha podido borrar el programa"));
@@ -462,7 +477,7 @@ public class ProgramasController {
 	public String editarProgramaAbrev(Long id) {
 		try {
 			nuevo = programaService.obtenerProgramaDtoPorId(id);
-			mapAreas = obtenerMapAreas(nuevo.getCarreras());
+			mapAreas = obtenerMapAreas(nuevo.getAreas());
 			maxBiblio = nuevo.getBibliografia().size();
 			revisionesPrograma = accionService.getRevisionesProgramaAbrev(id);
 			return "/pages/programas/editarAbrev.jsf?faces-redirect=true";
@@ -668,12 +683,20 @@ public class ProgramasController {
 		this.unidadesAcademicas = unidadesAcademicas;
 	}
 
-	public List<ProgramaDto> getProgramasTodos() {
-		return programasTodos;
+	public List<ProgramaDto> getProgramasEnProceso() {
+		return programasEnProceso;
 	}
 
-	public void setProgramasTodos(List<ProgramaDto> programasTodos) {
-		this.programasTodos = programasTodos;
+	public void setProgramasEnProceso(List<ProgramaDto> programasEnProceso) {
+		this.programasEnProceso = programasEnProceso;
+	}
+
+	public List<ProgramaDto> getProgramasAprobados() {
+		return programasAprobados;
+	}
+
+	public void setProgramasAprobados(List<ProgramaDto> programasAprobados) {
+		this.programasAprobados = programasAprobados;
 	}
 
 	public List<UnidadCurricularDto> getUnidadesCurriculares() {
@@ -780,11 +803,11 @@ public class ProgramasController {
 		this.accionesPrograma = accionesPrograma;
 	}
 
-	public Map<Long, Object> getMapAreas() {
+	public Map<Long, List<AreaTematicaDto>> getMapAreas() {
 		return mapAreas;
 	}
 
-	public void setMapAreas(Map<Long, Object> mapAreas) {
+	public void setMapAreas(Map<Long, List<AreaTematicaDto>> mapAreas) {
 		this.mapAreas = mapAreas;
 	}
 

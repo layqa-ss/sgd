@@ -104,11 +104,17 @@
 
 							<div class="item">
 								<div class="sug-label">
-									<label class="item-label">Area temática por carrera</label>
+									<label class="item-label">Area de formación</label>
 								</div>
 								<ui:repeat value="#{pCtrl.revisado.carreras}" var="c">
 									<div class="item">
-										<h:outputText value="#{c.nombre} - #{c.areaNombre}" />
+										<h:outputText value="#{c.nombre}" />
+										<ul class="item ul-list">
+											<ui:repeat value="#{pCtrl.revisado.areas}" var="a">
+												<li><h:outputText value="#{a.nombre}"
+														rendered="#{a.carreraId==c.id}" /></li>
+											</ui:repeat>
+										</ul>
 									</div>
 								</ui:repeat>
 							</div>
@@ -370,13 +376,17 @@
 								<div class="sug-label">
 									<label class="item-label" for="uc">Objetivos</label>
 								</div>
-								<h:outputText value="#{pCtrl.revisado.objetivos}" />
+								<div class="item">
+									<h:outputText value="#{pCtrl.revisado.objetivos}" escape="false"/>
+								</div>
 							</div>
 							<div class="item">
 								<div class="sug-label">
 									<label class="item-label" for="uc">Contenidos</label>
 								</div>
-								<h:outputText value="#{pCtrl.revisado.contenidos}" />
+								<div class="item">
+									<h:outputText value="#{pCtrl.revisado.contenidos}" escape="false"/>
+								</div>
 							</div>
 
 
@@ -408,7 +418,9 @@
 									<label class="item-label" for="uc">Descripción de la
 										propuesta metodológica de la unidad curricular</label>
 								</div>
-								<h:outputText value="#{pCtrl.revisado.descrMetodologia}" />
+								<div class="item">
+									<h:outputText value="#{pCtrl.revisado.descrMetodologia}" escape="false"/>
+								</div>
 							</div>
 							<div class="item">
 								<div class="sug-label">
@@ -455,7 +467,9 @@
 										<i class="material-symbols-outlined">add</i>
 									</button>
 								</div>
-								<h:outputText value="#{pCtrl.revisado.descrEvaluacion}" />
+								<div class="item">
+									<h:outputText value="#{pCtrl.revisado.descrEvaluacion}" escape="false" />
+								</div>
 							</div>
 							<div class="buttons">
 								<button type="button" class="button prev-step">
@@ -504,6 +518,10 @@
 								</button>
 							</div>
 						</div>
+					</div>
+					<div class="usuario">
+						<label class="item-label">Creado por:</label>
+						<h:outputText value="#{pCtrl.nuevo.nombreUsuario}" />
 					</div>
 					<div class="buttons">
 						<div class="item">

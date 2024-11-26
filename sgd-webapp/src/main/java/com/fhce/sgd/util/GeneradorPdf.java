@@ -10,6 +10,7 @@ import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
 import com.fhce.sgd.controller.exception.SgdWebappException;
+import com.fhce.sgd.dto.gestion.AreaTematicaDto;
 import com.fhce.sgd.dto.gestion.CarreraDto;
 import com.fhce.sgd.dto.gestion.UnidadAcademicaDto;
 import com.fhce.sgd.dto.programas.BibliografiaDto;
@@ -25,6 +26,7 @@ import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Image;
+import com.itextpdf.text.ListItem;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.html.simpleparser.HTMLWorker;
@@ -113,7 +115,7 @@ public class GeneradorPdf {
 			pAclaracionCarrera.setSpacingAfter(15);
 			document.add(pAclaracionCarrera);
 
-			Chunk areaLabel = new Chunk("Area temática por carrera", fontBold);
+			Chunk areaLabel = new Chunk("Area de formación por carrera", fontBold);
 			Paragraph pArea = new Paragraph();
 			pArea.setSpacingAfter(4);
 			pArea.add(areaLabel);
@@ -121,8 +123,14 @@ public class GeneradorPdf {
 
 			for (CarreraDto a : pr.getCarreras()) {
 				Paragraph pAreaValue = new Paragraph();
-				pAreaValue.add(new Chunk(a.getNombre() + " - " + a.getAreaNombre(), fontRegular));
+				pAreaValue.add(new Chunk(a.getNombre(), fontRegular));
 				document.add(pAreaValue);
+				com.itextpdf.text.List list = new com.itextpdf.text.List(com.itextpdf.text.List.UNORDERED);
+				for(AreaTematicaDto area : pr.getAreas()) {
+					ListItem item = new ListItem(area.getNombre());
+					list.add(item);
+				}
+				document.add(list);
 			}
 			document.add(new Paragraph("\n"));
 
