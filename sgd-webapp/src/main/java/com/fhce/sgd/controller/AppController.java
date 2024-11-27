@@ -179,7 +179,7 @@ public class AppController {
 		return equipo;
 	}
 
-	private boolean checkUA(ProgramaDto programa) {
+	public boolean checkUA(ProgramaDto programa) {
 		boolean checkUnidades = false;
 		if (unidadesUsuario != null) {
 			for (UnidadAcademicaDto uaDto : programa.getUnidades()) {
@@ -198,7 +198,7 @@ public class AppController {
 		return checkUnidades;
 	}
 
-	private boolean checkCarrera(ProgramaDto programa) {
+	public boolean checkCarrera(ProgramaDto programa) {
 		boolean checkCarreras = false;
 		if (carrerasUsuario != null) {
 			for (CarreraDto cDto : programa.getCarreras()) {
@@ -249,14 +249,16 @@ public class AppController {
 
 	public boolean puedeEditarAprobado(ProgramaDto programa) {
 		EnumEstadoPrograma estado = programa.getEstado();
+		boolean autoria = programa.getIdUsuario() == idUsuarioLogueado;
 		boolean puedeEditarApr = (estado == EnumEstadoPrograma.APROBADO && puedeEditarAprobado)
 				|| (estado == EnumEstadoPrograma.SUGERENCIAS_ABR && puedeEditarSugAbrev);
-		return puedeEditarApr && (checkUA(programa) || checkCarrera(programa) || sinAdscripcion);
+		return puedeEditarApr && (autoria || perteneceEquipoDocente(programa) || sinAdscripcion);
 	}
 
 	public boolean puedeDuplicarPrograma(ProgramaDto programa) {
+		boolean autoria = programa.getIdUsuario() == idUsuarioLogueado;
 		return (programa.getEstado() == EnumEstadoPrograma.APROBADO && puedeDuplicarPrograma)
-				&& (checkUA(programa) || checkCarrera(programa) || sinAdscripcion);
+				&& (autoria || perteneceEquipoDocente(programa) || sinAdscripcion);
 	}
 
 	public boolean puedeVerHistorial(ProgramaDto programa) {
@@ -361,6 +363,10 @@ public class AppController {
 
 	public Long getIdUsuarioLogueado() {
 		return idUsuarioLogueado;
+	}
+
+	public boolean isSinAdscripcion() {
+		return sinAdscripcion;
 	}
 
 }

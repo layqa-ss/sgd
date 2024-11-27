@@ -118,18 +118,20 @@ public class ProgramasController {
 	private boolean tareasObligTrueDisabled = false;
 
 	private Integer vigencia;
+	private String linkFormulario;
 
 	@PostConstruct
 	public void init() {
 		try {
 			vigencia = Integer.parseInt(configService.getConfigDtoByEnum(EnumConfig.VIGENCIA_EN_ANIOS).getValue());
+			linkFormulario = configService.getConfigDtoByEnum(EnumConfig.LINK_FORMULARIO_ENCARGADO).getValue();
 			nuevo = new ProgramaNuevoDto();
 			unidadesAcademicas = gestionService.getUnidadesAcademicasHabilitadas();
 			carreras = gestionService.getCarrerasHabilitadas();
 			areasPorCarrera = gestionService.getAreasPorCarrera();
 			unidadesCurriculares = gestionService.getUnidadesCurriculares();
-			programasEnProceso = programaService.getProgramasEnProceso();
-			programasAprobados = programaService.getProgramasAprobados();
+			programasEnProceso = filtrarProgramas(programaService.getProgramasEnProceso());
+			programasAprobados = filtrarProgramas(programaService.getProgramasAprobados());
 			usuarios = usuarioService.getUsuarios();
 
 			integrante = new ProgramaIntegranteDto();
@@ -140,6 +142,19 @@ public class ProgramasController {
 		} catch (SgdServicesException e) {
 			log.error("Error en init de ProgramasController.");
 		}
+	}
+
+	private List<ProgramaDto> filtrarProgramas(List<ProgramaDto> programas) {
+		if (appCtrl.isSinAdscripcion()) {
+			return programas;
+		}
+		List<ProgramaDto> filtrados = new ArrayList<ProgramaDto>();
+		for (ProgramaDto p : programas) {
+			if (appCtrl.checkCarrera(p) || appCtrl.checkUA(p)) {
+				filtrados.add(p);
+			}
+		}
+		return filtrados;
 	}
 
 	public String verHistorialPrograma(Long id) {
@@ -396,7 +411,7 @@ public class ProgramasController {
 		}
 
 	}
-	
+
 	private List<AreaTematicaDto> obtenerAreas() {
 		List<AreaTematicaDto> areas = new ArrayList<AreaTematicaDto>();
 		for (Long c : mapAreas.keySet()) {
@@ -809,6 +824,14 @@ public class ProgramasController {
 
 	public void setMapAreas(Map<Long, List<AreaTematicaDto>> mapAreas) {
 		this.mapAreas = mapAreas;
+	}
+
+	public String getLinkFormulario() {
+		return linkFormulario;
+	}
+
+	public void setLinkFormulario(String linkFormulario) {
+		this.linkFormulario = linkFormulario;
 	}
 
 }
