@@ -24,6 +24,16 @@ sn: Emu
 uid: admin@fhce.com.uy
 userPassword: password
 
+dn: uid=test.user,ou=people,dc=springframework,dc=org
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+cn: Dianne Emu
+sn: Emu
+uid: test.user
+userPassword: fhce1234
+
 dn: uid=bedelias,ou=people,dc=springframework,dc=org
 objectclass: top
 objectclass: person
