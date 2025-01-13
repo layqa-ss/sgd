@@ -65,14 +65,21 @@ public class SecurityConfig {
 		authenticator.setUserSearch(search);
 		return authenticator;
 	}
-
+	
 	@Bean
 	public DefaultSpringSecurityContextSource contextSource() {
 		DefaultSpringSecurityContextSource dsCtx = new DefaultSpringSecurityContextSource(
-				"ldap://localhost:8389/dc=springframework,dc=org");
-		dsCtx.setUserDn("uid=admin,ou=people,dc=springframework,dc=org");
-		dsCtx.setPassword("password");
+				"ldap://ldapmaster.fhce/dc=fhce,dc=edu,dc=uy");
 		return dsCtx;
 	}
+
+//	@Bean
+//	public DefaultSpringSecurityContextSource contextSource() {
+//		DefaultSpringSecurityContextSource dsCtx = new DefaultSpringSecurityContextSource(
+//				"ldap://localhost:8389/dc=springframework,dc=org");
+//		dsCtx.setUserDn("uid=admin,ou=people,dc=springframework,dc=org");
+//		dsCtx.setPassword("password");
+//		return dsCtx;
+//	}
 
 }
