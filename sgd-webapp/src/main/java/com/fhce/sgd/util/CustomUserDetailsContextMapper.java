@@ -23,7 +23,8 @@ public class CustomUserDetailsContextMapper implements UserDetailsContextMapper 
 
     @Override
     public UserDetails mapUserFromContext(DirContextOperations ctx, String username, Collection<? extends GrantedAuthority> authorities) {
-    	UserDetails details= userDetailsService.loadUserByUsername(username);
+    	log.info("Usuario: " + username);
+    	UserDetails details = userDetailsService.loadUserByUsername(username);
         return  details;
     }
 

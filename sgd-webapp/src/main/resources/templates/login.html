@@ -50,6 +50,7 @@
 								th:field="*{password}" type="password" id="password"
 								name="password" required>
 						</div>
+						<div class="messages error" style="background-color: pink;" th:if="${errorMessage}" th:text="${errorMessage}"></div>
 						<div class="item">
 							<button class="button button_rojo" type="submit">Ingresar</button>
 						</div>

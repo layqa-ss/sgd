@@ -171,7 +171,8 @@ INSERT INTO sgd.usuarios (id, creationDate, fullname, password, tipoAdscripcion,
 INSERT INTO sgd.usuarios (id, creationDate, fullname, password, tipoAdscripcion, username, id_rol) VALUES(6, '2024-11-18 13:56:27.574000', 'Comisiones', 'password', 2, 'comisiones@fhce.com.uy', 6);
 INSERT INTO sgd.usuarios (id, creationDate, fullname, password, tipoAdscripcion, username, id_rol) VALUES(7, '2024-11-18 13:56:49.111000', 'Gobierno', 'password', 2, 'gobierno@fhce.com.uy', 7);
 INSERT INTO sgd.usuarios (password, creationDate, id, fullname, username, id_rol, tipoAdscripcion) VALUES('', '2025-01-13 00:00:00', 9, 'Test User', 'test.user', 1, 2);
-INSERT INTO sgd.usuarios_SEQ (next_val) VALUES (9);
+INSERT INTO sgd.usuarios (password, creationDate, id, fullname, username, id_rol, tipoAdscripcion) VALUES('', '2025-01-20 00:00:00', 10, 'Test User', 'test.user@fhce.edu.uy', 1, 2);
+INSERT INTO sgd.usuarios_SEQ (next_val) VALUES (11);
 
 INSERT INTO sgd.adscripcion_carrera (usuario_id, carrera_id) VALUES(1, 53);
 INSERT INTO sgd.adscripcion_carrera (usuario_id, carrera_id) VALUES(2, 53);

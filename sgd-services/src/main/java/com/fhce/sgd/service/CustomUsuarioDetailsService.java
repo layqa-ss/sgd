@@ -24,12 +24,13 @@ public class CustomUsuarioDetailsService implements UserDetailsService {
 		try {
 			Usuario user = usuarioService.getUsuarioByUsername(username);
 			if (user == null) {
+				log.error("Usuario no encontrado en la app: " + username);
 				throw new UsernameNotFoundException("Usuario o contraseña incorrecta");
 			}
 			return new CustomUsuarioDetails(user);
 		} catch (SgdServicesException e) {
 			log.error("Error en loadUserByUsername de CustomUsuarioDetailsService: " + e.getMessage());
-			throw new UsernameNotFoundException("Error al obtener usuario");
+			throw new UsernameNotFoundException("Usuario o contraseña incorrecta");
 		}
 
 	}

@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.ldap.DefaultSpringSecurityContextSource;
 import org.springframework.security.ldap.authentication.BindAuthenticator;
 import org.springframework.security.ldap.authentication.LdapAuthenticationProvider;
@@ -15,8 +17,11 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.fhce.sgd.util.CustomUserDetailsContextMapper;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Configuration
 @EnableWebSecurity
+@Slf4j
 public class SecurityConfig {
 	
 	@Autowired
@@ -37,6 +42,7 @@ public class SecurityConfig {
         	.loginProcessingUrl("/login")
             .defaultSuccessUrl("/index.jsf", true)
             .permitAll()
+            .failureUrl("/login-error")
         )
         .logout(logout -> logout.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
 				        		.invalidateHttpSession(true)
@@ -56,6 +62,11 @@ public class SecurityConfig {
 		auth.setUserDetailsContextMapper(mapper);
 		return auth;
 	}
+	
+	@Bean
+    PasswordEncoder getPasswordEncoder() {
+        return NoOpPasswordEncoder.getInstance();
+    }
 
 	@Bean
 	BindAuthenticator authenticator() {

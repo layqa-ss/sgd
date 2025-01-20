@@ -6,11 +6,15 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.security.core.AuthenticationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.WebAttributes;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,6 +34,8 @@ import com.fhce.sgd.service.UsuarioService;
 import com.fhce.sgd.service.exception.SgdServicesException;
 
 import jakarta.inject.Named;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 
 @Named("appCtrl")
@@ -89,10 +95,26 @@ public class AppController {
 
 	@GetMapping("/login")
 	public String login(Model model, UsuarioDto userDto) {
-
+		
 		model.addAttribute("user", userDto);
 		return "login";
 	}
+	
+	@GetMapping("/login-error")
+    public String login(HttpServletRequest request, Model model, UsuarioDto userDto) {
+        HttpSession session = request.getSession(false);
+        String errorMessage = null;
+        if (session != null) {
+            AuthenticationException ex = (AuthenticationException) session
+                    .getAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
+            if (ex != null) {
+                errorMessage = ex.getMessage();
+            }
+        }
+        model.addAttribute("errorMessage", errorMessage);
+        model.addAttribute("user", userDto);
+        return "login";
+    }
 
 	public String getUsuarioLogueado() {
 		String username = "";
