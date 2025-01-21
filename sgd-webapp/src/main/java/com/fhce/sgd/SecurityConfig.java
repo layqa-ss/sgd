@@ -71,27 +71,25 @@ public class SecurityConfig {
 	@Bean
 	BindAuthenticator authenticator() {
 
-		FilterBasedLdapUserSearch search = new FilterBasedLdapUserSearch("ou=people", "(uid={0})", contextSource());
+		FilterBasedLdapUserSearch search = new FilterBasedLdapUserSearch("ou=people,dc=fhce,dc=edu,dc=uy", "(uid={0})", contextSource());
 		log.info(search.toString());
 		BindAuthenticator authenticator = new BindAuthenticator(contextSource());
 		authenticator.setUserSearch(search);
 		return authenticator;
 	}
 	
-//	@Bean
-//	public DefaultSpringSecurityContextSource contextSource() {
-//		DefaultSpringSecurityContextSource dsCtx = new DefaultSpringSecurityContextSource(
-//				"ldap://ldapmaster.fhce/dc=fhce,dc=edu,dc=uy");
-//		return dsCtx;
-//	}
-
 	@Bean
 	public DefaultSpringSecurityContextSource contextSource() {
 		DefaultSpringSecurityContextSource dsCtx = new DefaultSpringSecurityContextSource(
-				"ldap://localhost:8389/dc=springframework,dc=org");
-//		dsCtx.setUserDn("uid=admin,ou=people,dc=springframework,dc=org");
-//		dsCtx.setPassword("password");
+				"ldap://ldapmaster.fhce/");
 		return dsCtx;
 	}
+
+//	@Bean
+//	public DefaultSpringSecurityContextSource contextSource() {
+//		DefaultSpringSecurityContextSource dsCtx = new DefaultSpringSecurityContextSource(
+//				"ldap://localhost:8389/");
+//		return dsCtx;
+//	}
 
 }
