@@ -107,8 +107,12 @@ public class AppController {
         if (session != null) {
             AuthenticationException ex = (AuthenticationException) session
                     .getAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
+            
             if (ex != null) {
                 errorMessage = ex.getMessage();
+                for(StackTraceElement e : ex.getStackTrace()) {
+                	log.error(e.toString());
+                }
             }
         }
         model.addAttribute("errorMessage", errorMessage);
