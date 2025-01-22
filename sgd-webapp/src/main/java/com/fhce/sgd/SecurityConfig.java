@@ -71,7 +71,7 @@ public class SecurityConfig {
 	@Bean
 	BindAuthenticator authenticator() {
 
-		FilterBasedLdapUserSearch search = new FilterBasedLdapUserSearch("ou=people,dc=fhce,dc=edu,dc=uy", "(uid={0})", contextSource());
+		FilterBasedLdapUserSearch search = new FilterBasedLdapUserSearch("dc=fhce,dc=edu,dc=uy", "(uid={0})", contextSource());
 		log.info(search.toString());
 		BindAuthenticator authenticator = new BindAuthenticator(contextSource());
 		authenticator.setUserSearch(search);

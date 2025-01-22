@@ -41,9 +41,10 @@
 					<form th:action="@{/login}" method="post" role="form"
 						th:object="${user}" class="form container form-login">
 						<div class="item">
-							<label for="username" class="item-label">Usuario</label> <input
+							<label for="username" class="item-label">Usuario</label> 
+							<input
 								th:field="*{username}" type="text" id="username" name="username"
-								placeholder="nombre.apellido@fhce.edu.uy" required>
+								placeholder="nombre.apellido" required>
 						</div>
 						<div class="item">
 							<label for="password" class="item-label">Contraseña</label> <input
