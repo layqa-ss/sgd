@@ -1,30 +1,30 @@
-dn: dc=springframework,dc=org
+dn: dc=fhce,dc=edu,dc=uy
 objectclass: top
 objectclass: domain
 objectclass: extensibleObject
-dc: springframework
+dc: fhce
 
-dn: ou=groups,dc=springframework,dc=org
+dn: ou=groups,dc=fhce,dc=edu,dc=uy
 objectclass: top
 objectclass: organizationalUnit
 ou: groups
 
-dn: ou=people,dc=springframework,dc=org
+dn: ou=people,dc=fhce,dc=edu,dc=uy
 objectclass: top
 objectclass: organizationalUnit
 ou: people
 
-dn: uid=admin,ou=people,dc=springframework,dc=org
+dn: uid=admin,ou=people,dc=fhce,dc=edu,dc=uy
 objectclass: top
 objectclass: person
 objectclass: organizationalPerson
 objectclass: inetOrgPerson
 cn: Dianne Emu
 sn: Emu
-uid: admin@fhce.com.uy
+uid: admin
 userPassword: password
 
-dn: uid=test.user,ou=people,dc=springframework,dc=org
+dn: uid=test.user,ou=people,dc=fhce,dc=edu,dc=uy
 objectclass: top
 objectclass: person
 objectclass: organizationalPerson
@@ -34,75 +34,75 @@ sn: Emu
 uid: test.user
 userPassword: fhce1234
 
-dn: uid=bedelias,ou=people,dc=springframework,dc=org
+dn: uid=bedelias,ou=people,dc=fhce,dc=edu,dc=uy
 objectclass: top
 objectclass: person
 objectclass: organizationalPerson
 objectclass: inetOrgPerson
 cn: Dianne Emu
 sn: Emu
-uid: bedelias@fhce.com.uy
+uid: bedelias
 userPassword: password
 
-dn: uid=docente.educacion,ou=people,dc=springframework,dc=org
+dn: uid=docente.educacion,ou=people,dc=fhce,dc=edu,dc=uy
 objectclass: top
 objectclass: person
 objectclass: organizationalPerson
 objectclass: inetOrgPerson
 cn: Dianne Emu
 sn: Emu
-uid: docente.educacion@fhce.com.uy
+uid: docente.educacion
 userPassword: password
 
-dn: uid=director.educacion,ou=people,dc=springframework,dc=org
+dn: uid=director.educacion,ou=people,dc=fhce,dc=edu,dc=uy
 objectclass: top
 objectclass: person
 objectclass: organizationalPerson
 objectclass: inetOrgPerson
 cn: Dianne Emu
 sn: Emu
-uid: director.educacion@fhce.com.uy
+uid: director.educacion
 userPassword: password
 
-dn: uid=admin.educacion,ou=people,dc=springframework,dc=org
+dn: uid=admin.educacion,ou=people,dc=fhce,dc=edu,dc=uy
 objectclass: top
 objectclass: person
 objectclass: organizationalPerson
 objectclass: inetOrgPerson
 cn: Dianne Emu
 sn: Emu
-uid: admin.educacion@fhce.com.uy
+uid: admin.educacion
 userPassword: password
 
-dn: uid=comisiones,ou=people,dc=springframework,dc=org
+dn: uid=comisiones,ou=people,dc=fhce,dc=edu,dc=uy
 objectclass: top
 objectclass: person
 objectclass: organizationalPerson
 objectclass: inetOrgPerson
 cn: Dianne Emu
 sn: Emu
-uid: comisiones@fhce.com.uy
+uid: comisiones
 userPassword: password
 
-dn: uid=gobierno,ou=people,dc=springframework,dc=org
+dn: uid=gobierno,ou=people,dc=fhce,dc=edu,dc=uy
 objectclass: top
 objectclass: person
 objectclass: organizationalPerson
 objectclass: inetOrgPerson
 cn: Dianne Emu
 sn: Emu
-uid: gobierno@fhce.com.uy
+uid: gobierno
 userPassword: password
 
-dn: cn=user,ou=groups,dc=springframework,dc=org
+dn: cn=user,ou=groups,dc=fhce,dc=edu,dc=uy
 objectclass: top
 objectclass: groupOfNames
 cn: user
-member: uid=admin,ou=people,dc=springframework,dc=org
-member: uid=user,ou=people,dc=springframework,dc=org
+member: uid=admin,ou=people,dc=fhce,dc=edu,dc=uy
+member: uid=user,ou=people,dc=fhce,dc=edu,dc=uy
 
-dn: cn=admin,ou=groups,dc=springframework,dc=org
+dn: cn=admin,ou=groups,dc=fhce,dc=edu,dc=uy
 objectclass: top
 objectclass: groupOfNames
 cn: admin
-member: uid=admin,ou=people,dc=springframework,dc=org
+member: uid=admin,ou=people,dc=fhce,dc=edu,dc=uy

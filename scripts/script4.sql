@@ -163,16 +163,15 @@ INSERT INTO sgd.roles (id, nombre, operaciones) VALUES(7, 'Admin Gobierno', 0x0C
 
 INSERT INTO sgd.roles_SEQ (next_val) VALUES (8);
 
-INSERT INTO sgd.usuarios (password, creationDate, id, fullname, username, id_rol, tipoAdscripcion) VALUES('password', '2024-11-13 00:00:00', 1, 'Director Lic Educación', 'director.educacion@fhce.com.uy', 3, 1);
-INSERT INTO sgd.usuarios (password, creationDate, id, fullname, username, id_rol, tipoAdscripcion) VALUES('password', '2024-11-13 00:00:00', 2, 'Docente Lic Educacion', 'docente.educacion@fhce.com.uy', 2, 1);
-INSERT INTO sgd.usuarios (password, creationDate, id, fullname, username, id_rol, tipoAdscripcion) VALUES('password', '2024-11-13 00:00:00', 3, 'Administrador', 'admin@fhce.com.uy', 1, 2);
-INSERT INTO sgd.usuarios (password, creationDate, id, fullname, username, id_rol, tipoAdscripcion) VALUES('password', '2024-11-13 00:00:00', 4, 'Bedelias', 'bedelias@fhce.com.uy', 5, 2);
-INSERT INTO sgd.usuarios (id, creationDate, fullname, password, tipoAdscripcion, username, id_rol) VALUES(5, '2024-11-18 13:56:00.198000', 'Admin Inst Educación', 'password', 0, 'admin.educacion@fhce.com.uy', 4);
-INSERT INTO sgd.usuarios (id, creationDate, fullname, password, tipoAdscripcion, username, id_rol) VALUES(6, '2024-11-18 13:56:27.574000', 'Comisiones', 'password', 2, 'comisiones@fhce.com.uy', 6);
-INSERT INTO sgd.usuarios (id, creationDate, fullname, password, tipoAdscripcion, username, id_rol) VALUES(7, '2024-11-18 13:56:49.111000', 'Gobierno', 'password', 2, 'gobierno@fhce.com.uy', 7);
+INSERT INTO sgd.usuarios (password, creationDate, id, fullname, username, id_rol, tipoAdscripcion) VALUES('password', '2024-11-13 00:00:00', 1, 'Director Lic Educación', 'director.educacion', 3, 1);
+INSERT INTO sgd.usuarios (password, creationDate, id, fullname, username, id_rol, tipoAdscripcion) VALUES('password', '2024-11-13 00:00:00', 2, 'Docente Lic Educacion', 'docente.educacion', 2, 1);
+INSERT INTO sgd.usuarios (password, creationDate, id, fullname, username, id_rol, tipoAdscripcion) VALUES('password', '2024-11-13 00:00:00', 3, 'Administrador', 'admin', 1, 2);
+INSERT INTO sgd.usuarios (password, creationDate, id, fullname, username, id_rol, tipoAdscripcion) VALUES('password', '2024-11-13 00:00:00', 4, 'Bedelias', 'bedelias', 5, 2);
+INSERT INTO sgd.usuarios (id, creationDate, fullname, password, tipoAdscripcion, username, id_rol) VALUES(5, '2024-11-18 13:56:00.198000', 'Admin Inst Educación', 'password', 0, 'admin.educacion', 4);
+INSERT INTO sgd.usuarios (id, creationDate, fullname, password, tipoAdscripcion, username, id_rol) VALUES(6, '2024-11-18 13:56:27.574000', 'Comisiones', 'password', 2, 'comisiones', 6);
+INSERT INTO sgd.usuarios (id, creationDate, fullname, password, tipoAdscripcion, username, id_rol) VALUES(7, '2024-11-18 13:56:49.111000', 'Gobierno', 'password', 2, 'gobierno', 7);
 INSERT INTO sgd.usuarios (password, creationDate, id, fullname, username, id_rol, tipoAdscripcion) VALUES('', '2025-01-13 00:00:00', 9, 'Test User', 'test.user', 1, 2);
-INSERT INTO sgd.usuarios (password, creationDate, id, fullname, username, id_rol, tipoAdscripcion) VALUES('', '2025-01-20 00:00:00', 10, 'Test User', 'test.user@fhce.edu.uy', 1, 2);
-INSERT INTO sgd.usuarios_SEQ (next_val) VALUES (11);
+INSERT INTO sgd.usuarios_SEQ (next_val) VALUES (10);
 
 INSERT INTO sgd.adscripcion_carrera (usuario_id, carrera_id) VALUES(1, 53);
 INSERT INTO sgd.adscripcion_carrera (usuario_id, carrera_id) VALUES(2, 53);
@@ -181,7 +180,7 @@ INSERT INTO sgd.configuraciones (id, config, value, isDate) VALUES(0, 0, '3', 0)
 INSERT INTO sgd.configuraciones (id, config, value, isDate) VALUES(1, 1, '11/11/2024', 1);
 INSERT INTO sgd.configuraciones (id, config, value, isDate) VALUES(2, 2, '31/12/2024', 1);
 alter table sgd.configuraciones drop check configuraciones_chk_1;
-INSERT INTO sgd.configuraciones (id, config, value, isDate) VALUES(3, 3, 'www.google.com', 0);
+INSERT INTO sgd.configuraciones (id, config, value, isDate) VALUES(3, 3, 'https://fhce.edu.uy/wp-content/uploads/2024/12/Formulario-para-autorizacion.doc', 0);
 
 insert into sgd.configuraciones_SEQ(next_val) values (3);
 

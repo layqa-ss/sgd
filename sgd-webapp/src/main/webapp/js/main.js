@@ -73,6 +73,9 @@
          $('#'+ prevTab+'-btn').addClass('active').show();
          $activeMenu.removeClass('active');
       }
+      $('html, body').animate({
+          scrollTop: $('.titulo-seccion').offset().top
+      }, 1500);
     });
 
     $('.agregar-button').on('click', function (e){
