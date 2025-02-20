@@ -3,8 +3,6 @@ package com.fhce.sgd.util;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.io.StringReader;
-import java.util.List;
 
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
@@ -29,10 +27,11 @@ import com.itextpdf.text.Image;
 import com.itextpdf.text.ListItem;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
-import com.itextpdf.text.html.simpleparser.HTMLWorker;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.tool.xml.ElementList;
+import com.itextpdf.tool.xml.XMLWorkerHelper;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -367,22 +366,23 @@ public class GeneradorPdf {
 			document.add(pCreditos);
 
 			Chunk objetivos = new Chunk("Objetivos \n", fontBold);
-			StringReader strReader = new StringReader(pr.getObjetivos());
 			Paragraph pObj = new Paragraph();
 			pObj.add(objetivos);
-			List<Element> objElem = HTMLWorker.parseToList(strReader, null);
-			for (Element e : objElem) {
+	        
+	        String css = null;
+	        ElementList elements = XMLWorkerHelper.parseToElementList(pr.getObjetivos(), css);
+			for (Element e : elements) {
 				pObj.add(e);
 			}
 			pObj.setSpacingAfter(15);
 			document.add(pObj);
 
 			Chunk contenidos = new Chunk("Contenidos \n ", fontBold);
-			StringReader strReader2 = new StringReader(pr.getContenidos());
 			Paragraph pCont = new Paragraph();
 			pCont.add(contenidos);
-			List<Element> contElem = HTMLWorker.parseToList(strReader2, null);
-			for (Element e : contElem) {
+			ElementList elements2 = XMLWorkerHelper.parseToElementList(pr.getContenidos(), css);
+			
+			for (Element e : elements2) {
 				pCont.add(e);
 			}
 			pCont.setSpacingAfter(15);
@@ -406,11 +406,10 @@ public class GeneradorPdf {
 
 			Chunk metogologia = new Chunk("Descripción de la propuesta metodológica de la unidad curricular: ",
 					fontBold);
-			StringReader strReader3 = new StringReader(pr.getDescrMetodologia());
 			Paragraph pMeto = new Paragraph();
 			pMeto.add(metogologia);
-			List<Element> metElem = HTMLWorker.parseToList(strReader3, null);
-			for (Element e : metElem) {
+			ElementList elements3 = XMLWorkerHelper.parseToElementList(pr.getDescrMetodologia(), css);
+			for (Element e : elements3) {
 				pMeto.add(e);
 			}
 			pMeto.setSpacingAfter(15);
@@ -463,11 +462,10 @@ public class GeneradorPdf {
 			document.add(pExonera);
 
 			Chunk evaluacion = new Chunk("Descripción de la forma de evaluación y aprobación: \n", fontBold);
-			StringReader strReader4 = new StringReader(pr.getDescrEvaluacion());
 			Paragraph pEvaluacion = new Paragraph();
 			pEvaluacion.add(evaluacion);
-			List<Element> evaElem = HTMLWorker.parseToList(strReader4, null);
-			for (Element e : evaElem) {
+			ElementList elements4 = XMLWorkerHelper.parseToElementList(pr.getDescrMetodologia(), css);
+			for (Element e : elements4) {
 				pEvaluacion.add(e);
 			}
 			pEvaluacion.setSpacingAfter(15);
@@ -493,7 +491,6 @@ public class GeneradorPdf {
 			PdfPTable tableBiblio = new PdfPTable(1);
 			tableBiblio.setWidthPercentage(100);
 
-			tableBiblio.setHeaderRows(1);
 			for (BibliografiaDto b : pr.getBibliografia()) {
 				if (b.isEsTitulo()) {
 					columnHeader = new PdfPCell(new Phrase(b.getTitulo(), fontBold));
@@ -516,8 +513,11 @@ public class GeneradorPdf {
 			document.close();
 
 			InputStream is = new ByteArrayInputStream(os.toByteArray());
+			
+			String nombreArchivo = pr.getNombreUC().replaceAll(" ", "").replaceAll("á",  "a").replaceAll("é", "e").replaceAll("í", "i")
+					.replaceAll("ó", "o").replaceAll("ú", "u").replaceAll("ü", "u").replaceAll("ñ", "n") + pr.getYear();
 
-			StreamedContent file = DefaultStreamedContent.builder().contentType("application/pdf").name("programa.pdf")
+			StreamedContent file = DefaultStreamedContent.builder().contentType("application/pdf").name(nombreArchivo + ".pdf")
 					.stream(() -> is).build();
 			return file;
 

@@ -1,6 +1,7 @@
 
 package com.fhce.sgd.controller.programas;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.primefaces.event.ReorderEvent;
+import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.FilterMeta;
 import org.primefaces.model.StreamedContent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,6 +100,7 @@ public class ProgramasController {
 	private AprobarDto aprobacion;
 	private Part fileDespacho;
 	private List<AccionDto> accionesPrograma;
+	private AccionDto accionSeleccionada;
 
 	private ProgramaIntegranteDto integrante;
 
@@ -167,6 +170,13 @@ public class ProgramasController {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("No se ha podido obtener el programa"));
 			return "ver-programas";
 		}
+	}
+	
+	public StreamedContent obtenerFileAprobacion() {
+		AprobarDto aprob = (AprobarDto) accionSeleccionada;
+		return DefaultStreamedContent.builder().contentType("application/pdf")
+				.name(aprob.getDespachoFileName()).stream(() -> new ByteArrayInputStream(aprob.getDespachoData()))
+				.build();
 	}
 
 	public String enviarCC(Long id) {
@@ -832,6 +842,14 @@ public class ProgramasController {
 
 	public void setLinkFormulario(String linkFormulario) {
 		this.linkFormulario = linkFormulario;
+	}
+
+	public AccionDto getAccionSeleccionada() {
+		return accionSeleccionada;
+	}
+
+	public void setAccionSeleccionada(AccionDto accionSeleccionada) {
+		this.accionSeleccionada = accionSeleccionada;
 	}
 
 }

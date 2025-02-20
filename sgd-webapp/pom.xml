@@ -5,7 +5,7 @@
 	<parent>
 		<artifactId>sgd</artifactId>
 		<groupId>com.fhce</groupId>
-		<version>0.1.0</version>
+		<version>${sgd.version}</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
@@ -42,6 +42,7 @@
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-ldap</artifactId>
+			<version>6.2.1</version>
 		</dependency>
 
 		<dependency>
@@ -84,6 +85,11 @@
 			<version>5.5.13.3</version>
 		</dependency>
 		<dependency>
+    		<groupId>com.itextpdf.tool</groupId>
+		    <artifactId>xmlworker</artifactId>
+		    <version>5.5.13.3</version>
+		</dependency>
+		<dependency>
 			<groupId>com.googlecode.owasp-java-html-sanitizer</groupId>
 			<artifactId>owasp-java-html-sanitizer</artifactId>
 			<version>20240325.1</version>
@@ -96,6 +102,11 @@
 		<dependency>
 			<groupId>com.unboundid</groupId>
 			<artifactId>unboundid-ldapsdk</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.fhce</groupId>
+			<artifactId>sgd-domain</artifactId>
+			<version>0.2.0</version>
 		</dependency>
 	</dependencies>
 

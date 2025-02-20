@@ -11,7 +11,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 public class WatermarkPageEvent extends PdfPageEventHelper {
 
-    Font FONT = new Font(Font.FontFamily.HELVETICA, 42, Font.BOLD, new GrayColor(0.85f));
+    Font FONT = new Font(Font.FontFamily.HELVETICA, 40, Font.BOLD, new GrayColor(0.85f));
 
     @Override
     public void onEndPage(PdfWriter writer, Document document) {

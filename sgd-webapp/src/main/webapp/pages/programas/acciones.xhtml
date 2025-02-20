@@ -15,7 +15,7 @@
 		</section>
 		<section>
 			<article>
-				<h:form class="form container" enctype="multipart/form-data">
+				<h:form class="form container" enctype="multipart/form-data" id="form">
 					<h:messages styleClass="messages error" />
 					<div class="item">
 						<label class="item-label">Unidad curricular</label>
@@ -30,7 +30,8 @@
 						<h:outputText value="#{pCtrl.revisado.estado.label}" />
 					</div>
 					<p:dataTable value="#{pCtrl.accionesPrograma}" var="a"
-						styleClass="table table-bibliografia">
+						styleClass="table table-bibliografia"
+						emptyMessage="No se encontraron acciones" id="acciones">
 
 						<p:column headerText="Estado">
 							<h:outputText value="#{a.estadoPrograma.label}" />
@@ -44,12 +45,37 @@
 						<p:column headerText="Fecha">
 							<h:outputText value="#{a.fecha_revisionFormated}" />
 						</p:column>
-
+						
 						<p:column headerText="Usuario">
 							<h:outputText value="#{a.nombre_usuario}" />
 						</p:column>
+						
+						<p:column rendered="#{a['class'].simpleName eq 'AprobarDto'}">
+			                <p:commandButton update=":form:accionDetalle" styleClass="ui-button-flat"
+			                                 oncomplete="PF('accionOP').show('#{component.clientId}')"
+			                                 icon="pi pi-search" title="Ver">
+			                    <f:setPropertyActionListener value="#{a}"
+			                                                 target="#{pCtrl.accionSeleccionada}"/>
+			                </p:commandButton>
+			            </p:column>
 
 					</p:dataTable>
+					
+					<p:overlayPanel widgetVar="accionOP"  showCloseIcon="true" dynamic="true">
+			            <p:outputPanel id="accionDetalle" styleClass="form">
+							<div class="item">
+								<label class="item-label">Comentarios</label>
+								<h:outputText value="#{pCtrl.accionSeleccionada.comentarios}" />
+							</div>
+							
+							<div class="item">
+								<label class="item-label">Descargar despacho</label>
+								<p:commandButton value="Descargar" ajax="false" icon="pi pi-arrow-down" styleClass="button download">
+						            <p:fileDownload value="#{pCtrl.obtenerFileAprobacion()}" />
+	       						 </p:commandButton>
+							</div>
+			            </p:outputPanel>
+			        </p:overlayPanel>
 
 					<div class="item volver">
 						<a href="/pages/programas/ver-programas.jsf?faces-redirect=true"><span

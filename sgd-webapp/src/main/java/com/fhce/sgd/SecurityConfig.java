@@ -71,25 +71,35 @@ public class SecurityConfig {
 	@Bean
 	BindAuthenticator authenticator() {
 
-		FilterBasedLdapUserSearch search = new FilterBasedLdapUserSearch("dc=fhce,dc=edu,dc=uy", "(uid={0})", contextSource());
+		FilterBasedLdapUserSearch search = new FilterBasedLdapUserSearch("ou=people,dc=fhce,dc=edu,dc=uy", "(uid={0})", contextSource());
 		log.info(search.toString());
 		BindAuthenticator authenticator = new BindAuthenticator(contextSource());
+		authenticator.setUserDnPatterns(new String[] {"uid={0},ou=people,dc=fhce,dc=edu,dc=uy"});
 		authenticator.setUserSearch(search);
 		return authenticator;
 	}
 	
-//	@Bean
-//	public DefaultSpringSecurityContextSource contextSource() {
-//		DefaultSpringSecurityContextSource dsCtx = new DefaultSpringSecurityContextSource(
-//				"ldap://ldapmaster.fhce/");
-//		return dsCtx;
-//	}
-
 	@Bean
 	public DefaultSpringSecurityContextSource contextSource() {
 		DefaultSpringSecurityContextSource dsCtx = new DefaultSpringSecurityContextSource(
-				"ldap://localhost:8389/");
+				"ldap://ldapmaster.fhce/");
 		return dsCtx;
 	}
+
+//	@Bean
+//	public DefaultSpringSecurityContextSource contextSource() {
+//		DefaultSpringSecurityContextSource dsCtx = new DefaultSpringSecurityContextSource(
+//				"ldap://ldapo:389/");
+////		dsCtx.setUserDn("cn=admin,dc=fhce,dc=edu,dc=uy");
+////		dsCtx.setPassword("password");
+//		return dsCtx;
+//	}
+	
+//	@Bean
+//	public DefaultSpringSecurityContextSource contextSource() {
+//		DefaultSpringSecurityContextSource dsCtx = new DefaultSpringSecurityContextSource(
+//				"ldap://localhost:8389/");
+//		return dsCtx;
+//	}
 
 }
