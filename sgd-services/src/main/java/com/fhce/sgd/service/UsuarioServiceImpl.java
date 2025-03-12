@@ -43,7 +43,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 		try {
 			Optional<Usuario> u = usuarioRepository.findById(id);
 			if (u.isPresent()) {
-				UsuarioDto userDto = new UsuarioDto(u.get().getId(), u.get().getUsername(), u.get().getPassword(),
+				UsuarioDto userDto = new UsuarioDto(u.get().getId(), u.get().getUsername(),
 						u.get().getCreationDate(), u.get().getFullname(), u.get().getRol().getId());
 				if (u.get().getTipoAdscripcion() != null) {
 					userDto.setTipoAdscripcion(u.get().getTipoAdscripcion());
@@ -115,7 +115,6 @@ public class UsuarioServiceImpl implements UsuarioService {
 			}
 			user.setFullname(userDto.getFullname());
 			user.setCreationDate(userDto.getCreationDate());
-			user.setPassword(userDto.getPassword());
 			user.setUsername(userDto.getUsername());
 			Rol r = rolRepo.findById(userDto.getIdRol()).get();
 			user.setRol(r);
@@ -155,7 +154,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 			if (!usuarios.isEmpty()) {
 				List<UsuarioDto> usuariosDto = new ArrayList<UsuarioDto>();
 				for (Usuario u : usuarios) {
-					UsuarioDto uDto = new UsuarioDto(u.getId(), u.getUsername(), u.getPassword(), u.getCreationDate(),
+					UsuarioDto uDto = new UsuarioDto(u.getId(), u.getUsername(), u.getCreationDate(),
 							u.getFullname(), u.getRol().getId());
 					usuariosDto.add(uDto);
 				}

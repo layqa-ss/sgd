@@ -295,9 +295,8 @@ CREATE TABLE `configuraciones` (
   `id` bigint NOT NULL,
   `config` tinyint DEFAULT NULL,
   `isDate` bit(1) NOT NULL,
-  `value` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  CONSTRAINT `configuraciones_chk_1` CHECK ((`config` between 0 and 2))
+  `value` text DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -864,7 +863,6 @@ CREATE TABLE `usuarios` (
   `id` bigint NOT NULL,
   `creationDate` datetime(6) DEFAULT NULL,
   `fullname` varchar(255) DEFAULT NULL,
-  `password` varchar(255) DEFAULT NULL,
   `tipoAdscripcion` tinyint DEFAULT NULL,
   `username` varchar(255) DEFAULT NULL,
   `id_rol` bigint DEFAULT NULL,
@@ -888,7 +886,6 @@ CREATE TABLE `usuarios_AUD` (
   `REVTYPE` tinyint DEFAULT NULL,
   `creationDate` datetime(6) DEFAULT NULL,
   `fullname` varchar(255) DEFAULT NULL,
-  `password` varchar(255) DEFAULT NULL,
   `tipoAdscripcion` tinyint DEFAULT NULL,
   `username` varchar(255) DEFAULT NULL,
   `id_rol` bigint DEFAULT NULL,

@@ -27,16 +27,17 @@
 				</h:form>
 				<h:form id="tableForm">
 					<p:dataTable value="#{pCtrl.programasAprobados}" var="p"
-						widgetVar="programasTable" styleClass="table"
+						widgetVar="programasTable" styleClass="table table-programas"
 						emptyMessage="No se encontraron programas"
 						filteredValue="#{pCtrl.programasFiltrados}"
 						filterBy="#{pCtrl.filterBy}" rows="10" paginator="true"
 						paginatorPosition="bottom"
 						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 						currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
-						rowsPerPageTemplate="5,10,{ShowAll|'Todos'}">
+						rowsPerPageTemplate="5,10,{ShowAll|'Todos'}"
+						rowStyleClass="#{pCtrl.estaVigente(p.year) ? '' : 'vencido'}">
 
-						<p:column headerText="UnidadCurricular" sortBy="#{p.nombreUC}"
+						<p:column headerText="Unidad Curricular" sortBy="#{p.nombreUC}"
 							filterBy="#{p.nombreUC}" filterMatchMode="contains"
 							filterPlaceholder="Filtrar por unidad curricular">
 							<h:outputText value="#{p.nombreUC}" />

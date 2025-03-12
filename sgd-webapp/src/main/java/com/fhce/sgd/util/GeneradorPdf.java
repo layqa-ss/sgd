@@ -6,6 +6,8 @@ import java.io.InputStream;
 
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.fhce.sgd.controller.exception.SgdWebappException;
 import com.fhce.sgd.dto.gestion.AreaTematicaDto;
@@ -15,8 +17,10 @@ import com.fhce.sgd.dto.programas.BibliografiaDto;
 import com.fhce.sgd.dto.programas.ProgramaIntegranteDto;
 import com.fhce.sgd.dto.programas.ProgramaNuevoDto;
 import com.fhce.sgd.model.enums.EnumCargo;
+import com.fhce.sgd.model.enums.EnumConfig;
 import com.fhce.sgd.model.enums.EnumDuracion;
 import com.fhce.sgd.model.enums.EnumEstadoPrograma;
+import com.fhce.sgd.service.ConfigService;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
@@ -36,7 +40,11 @@ import com.itextpdf.tool.xml.XMLWorkerHelper;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Component
 public class GeneradorPdf {
+	
+	@Autowired
+	private ConfigService configService;
 
 	public StreamedContent generarPdf(ProgramaNuevoDto pr) throws SgdWebappException {
 
@@ -472,16 +480,14 @@ public class GeneradorPdf {
 			document.add(pEvaluacion);
 
 			Paragraph pAclaracionEv1 = new Paragraph();
-			pAclaracionEv1.add(new Chunk(
-					"El estudiante que no alcanzare la calificación mínima requerida (Aceptable) en una sola de las evaluaciones durante el curso —cualquiera que esta evaluación fuere—, ya sea para su aprobación directa o para ganar el derecho a aprobar mediante una evaluación final, tendrá derecho a la realización de una prueba de recuperación, que sustituirá a la referida instancia de evaluación.",
+			pAclaracionEv1.add(new Chunk(configService.getConfigDtoByEnum(EnumConfig.TEXTO_PDF_1).getValue(),
 					fontRegularSmall));
 			pAclaracionEv1.setSpacingAfter(15);
 			document.add(pAclaracionEv1);
 
 			Paragraph pAclaracionEv2 = new Paragraph();
 			pAclaracionEv2.add(new Chunk(
-					"Examen libre: para la aprobación de las unidades curriculares de carácter teórico, podrán rendir un examen libre aquellos estudiantes inscriptos al mismo. El examen versará sobre la totalidad del Programa del último curso impartido. Para aprobar la unidad curricular, el estudiante deberá alcanzar una calificación mínima de Aceptable en dicha evaluación.",
-					fontRegularSmall));
+					configService.getConfigDtoByEnum(EnumConfig.TEXTO_PDF_2).getValue(), fontRegularSmall));
 			pAclaracionEv2.setSpacingAfter(15);
 			document.add(pAclaracionEv2);
 

@@ -184,7 +184,7 @@
 							</div>
 
 							<h:panelGroup class="item" layout="block" id="areas">
-								<label class="item-label">Area de formación por carrera</label>
+								<label class="item-label">Área de formación por carrera</label>
 								<p class="ayuda">Seleccionar por cada carrera el área de formación a la que pertenece la unidad curricular. Si correspondiere, es posible seleccionar más de una opción.</p>
 								<ui:repeat value="#{pCtrl.nuevo.carreras}" var="carreraA">
 									<div class="item item-carrera-area">
@@ -322,7 +322,7 @@
 								</div>
 							</div>
 							<h:panelGroup id="cuales" layout="block">
-								<h:panelGroup class="item" rendered="#{pCtrl.nuevo.requisitos}">
+								<h:panelGroup class="item cuales" rendered="#{pCtrl.nuevo.requisitos}">
 									<label class="item-label">¿Cuáles?<span
 										class="required">*</span></label>
 									<h:inputTextarea value="#{pCtrl.nuevo.requisitosCuales}"
@@ -445,12 +445,11 @@
 									<div class="item">
 										<label class="item-label" for="nombre">Nombre<span
 											class="required">*</span></label>
-										<p:selectOneMenu value="#{pCtrl.integrante.idUsuario}"
-											id="id-docente" filter="true" filterMatchMode="contains"
-											filterNormalize="true">
-											<f:selectItem itemLabel="Selecciona" itemValue="#{null}" />
+										<p:selectOneMenu value="#{pCtrl.integrante.nombre_docente}"
+											id="id-docente" editable="true">
+<!-- 											<f:selectItem itemLabel="Selecciona" itemValue="#{null}" /> -->
 											<f:selectItems value="#{pCtrl.usuarios}" var="usu"
-												itemValue="#{usu.id}" itemLabel="#{usu.fullname}" />
+												itemValue="#{usu.fullname}" itemLabel="#{usu.fullname}" />
 										</p:selectOneMenu>
 										<h:message for="form:id-docente" style="color:red" />
 									</div>
@@ -1039,9 +1038,9 @@
 								<p class="ayuda">Listar la bibliografía básica en formato
 									APA, el resto de la bibliografía se indicará en clase. Se
 									podrán incluir aquí materiales en diversos soportes. La
-									bibliografía podrá estar organizadas según unidades temáticas o
+									bibliografía podrá estar organizada según unidades temáticas o
 									módulos. Para agregar un subtítulo de sección o módulo se tilda
-									la opción "¿Es título de sección?".</p>
+									la opción "Título de unidad temática o módulo".</p>
 								<h:panelGroup id="bibliografia">
 									<h:panelGroup class="agregar-biblio">
 										<div class="item">
@@ -1059,7 +1058,7 @@
 													value="#{pCtrl.nuevaBibliografia.esTitulo}">
 													<f:ajax render="recom" />
 												</h:selectBooleanCheckbox>
-												<label>¿Es título de sección?</label>
+												<label>Título de unidad temática o módulo</label>
 											</div>
 										</div>
 										<div class="item">
@@ -1076,9 +1075,9 @@
 										<p:ajax event="rowReorder" listener="#{pCtrl.onRowReorder}"
 											update=":form:bibliografia" />
 
-										<p:column headerText="#" class="numberColumn">
-											<h:outputText value="#{b.orden}" />
-										</p:column>
+<!-- 										<p:column headerText="#" class="numberColumn"> -->
+<!-- 											<h:outputText value="#{b.orden}" /> -->
+<!-- 										</p:column> -->
 
 										<p:column headerText="Material bibliográfico">
 											<h:outputText value="#{b.titulo}"

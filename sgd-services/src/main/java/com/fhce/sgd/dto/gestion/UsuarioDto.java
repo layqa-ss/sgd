@@ -30,10 +30,9 @@ public class UsuarioDto {
     	
     }
 
-    public UsuarioDto(Long id, String username, String password, Date creationDate, String fullname, Long idRol) {
+    public UsuarioDto(Long id, String username, Date creationDate, String fullname, Long idRol) {
         this.id = id;
         this.username = username;
-        this.password = password;
         this.creationDate = creationDate;
         this.fullname = fullname;
         this.idRol = idRol;

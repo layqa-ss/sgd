@@ -50,7 +50,7 @@
 							<h:outputText value="#{a.nombre_usuario}" />
 						</p:column>
 						
-						<p:column rendered="#{a['class'].simpleName eq 'AprobarDto'}">
+						<p:column rendered="#{a['class'].simpleName eq 'AprobarDto'}" styleClass="links-column">
 			                <p:commandButton update=":form:accionDetalle" styleClass="ui-button-flat"
 			                                 oncomplete="PF('accionOP').show('#{component.clientId}')"
 			                                 icon="pi pi-search" title="Ver">

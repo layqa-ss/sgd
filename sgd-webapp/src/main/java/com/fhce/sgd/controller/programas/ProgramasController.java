@@ -43,6 +43,7 @@ import com.fhce.sgd.model.enums.EnumModoAprobacion;
 import com.fhce.sgd.model.enums.EnumRegimen;
 import com.fhce.sgd.model.enums.EnumRolDocente;
 import com.fhce.sgd.model.enums.EnumSemestre;
+import com.fhce.sgd.model.enums.EnumTipoAdscripcion;
 import com.fhce.sgd.service.AccionService;
 import com.fhce.sgd.service.ConfigService;
 import com.fhce.sgd.service.GestionService;
@@ -80,6 +81,9 @@ public class ProgramasController {
 
 	@Autowired
 	private AppController appCtrl;
+	
+	@Autowired
+	private GeneradorPdf generador;
 
 	private List<UnidadAcademicaDto> unidadesAcademicas;
 
@@ -382,7 +386,6 @@ public class ProgramasController {
 	public void crearPdfPrograma(Long id) {
 		try {
 			ProgramaNuevoDto p = programaService.obtenerProgramaDtoPorId(id);
-			GeneradorPdf generador = new GeneradorPdf();
 			file = generador.generarPdf(p);
 		} catch (SgdServicesException e) {
 			log.error("Error en crearPdfPrograma de ProgramasController");
@@ -540,13 +543,29 @@ public class ProgramasController {
 				error = true;
 			}
 		}
-		if (integrante.getIdUsuario() == null) {
+		if (integrante.getNombre_docente() == null) {
 			FacesContext.getCurrentInstance().addMessage("form:id-docente", new FacesMessage("Debe ingresar nombre"));
 			error = true;
 		}
 		if (!error) {
-			integrante.setNombre_docente(usuarios.stream().filter(u -> u.getId() == integrante.getIdUsuario()).toList()
-					.get(0).getFullname());
+			List<UsuarioDto> us = usuarios.stream().filter(u -> u.getFullname() == integrante.getNombre_docente()).toList();
+			if (!us.isEmpty()) {
+				integrante.setIdUsuario(us.get(0).getId());
+			} else {
+				// Se agrega usuario nuevo sin login a la aplicacion
+				UsuarioDto uDto = new UsuarioDto();
+				uDto.setFullname(integrante.getNombre_docente());
+				uDto.setUsername("externo");
+				uDto.setIdRol(8L);
+				uDto.setTipoAdscripcion(EnumTipoAdscripcion.SIN_ADSCRIPCION);
+				try {
+					Long id = usuarioService.saveOrUpdateUsuario(uDto);
+					integrante.setId(id);
+				} catch (SgdServicesException e) {
+					log.error("Error en agregarDocente de ProgramasController: no se pudo agregar usuario nuevo. " + e.getMessage());
+				}
+			}
+			
 			nuevo.getIntegrantes().add(integrante);
 			integrante = new ProgramaIntegranteDto();
 		}

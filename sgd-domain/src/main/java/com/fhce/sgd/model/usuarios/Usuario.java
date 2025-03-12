@@ -30,8 +30,6 @@ public class Usuario {
 	private Long id;
 
 	private String username;
-
-	private String password;
 	
 	private String fullname;
 
@@ -58,10 +56,9 @@ public class Usuario {
 			  inverseJoinColumns = @JoinColumn(name = "carrera_id"))
 	private Set<Carrera> carreras;
 	
-	public Usuario(String username, String password, String fullname) {
+	public Usuario(String username, String fullname) {
 		super();
 		this.username = username;
-		this.password = password;
 		this.fullname = fullname;
 		this.creationDate = new Date();
 	}
@@ -76,14 +73,6 @@ public class Usuario {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
 	}
 
 	public Date getCreationDate() {
