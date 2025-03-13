@@ -20,6 +20,7 @@ import com.fhce.sgd.model.enums.EnumCargo;
 import com.fhce.sgd.model.enums.EnumConfig;
 import com.fhce.sgd.model.enums.EnumDuracion;
 import com.fhce.sgd.model.enums.EnumEstadoPrograma;
+import com.fhce.sgd.model.enums.EnumFormato;
 import com.fhce.sgd.service.ConfigService;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
@@ -452,14 +453,16 @@ public class GeneradorPdf {
 			pRegimen.setSpacingAfter(15);
 			document.add(pRegimen);
 
-			Chunk tareas = new Chunk("Realización obligatoria del 75% de las tareas propuestas por el equipo docente: ",
-					fontBold);
-			Chunk tareasV = new Chunk(pr.isTareas75obligatoria() ? "SI" : "NO", fontRegular);
-			Paragraph pTareas = new Paragraph();
-			pTareas.add(tareas);
-			pTareas.add(tareasV);
-			pTareas.setSpacingAfter(15);
-			document.add(pTareas);
+			if (pr.getFormato() != EnumFormato.TEORICA) {
+				Chunk tareas = new Chunk("Realización obligatoria del 75% de las tareas propuestas por el equipo docente: ",
+						fontBold);
+				Chunk tareasV = new Chunk(pr.isTareas75obligatoria() ? "SI" : "NO", fontRegular);
+				Paragraph pTareas = new Paragraph();
+				pTareas.add(tareas);
+				pTareas.add(tareasV);
+				pTareas.setSpacingAfter(15);
+				document.add(pTareas);
+			}
 
 			Chunk exonera = new Chunk("Modo de aprobación: ", fontBold);
 			Chunk exoneraV = new Chunk(pr.getModoAprobacion().getLabel(), fontRegular);

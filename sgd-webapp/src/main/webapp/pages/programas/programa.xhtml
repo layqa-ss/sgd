@@ -924,31 +924,32 @@
 									</ui:repeat>
 								</div>
 							</h:panelGroup>
-							<h:panelGroup class="switch-button item" id="tareasOblig"
-								layout="block">
-								<label class="item-label">Realización obligatoria del
-									75% de las tareas propuestas por el equipo docente</label>
-								<h:selectBooleanCheckbox
-									value="#{pCtrl.nuevo.tareas75obligatoria}" id="switch-label5"
-									class="switch-button__checkbox"
-									disabled="#{pCtrl.tareasObligTrueDisabled}" />
-								<label for="form:switch-label5"
-									class="switch-button__label #{pCtrl.tareasObligTrueDisabled ? 'disabled': ''}"></label>
-								<p class="ayuda">Indicar si se exige la realización del 75%
-									de las tareas. En las unidades curriculares prácticas o
-									teórico-prácticas será obligatoria la asistencia al 75% de las
-									clases efectivamente dictadas y/o la realización del 75% de las
-									tareas propuestas.</p>
-								<div class="sugerencias">
-									<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
-										<h:panelGroup layout="block" class="show-sugerencia"
-											rendered="#{r.tareas75obligSug != null}">
-											<p>#{r.tareas75obligSug}</p>
-											<p>#{r.fecha_revisionFormated}</p>
-											<p>#{r.nombre_usuario}</p>
-										</h:panelGroup>
-									</ui:repeat>
-								</div>
+							<h:panelGroup  id="tareasOblig" layout="block">
+								<h:panelGroup class="switch-button item" rendered="#{pCtrl.nuevo.formato != EnumFormato.TEORICA}">
+									<label class="item-label">Realización obligatoria del
+										75% de las tareas propuestas por el equipo docente</label>
+									<h:selectBooleanCheckbox
+										value="#{pCtrl.nuevo.tareas75obligatoria}" id="switch-label5"
+										class="switch-button__checkbox"
+										disabled="#{pCtrl.tareasObligTrueDisabled}" />
+									<label for="form:switch-label5"
+										class="switch-button__label #{pCtrl.tareasObligTrueDisabled ? 'disabled': ''}"></label>
+									<p class="ayuda">Indicar si se exige la realización del 75%
+										de las tareas. En las unidades curriculares prácticas o
+										teórico-prácticas será obligatoria la asistencia al 75% de las
+										clases efectivamente dictadas y/o la realización del 75% de las
+										tareas propuestas.</p>
+									<div class="sugerencias">
+										<ui:repeat var="r" value="#{pCtrl.revisionesPrograma}">
+											<h:panelGroup layout="block" class="show-sugerencia"
+												rendered="#{r.tareas75obligSug != null}">
+												<p>#{r.tareas75obligSug}</p>
+												<p>#{r.fecha_revisionFormated}</p>
+												<p>#{r.nombre_usuario}</p>
+											</h:panelGroup>
+										</ui:repeat>
+									</div>
+								</h:panelGroup>
 							</h:panelGroup>
 							<div class="switch-button item">
 								<label class="item-label">Modo de aprobación</label>

@@ -27,8 +27,9 @@ INSERT INTO sgd.carreras (id, nombreCarrera, id_ua, habilitada) VALUES(59, 'Tecn
 INSERT INTO sgd.carreras (id, nombreCarrera, id_ua, habilitada) VALUES(60, 'Licenciatura en Turismo', 7, 1);
 INSERT INTO sgd.carreras (id, nombreCarrera, id_ua, habilitada) VALUES(61, 'Licenciatura en Biología Humana', 10, 1);
 INSERT INTO sgd.carreras (id, nombreCarrera, id_ua, habilitada) VALUES(62, 'Tecnicatura Universitaria en Dramaturgia', 5, 1);
+INSERT INTO sgd.carreras (id, nombreCarrera, id_ua, habilitada) VALUES(63, 'Tecnicatura Universitaria en Bienes Culturales', 2, 1);
 
-INSERT INTO sgd.carreras_SEQ (next_val) VALUES (63);
+INSERT INTO sgd.carreras_SEQ (next_val) VALUES (64);
 
 insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(1, 'Formación general', 52, 1);
 insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(2, 'Formación general – Formación y práctica en extensión', 52, 1);
@@ -67,26 +68,27 @@ insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(32, 'Oblig
 insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(33, 'Obligatorias complementarias', 55, 1);
 insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(34, 'Electivas filosóficas – Lógica y metodología', 55, 1);
 insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(35, 'Electivas filosóficas – Filosofía teórica', 55, 1);
-insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(36, 'Electivas filosófica – Filosofía de la práctica', 55, 1);
-insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(37, 'Electivas filosófica – Estética', 55, 1);
-insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(38, 'Electivas filosófica – Historia y filosofía de la ciencia', 55, 1);
-insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(39, 'Electivas filosófica – Filosofía latinoamericana y uruguaya', 55, 1);
-insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(40, 'Electivas filosófica – Formación complementaria', 55, 1);
-insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(41, 'Electivas filosófica – Tópicos especiales – Historia de la filosofía', 55, 1);
-insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(42, 'Electivas filosófica – Tópicos especiales – Lógica y metodología', 55, 1);
-insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(43, 'Electivas filosófica – Tópicos especiales – Filosofía teórica', 55, 1);
-insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(44, 'Electivas filosófica – Tópicos especiales – Filosofía de la práctica', 55, 1);
-insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(45, 'Electivas filosófica – Tópicos especiales – Estética', 55, 1);
-insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(46, 'Electivas filosófica – Tópicos especiales – Historia y filosofía de la ciencia', 55, 1);
-insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(47, 'Electivas filosófica – Tópicos especiales – Filosofía latinoamericana y uruguaya', 55, 1);
+insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(36, 'Electivas filosóficas – Filosofía de la práctica', 55, 1);
+insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(37, 'Electivas filosóficas – Estética', 55, 1);
+insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(38, 'Electivas filosóficas – Historia y filosofía de la ciencia', 55, 1);
+insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(39, 'Electivas filosóficas – Filosofía latinoamericana y uruguaya', 55, 1);
+insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(40, 'Electivas filosóficas – Formación complementaria', 55, 1);
+insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(41, 'Electivas filosóficas – Tópicos especiales – Historia de la filosofía', 55, 1);
+insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(42, 'Electivas filosóficas – Tópicos especiales – Lógica y metodología', 55, 1);
+insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(43, 'Electivas filosóficas – Tópicos especiales – Filosofía teórica', 55, 1);
+insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(44, 'Electivas filosóficas – Tópicos especiales – Filosofía de la práctica', 55, 1);
+insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(45, 'Electivas filosóficas – Tópicos especiales – Estética', 55, 1);
+insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(46, 'Electivas filosóficas – Tópicos especiales – Historia y filosofía de la ciencia', 55, 1);
+insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(47, 'Electivas filosóficas – Tópicos especiales – Filosofía latinoamericana y uruguaya', 55, 1);
 insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(48, 'Electivas universitarias', 55, 1);
 insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(49, 'Taller integral', 55, 1);
 insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(50, 'Seminario de tesina', 55, 1);
 
-insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(51, 'Introductoria', 54, 1);
-insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(52, 'Teórico – metodológica', 54, 1);
-insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(53, 'Europa y el mundo', 54, 1);
-insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(54, 'Uruguay y América', 54, 1);
+insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(111, 'Optativas Introductorias', 54, 1);
+insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(51, 'Introducción a la vida universitaria', 54, 1);
+insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(52, 'Formación Obligatoria: Teórico – metodológica', 54, 1);
+insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(53, 'Formación Obligatoria: Europa y el mundo', 54, 1);
+insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(54, 'Formación Obligatoria: Uruguay y América', 54, 1);
 insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(55, 'Actividades integradas', 54, 1);
 insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(56, 'Optativas', 54, 1);
 insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(57, 'Electivas', 54, 1);
@@ -151,7 +153,17 @@ insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(108, 'Áre
 insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(109, 'Áreas comunes – Ciencias sociales y humanísticas', 61, 1);
 insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(110, 'Orientaciones específicas', 61, 1);
 
-INSERT INTO sgd.areas_SEQ (next_val) VALUES (111);
+insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(112, 'Eje de Formación general - Módulo Historia y Patrimonio', 63, 1);
+insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(113, 'Eje de Formación general - Módulo Museología', 63, 1);
+insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(114, 'Eje de Formación general – Módulo de gestión y promoción Cultural ', 63, 1);
+insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(115, 'Eje de Formación específica – Mención en Museología', 63, 1);
+insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(116, 'Eje de Formación específica – Mención Historia regional y local', 63, 1);
+insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(117, 'Eje de Formación específica – Mención en Patrimonio', 63, 1);
+insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(118, 'Actividades integradas', 63, 1);
+insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(119, 'Comprensión lectora de lengua moderna', 63, 1);
+insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(120, 'Actividades electivas', 63, 1);
+
+INSERT INTO sgd.areas_SEQ (next_val) VALUES (121);
 
 INSERT INTO sgd.roles (id, nombre, operaciones) VALUES(1, 'Admin', 0x000102030405060708090A0B0C0D0E0F10111213141516);
 INSERT INTO sgd.roles (id, nombre, operaciones) VALUES(2, 'Docente', 0x02030405080F12131416);

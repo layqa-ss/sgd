@@ -617,15 +617,10 @@ public class ProgramasController {
 			nuevo.setRegimen(EnumRegimen.LIBRE);
 		} else if (nuevo.getFormato() == EnumFormato.PRACTICA) {
 			itemsRegimen = new EnumRegimen[] { EnumRegimen.LIBRE, EnumRegimen.OBLIGATORIA_75_DICTADAS };
+			nuevo.setRegimen(null);
 		} else {
 			itemsRegimen = EnumRegimen.values();
-		}
-		if (nuevo.getRegimen() != null && nuevo.getRegimen() == EnumRegimen.LIBRE) {
-			nuevo.setTareas75obligatoria(true);
-			tareasObligTrueDisabled = true;
-		} else {
-			nuevo.setTareas75obligatoria(false);
-			tareasObligTrueDisabled = false;
+			nuevo.setRegimen(null);
 		}
 	}
 
