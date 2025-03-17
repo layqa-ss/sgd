@@ -34,19 +34,19 @@ services:
       retries: 10
       interval: 3s
       timeout: 30s
-  ldapo:
-    image: osixia/openldap:1.5.0
-    container_name: ldapo
-    environment:
-        - LDAP_ORGANISATION=fhce
-        - LDAP_DOMAIN=fhce.edu.uy
-        - "LDAP_BASE_DN=dc=fhce,dc=edu,dc=uy"
-        - LDAP_ADMIN_PASSWORD=password
-    ports:
-        - 389:389
-        - 636:636
-    networks:
-      - springboot-mysql-network
+#  ldapo:
+#    image: osixia/openldap:1.5.0
+#    container_name: ldapo
+#    environment:
+#        - LDAP_ORGANISATION=fhce
+#        - LDAP_DOMAIN=fhce.edu.uy
+#        - "LDAP_BASE_DN=dc=fhce,dc=edu,dc=uy"
+#        - LDAP_ADMIN_PASSWORD=password
+#    ports:
+#        - 389:389
+#        - 636:636
+#    networks:
+#      - springboot-mysql-network
 volumes:
   mysql-data:
 networks:
