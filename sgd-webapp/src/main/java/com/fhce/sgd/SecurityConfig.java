@@ -79,12 +79,12 @@ public class SecurityConfig {
 		return authenticator;
 	}
 	
-	@Bean
-	public DefaultSpringSecurityContextSource contextSource() {
-		DefaultSpringSecurityContextSource dsCtx = new DefaultSpringSecurityContextSource(
-				"ldap://ldapmaster.fhce/");
-		return dsCtx;
-	}
+//	@Bean
+//	public DefaultSpringSecurityContextSource contextSource() {
+//		DefaultSpringSecurityContextSource dsCtx = new DefaultSpringSecurityContextSource(
+//				"ldap://ldapmaster.fhce/");
+//		return dsCtx;
+//	}
 
 //	@Bean
 //	public DefaultSpringSecurityContextSource contextSource() {
@@ -95,11 +95,11 @@ public class SecurityConfig {
 //		return dsCtx;
 //	}
 	
-//	@Bean
-//	public DefaultSpringSecurityContextSource contextSource() {
-//		DefaultSpringSecurityContextSource dsCtx = new DefaultSpringSecurityContextSource(
-//				"ldap://localhost:8389/");
-//		return dsCtx;
-//	}
+	@Bean
+	public DefaultSpringSecurityContextSource contextSource() {
+		DefaultSpringSecurityContextSource dsCtx = new DefaultSpringSecurityContextSource(
+				"ldap://localhost:8389/");
+		return dsCtx;
+	}
 
 }
