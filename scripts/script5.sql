@@ -84,16 +84,16 @@ insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(48, 'Elect
 insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(49, 'Taller integral', 55, 1);
 insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(50, 'Seminario de tesina', 55, 1);
 
-insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(111, 'Optativas Introductorias', 54, 1);
-insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(51, 'Introducción a la vida universitaria', 54, 1);
-insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(52, 'Formación Obligatoria: Teórico – metodológica', 54, 1);
-insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(53, 'Formación Obligatoria: Europa y el mundo', 54, 1);
-insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(54, 'Formación Obligatoria: Uruguay y América', 54, 1);
-insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(55, 'Actividades integradas', 54, 1);
-insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(56, 'Optativas', 54, 1);
-insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(57, 'Electivas', 54, 1);
-insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(58, 'Seminario de tesis', 54, 1);
-insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(59, 'Lengua moderna', 54, 1);
+insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(51, 'Optativas Introductorias', 54, 1);
+insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(52, 'Introducción a la vida universitaria', 54, 1);
+insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(53, 'Formación Obligatoria: Teórico – metodológica', 54, 1);
+insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(54, 'Formación Obligatoria: Europa y el mundo', 54, 1);
+insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(55, 'Formación Obligatoria: Uruguay y América', 54, 1);
+insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(56, 'Actividades integradas', 54, 1);
+insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(57, 'Optativas', 54, 1);
+insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(58, 'Electivas', 54, 1);
+insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(59, 'Seminario de tesis', 54, 1);
+insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(111, 'Lengua moderna', 54, 1);
 
 insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(60, 'Formación general', 56, 1);
 insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(61, 'Formación específica – Literaturas uruguaya y de América Latina', 56, 1);
@@ -151,7 +151,7 @@ insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(106, 'Elec
 insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(107, 'Áreas comunes – Ciencias básicas', 61, 1);
 insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(108, 'Áreas comunes – Ciencias biológicas', 61, 1);
 insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(109, 'Áreas comunes – Ciencias sociales y humanísticas', 61, 1);
-insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(110, 'Orientaciones específicas', 61, 1);
+insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(110, 'Orientación específica', 61, 1);
 
 insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(112, 'Eje de Formación general - Módulo Historia y Patrimonio', 63, 1);
 insert into sgd.areas (id, nombrearea, id_carrera, habilitada) values(113, 'Eje de Formación general - Módulo Museología', 63, 1);
